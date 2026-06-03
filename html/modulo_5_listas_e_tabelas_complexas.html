@@ -68,15 +68,42 @@
 
         
 
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
-            <h3 class="font-bold text-white">Prática de Laboratório</h3>
-            <p class="text-xs text-slate-400">Refatore o código abaixo para incluir <code>&lt;caption&gt;</code> e a estruturação de seções (thead/tbody):</p>
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
-                <pre class="text-[10px] font-mono-code text-red-400">
-&lt;table&gt;
-  &lt;tr&gt; &lt;td&gt;Item&lt;/td&gt; &lt;td&gt;Preço&lt;/td&gt; &lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Computador&lt;/td&gt; &lt;td&gt;R$ 3.000&lt;/td&gt; &lt;/tr&gt;
-&lt;/table&gt;</pre>
+        <!-- Laboratório Interativo -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="terminal-square" class="w-6 h-6 text-emerald-400"></i> Laboratório Prático de Conformidade
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Refatore a tabela inserindo <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code> e atributos <code>scope</code>.</p>
+                </div>
+                <button onclick="restaurarCodigo5()" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 text-xs px-4 py-2 rounded-lg font-bold transition flex items-center gap-2">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Restaurar Código
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Editor -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Editor HTML</label>
+                    <textarea id="code-editor-5" class="w-full h-48 bg-slate-950 p-4 rounded-xl border border-slate-800 text-[12px] font-mono-code text-sky-300 focus:outline-none focus:border-emerald-500 transition shadow-inner" spellcheck="false"></textarea>
+                    
+                    <button onclick="auditarTabela()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-900/50 flex justify-center items-center gap-2">
+                        <i data-lucide="play" class="w-4 h-4 fill-current"></i> Auditar Estrutura
+                    </button>
+                </div>
+
+                <!-- Painel de Resultados -->
+                <div class="space-y-2 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Verificações de A11y</label>
+                        <span id="score-badge-5" class="text-[10px] font-mono-code bg-slate-950 px-2 py-1 rounded text-slate-400 border border-slate-800">Score: 0 / 4</span>
+                    </div>
+                    
+                    <div id="painel-auditoria-5" class="flex-1 bg-slate-950 p-5 rounded-xl border border-slate-800 text-sm overflow-y-auto space-y-3">
+                        <!-- Conteúdo será injetado pelo JS -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -88,7 +115,96 @@
     </main>
 
     <script>
-        lucide.createIcons();
+        const codigoLegado5 = `<!-- Refatore a tabela abaixo -->
+<table border="1">
+  <tr>
+    <td>Produto</td>
+    <td>Preço</td>
+  </tr>
+  <tr>
+    <td>Computador</td>
+    <td>R$ 3.000</td>
+  </tr>
+</table>`;
+
+        function restaurarCodigo5() {
+            document.getElementById('code-editor-5').value = codigoLegado5;
+            limparPainel5();
+        }
+
+        function limparPainel5() {
+            document.getElementById('score-badge-5').innerText = 'Score: 0 / 4';
+            document.getElementById('painel-auditoria-5').innerHTML = `
+                <div class="flex items-start gap-3 p-2 rounded-lg border border-slate-800 bg-slate-900/50">
+                    <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-300">Pronto para Auditar</h5>
+                        <p class="text-[10px] text-slate-400 mt-1 leading-normal">Edite o código inserindo as tags estruturais de tabela. Em seguida, clique em "Auditar Estrutura".</p>
+                    </div>
+                </div>`;
+            lucide.createIcons();
+        }
+
+        function auditarTabela() {
+            const rawCode = document.getElementById('code-editor-5').value;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawCode, 'text/html');
+            const painel = document.getElementById('painel-auditoria-5');
+            
+            let passed = 0;
+            const checks = [];
+
+            checks.push({ 
+                status: !!doc.querySelector('caption'), 
+                title: "Legenda Acessível (caption)", 
+                msg: "Tabelas devem ter um título descritivo usando a tag <caption>." 
+            });
+
+            checks.push({ 
+                status: !!doc.querySelector('thead'), 
+                title: "Cabeçalho (thead)", 
+                msg: "Agrupa as linhas de cabeçalho da tabela com <thead>." 
+            });
+
+            checks.push({ 
+                status: !!doc.querySelector('tbody'), 
+                title: "Corpo de Dados (tbody)", 
+                msg: "Agrupa as linhas de conteúdo principal com <tbody>." 
+            });
+
+            const thEls = doc.querySelectorAll('th');
+            const temScope = thEls.length > 0 && Array.from(thEls).some(th => th.hasAttribute('scope'));
+            checks.push({ 
+                status: temScope, 
+                title: "Escopo de Cabeçalhos (scope)", 
+                msg: "Utilize o atributo scope='col' ou scope='row' nas células de cabeçalho (<th>)." 
+            });
+
+            painel.innerHTML = '';
+            checks.forEach(c => {
+                if (c.status) passed++;
+                const item = document.createElement('div');
+                item.className = `flex items-start gap-3 p-3 rounded-lg border transition-all ${
+                    c.status ? 'bg-emerald-950/20 border-emerald-900/40 text-emerald-300' : 'bg-red-950/20 border-red-900/40 text-red-300'
+                }`;
+                
+                item.innerHTML = `
+                    <i data-lucide="${c.status ? 'check' : 'x'}" class="w-4 h-4 shrink-0 mt-0.5 ${c.status ? 'text-emerald-400' : 'text-red-400'}"></i>
+                    <div>
+                        <h5 class="text-xs font-bold ${c.status ? 'text-emerald-300' : 'text-red-300'}">${c.title}</h5>
+                        <p class="text-[10px] mt-1 leading-normal opacity-80">${c.msg}</p>
+                    </div>`;
+                painel.appendChild(item);
+            });
+
+            document.getElementById('score-badge-5').innerText = `Score: ${passed} / 4`;
+            lucide.createIcons();
+        }
+
+        window.onload = function() {
+            lucide.createIcons();
+            restaurarCodigo5();
+        };
     </script>
 </body>
 </html>
