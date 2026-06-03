@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 7: URLs e Navegação | BSI - IFF</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono-code text-emerald-400 font-bold">
+                    IFF - BSI
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-none">Programação Web</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">Ementa Curricular &bull; Prof. Ronaldo Amaral</p>
+                </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-900/40 px-3 py-1 rounded-xl">
+                Módulo 7: URLs e Navegação
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 space-y-8">
+        
+        <!-- Banner Introdutório -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">A Ponte da Web</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Anatomia de URLs e Hiperligações</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                A World Wide Web é construída sobre o conceito de hiperligações. Compreender como um <strong>Uniform Resource Locator (URL)</strong> é formado, como passar dados dinâmicos através dele e como invocar protocolos nativos do sistema operativo é uma competência fundamental para a arquitetura de qualquer sistema web moderno.
+            </p>
+        </div>
+
+        <!-- Grelha de Conceitos Teóricos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Relativa vs Absoluta -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                    <i data-lucide="link" class="w-5 h-5 text-emerald-400"></i> Relativa vs Absoluta
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Absoluta:</strong> Contém o caminho completo (protocolo + domínio). Usada para recursos externos.<br><br>
+                    <strong>Relativa:</strong> Aponta para um caminho baseado na localização do ficheiro atual. Ideal para navegação interna na mesma aplicação.
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[11px] text-sky-400 overflow-x-auto shadow-inner space-y-2">
+                    <span class="text-slate-500 block">&lt;!-- URL Absoluta --&gt;</span>
+                    &lt;a href="https://iff.edu.br/sobre"&gt;IFF&lt;/a&gt;
+                    
+                    <span class="text-slate-500 block mt-2">&lt;!-- URL Relativa --&gt;</span>
+                    &lt;a href="/sobre"&gt;Sobre Nós&lt;/a&gt;
+                </div>
+            </div>
+
+            <!-- Navegação por Fragmento -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                    <i data-lucide="anchor" class="w-5 h-5 text-emerald-400"></i> Fragmentos (Âncoras)
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    O símbolo cardinal (<code>#</code>) na URL indica um fragmento. Ele orienta o navegador a fazer <em>scroll</em> automaticamente para o elemento na página que possui o atributo <code>id</code> correspondente.
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[11px] text-sky-400 overflow-x-auto shadow-inner space-y-2">
+                    <span class="text-slate-500 block">&lt;!-- Link que aponta para o ID --&gt;</span>
+                    &lt;a href="#tabela-precos"&gt;Ver Preços&lt;/a&gt;
+                    
+                    <span class="text-slate-500 block mt-2">&lt;!-- Destino na mesma página --&gt;</span>
+                    &lt;h2 id="tabela-precos"&gt;Tabela de Preços&lt;/h2&gt;
+                </div>
+            </div>
+
+            <!-- Parâmetros de URL -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                    <i data-lucide="list-filter" class="w-5 h-5 text-emerald-400"></i> Parâmetros (Query Strings)
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Iniciados por um ponto de interrogação (<code>?</code>), os parâmetros são pares de <code>chave=valor</code> separados por <code>&</code>. São vitais para enviar dados ao servidor via GET ou para ler estados no JavaScript (ex: paginação, filtros de pesquisa).
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[11px] text-emerald-300 overflow-x-auto shadow-inner">
+                    https://loja.iff.br/cursos<strong class="text-sky-400">?area=ti&semestre=2026</strong>
+                </div>
+            </div>
+
+            <!-- Links Especiais -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                    <i data-lucide="phone-forwarded" class="w-5 h-5 text-emerald-400"></i> Links Especiais
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    O atributo <code>href</code> não serve apenas para páginas. Pode invocar aplicações nativas do sistema operativo usando protocolos específicos, como clientes de email ou o discador do telemóvel.
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[11px] text-sky-400 overflow-x-auto shadow-inner space-y-2">
+                    <span class="text-slate-500 block">&lt;!-- Abre o cliente de Email --&gt;</span>
+                    &lt;a href="mailto:suporte@iff.edu.br"&gt;Email&lt;/a&gt;
+                    
+                    <span class="text-slate-500 block mt-2">&lt;!-- Abre o discador telefónico --&gt;</span>
+                    &lt;a href="tel:+552299999999"&gt;Ligar&lt;/a&gt;
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Laboratório Interativo: Desconstrutor de URL -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="microscope" class="w-6 h-6 text-emerald-400"></i> Laboratório: Desconstrutor de URL
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Insira uma URL complexa abaixo para ver como o motor web analisa cada segmento (Scheme, Host, Path, Query, Fragment).</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex gap-2">
+                    <input type="text" id="url-input" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-sky-300 font-mono-code focus:outline-none focus:border-emerald-500 transition" value="https://sistema.iff.edu.br:8080/alunos/notas?disciplina=web&ano=2026#tabela-final" placeholder="Insira uma URL válida...">
+                    <button onclick="analisarURL()" class="bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-xl text-white font-bold text-sm transition-colors shadow-lg shadow-emerald-900/50">
+                        Analisar
+                    </button>
+                </div>
+
+                <!-- Resultados da Análise -->
+                <div id="url-resultado" class="grid grid-cols-2 md:grid-cols-5 gap-4 pt-4 hidden">
+                    
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Protocolo</span>
+                        <div id="res-protocol" class="text-sm font-bold text-purple-400 font-mono-code break-all"></div>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Domínio (Host)</span>
+                        <div id="res-host" class="text-sm font-bold text-emerald-400 font-mono-code break-all"></div>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Caminho (Path)</span>
+                        <div id="res-path" class="text-sm font-bold text-blue-400 font-mono-code break-all"></div>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Parâmetros</span>
+                        <div id="res-search" class="text-sm font-bold text-amber-400 font-mono-code break-all"></div>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Fragmento</span>
+                        <div id="res-hash" class="text-sm font-bold text-pink-400 font-mono-code break-all"></div>
+                    </div>
+
+                </div>
+
+                <div id="url-error" class="hidden bg-red-950/30 border border-red-900/40 text-red-400 p-4 rounded-xl text-sm mt-4 flex items-center gap-2">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                    <span>URL inválida. Certifique-se de incluir o protocolo (ex: https://).</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+            <p>Instituto Federal Fluminense (IFF) - BSI</p>
+            <p class="mt-1">Referências MDN: <a href="https://developer.mozilla.org/pt-BR/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL" target="_blank" class="text-emerald-500 hover:text-emerald-400 underline transition">O que é uma URL?</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function analisarURL() {
+            const input = document.getElementById('url-input').value.trim();
+            const resultBox = document.getElementById('url-resultado');
+            const errorBox = document.getElementById('url-error');
+
+            try {
+                // Tenta instanciar um objeto URL nativo do JavaScript
+                const url = new URL(input);
+                
+                document.getElementById('res-protocol').innerText = url.protocol;
+                document.getElementById('res-host').innerText = url.host;
+                document.getElementById('res-path').innerText = url.pathname === '/' ? '/' : url.pathname;
+                document.getElementById('res-search').innerText = url.search || '(vazio)';
+                document.getElementById('res-hash').innerText = url.hash || '(vazio)';
+
+                errorBox.classList.add('hidden');
+                resultBox.classList.remove('hidden');
+                resultBox.classList.add('grid');
+                
+            } catch (e) {
+                // Se falhar (ex: não tem protocolo http://), mostra erro
+                resultBox.classList.add('hidden');
+                resultBox.classList.remove('grid');
+                errorBox.classList.remove('hidden');
+            }
+        }
+
+        // Executar uma análise inicial ao carregar a página
+        window.onload = () => {
+            analisarURL();
+        };
+    </script>
+</body>
+</html>
