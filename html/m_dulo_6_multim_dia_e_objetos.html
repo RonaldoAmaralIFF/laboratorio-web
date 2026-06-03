@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 6: Multimédia e Objetos | BSI - IFF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono-code text-emerald-400 font-bold">
+                    IFF - BSI
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-none">Programação Web</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">Ementa Curricular &bull; Prof. Ronaldo Amaral</p>
+                </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-900/40 px-3 py-1 rounded-xl">
+                Módulo 6: Multimédia e Objetos
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 space-y-8">
+        
+        <!-- Banner Introdutório -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Integração de Recursos Externos</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Conteúdos Multimédia e Iframes</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Na engenharia web moderna, a integração de vídeos, áudios e plataformas externas exige atenção rigorosa a dois pilares: <strong>Segurança</strong> e <strong>Acessibilidade (WCAG)</strong>. A utilização correta das APIs nativas do HTML5 evita dependências inseguras e assegura que os utilizadores com deficiências possam consumir o conteúdo de forma inclusiva.
+            </p>
+        </div>
+
+        <!-- Secções Teóricas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Áudio e Vídeo -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                    <i data-lucide="video" class="w-5 h-5 text-emerald-400"></i> Áudio e Vídeo Nativos
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    As tags <code>&lt;audio&gt;</code> e <code>&lt;video&gt;</code> suportam múltiplos formatos através da tag aninhada <code>&lt;source&gt;</code>. Para garantir a acessibilidade para pessoas com deficiência auditiva, é <strong>obrigatório</strong> disponibilizar ficheiros de legenda através do elemento <code>&lt;track kind="captions"&gt;</code>.
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[11px] text-sky-400 overflow-x-auto shadow-inner">
+&lt;video controls poster="capa-aula.avif"&gt;<br>
+&nbsp;&nbsp;&lt;source src="aula06.webm" type="video/webm"&gt;<br>
+&nbsp;&nbsp;&lt;source src="aula06.mp4" type="video/mp4"&gt;<br>
+&nbsp;&nbsp;&lt;track kind="captions" src="legenda.vtt" srclang="pt" label="Português" default&gt;<br>
+&lt;/video&gt;
+                </div>
+            </div>
+
+            <!-- Iframe e Object -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                    <i data-lucide="app-window" class="w-5 h-5 text-emerald-400"></i> Iframes e Objetos
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    O <code>&lt;iframe&gt;</code> permite incorporar contextos de navegação de terceiros (ex: mapas, vídeos). Por ser um vetor comum para ataques de <em>Clickjacking</em>, o atributo <code>sandbox</code> deve ser sempre configurado rigidamente. O atributo <code>title</code> é crucial para os leitores de ecrã identificarem o conteúdo embutido.
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[11px] text-sky-400 overflow-x-auto shadow-inner">
+&lt;iframe <br>
+&nbsp;&nbsp;src="https://mapas.exemplo.com/iff"<br>
+&nbsp;&nbsp;title="Mapa de localização do campus IFF Centro"<br>
+&nbsp;&nbsp;sandbox="allow-scripts allow-same-origin"<br>
+&nbsp;&nbsp;loading="lazy"&gt;<br>
+&lt;/iframe&gt;
+                </div>
+            </div>
+        </div>
+
+        <!-- Laboratório Tradicional -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="terminal-square" class="w-6 h-6 text-emerald-400"></i> Laboratório Prático de Conformidade
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Refatore o código legado para cumprir as diretrizes do W3C de Segurança e Acessibilidade.</p>
+                </div>
+                <button onclick="restaurarCodigo()" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 text-xs px-4 py-2 rounded-lg font-bold transition flex items-center gap-2">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Restaurar Código
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Editor -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Editor de Código</label>
+                    <textarea id="code-editor" class="w-full h-48 bg-slate-950 p-4 rounded-xl border border-slate-800 text-[12px] font-mono-code text-sky-300 custom-scrollbar focus:outline-none focus:border-emerald-500 transition shadow-inner" spellcheck="false"></textarea>
+                    
+                    <button onclick="auditarCodigo()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-900/50 flex justify-center items-center gap-2">
+                        <i data-lucide="play" class="w-4 h-4 fill-current"></i> Auditar Estrutura
+                    </button>
+                </div>
+
+                <!-- Painel de Resultados -->
+                <div class="space-y-2 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Verificações de Segurança & A11y</label>
+                        <span id="score-badge" class="text-[10px] font-mono-code bg-slate-950 px-2 py-1 rounded text-slate-400 border border-slate-800">Score: 0 / 4</span>
+                    </div>
+                    
+                    <div id="painel-auditoria" class="flex-1 bg-slate-950 p-5 rounded-xl border border-slate-800 text-sm overflow-y-auto custom-scrollbar space-y-3">
+                        <div class="flex items-start gap-3 p-2 rounded-lg border border-slate-800 bg-slate-900/50">
+                            <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-300">Pronto para Auditar</h5>
+                                <p class="text-[10px] text-slate-400 mt-1 leading-normal">Edite o código ao lado inserindo controlos, legendas e atributos sandbox/title. Em seguida, clique em "Auditar Estrutura".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+            <p>Instituto Federal Fluminense (IFF) - BSI</p>
+            <p class="mt-1">Referências MDN: <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/video" target="_blank" class="text-emerald-500 hover:text-emerald-400 underline transition">Aceder a Multimédia HTML5</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        const codigoLegado = `<!-- CÓDIGO VULNERÁVEL E INACESSÍVEL -->
+<div class="aula-multimidia">
+    <h3>Aula de Redes</h3>
+    <!-- O vídeo não possui controlos e não é acessível para surdos -->
+    <video src="aula06.mp4"></video>
+    
+    <br><br>
+
+    <h3>Material Complementar</h3>
+    <!-- O Iframe permite a execução de scripts maliciosos de fontes externas e não tem rótulo -->
+    <iframe src="https://exemplo-externo.com/pdf"></iframe>
+</div>`;
+
+        function restaurarCodigo() {
+            document.getElementById('code-editor').value = codigoLegado;
+            limparPainel();
+        }
+
+        function limparPainel() {
+            document.getElementById('score-badge').innerText = 'Score: 0 / 4';
+            document.getElementById('painel-auditoria').innerHTML = `
+                <div class="flex items-start gap-3 p-2 rounded-lg border border-slate-800 bg-slate-900/50">
+                    <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-300">Pronto para Auditar</h5>
+                        <p class="text-[10px] text-slate-400 mt-1 leading-normal">Edite o código ao lado inserindo controlos, legendas e atributos sandbox/title. Em seguida, clique em "Auditar Estrutura".</p>
+                    </div>
+                </div>`;
+            lucide.createIcons();
+        }
+
+        function auditarCodigo() {
+            const rawCode = document.getElementById('code-editor').value;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawCode, 'text/html');
+            const painel = document.getElementById('painel-auditoria');
+            
+            let passed = 0;
+            const checks = [];
+
+            // Regra 1: Controlos de Vídeo
+            const videoEl = doc.querySelector('video');
+            const temControls = videoEl && videoEl.hasAttribute('controls');
+            checks.push({
+                status: temControls,
+                title: "Controlos Nativos (<video controls>)",
+                msg: "Garante que o utilizador pode pausar, retroceder ou alterar o volume."
+            });
+
+            // Regra 2: Legendas
+            const trackEl = doc.querySelector('video track[kind="captions"]');
+            const temTrack = !!trackEl;
+            checks.push({
+                status: temTrack,
+                title: "Acessibilidade Auditiva (<track>)",
+                msg: "Exige o fornecimento de uma faixa de legendas (kind='captions') para conformidade com a WCAG."
+            });
+
+            // Regra 3: Título do Iframe
+            const iframeEl = doc.querySelector('iframe');
+            const temTitle = iframeEl && iframeEl.hasAttribute('title') && iframeEl.getAttribute('title').trim().length > 0;
+            checks.push({
+                status: temTitle,
+                title: "Acessibilidade Visual (iframe title)",
+                msg: "Leitores de ecrã anunciam o conteúdo de um iframe apenas se o atributo 'title' estiver presente e descritivo."
+            });
+
+            // Regra 4: Sandbox de Segurança
+            const temSandbox = iframeEl && iframeEl.hasAttribute('sandbox');
+            checks.push({
+                status: temSandbox,
+                title: "Prevenção de Injeções (iframe sandbox)",
+                msg: "Isola o conteúdo de terceiros para evitar a execução de scripts nocivos no domínio pai."
+            });
+
+            // Renderizar
+            painel.innerHTML = '';
+            checks.forEach(c => {
+                if (c.status) passed++;
+                const item = document.createElement('div');
+                item.className = `flex items-start gap-3 p-3 rounded-lg border transition-all ${
+                    c.status 
+                    ? 'bg-emerald-950/20 border-emerald-900/40 text-emerald-300' 
+                    : 'bg-red-950/20 border-red-900/40 text-red-300'
+                }`;
+                
+                item.innerHTML = `
+                    <i data-lucide="${c.status ? 'check' : 'x'}" class="w-4 h-4 shrink-0 mt-0.5 ${c.status ? 'text-emerald-400' : 'text-red-400'}"></i>
+                    <div>
+                        <h5 class="text-xs font-bold ${c.status ? 'text-emerald-300' : 'text-red-300'}">${c.title}</h5>
+                        <p class="text-[10px] mt-1 leading-normal opacity-80">${c.msg}</p>
+                    </div>
+                `;
+                painel.appendChild(item);
+            });
+
+            document.getElementById('score-badge').innerText = `Score: ${passed} / 4`;
+            lucide.createIcons();
+        }
+
+        window.onload = function() {
+            lucide.createIcons();
+            restaurarCodigo();
+        };
+    </script>
+</body>
+</html>

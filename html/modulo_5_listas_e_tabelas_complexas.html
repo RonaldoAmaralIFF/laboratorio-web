@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5: Listas e Tabelas | BSI - IFF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono-code text-emerald-400 font-bold">
+                    IFF - BSI
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-none">Programação Web</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">Ementa Curricular &bull; Prof. Ronaldo Amaral</p>
+                </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-900/40 px-3 py-1 rounded-xl">
+                Módulo 5: Listas e Tabelas Complexas
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 space-y-8">
+        
+        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Organização de Dados</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Listas Semânticas e Modelagem Tabular</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Listas organizam conjuntos de itens de forma hierárquica, enquanto tabelas são a estrutura soberana para dados relacionais. A acessibilidade nestes componentes é obrigatória: tabelas mal estruturadas tornam-se impossíveis de interpretar por utilizadores de leitores de ecrã (softwares como NVDA/VoiceOver).
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2">
+                    <i data-lucide="list" class="w-4 h-4 text-emerald-400"></i> Listas Semânticas
+                </h3>
+                <p class="text-xs text-slate-400">Utilize <code>&lt;ul&gt;</code> para listas não ordenadas (ordem irrelevante) e <code>&lt;ol&gt;</code> para ordenadas (passos de um algoritmo).</p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[10px] text-sky-400 overflow-x-auto">
+                    &lt;ol&gt;<br>
+                    &nbsp;&nbsp;&lt;li&gt;Clonar repositório&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&lt;li&gt;Executar npm install&lt;/li&gt;<br>
+                    &lt;/ol&gt;
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-bold text-white flex items-center gap-2">
+                    <i data-lucide="layout-grid" class="w-4 h-4 text-emerald-400"></i> Tabelas Complexas
+                </h3>
+                <p class="text-xs text-slate-400">O uso de <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, e <code>&lt;tfoot&gt;</code> é mandatório. Sempre defina <code>scope="col"</code> ou <code>scope="row"</code> nos seus <code>&lt;th&gt;</code>.</p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[10px] text-sky-400 overflow-x-auto">
+                    &lt;th scope="col"&gt;Produto&lt;/th&gt;
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <h3 class="font-bold text-white">Prática de Laboratório</h3>
+            <p class="text-xs text-slate-400">Refatore o código abaixo para incluir <code>&lt;caption&gt;</code> e a estruturação de seções (thead/tbody):</p>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+                <pre class="text-[10px] font-mono-code text-red-400">
+&lt;table&gt;
+  &lt;tr&gt; &lt;td&gt;Item&lt;/td&gt; &lt;td&gt;Preço&lt;/td&gt; &lt;/tr&gt;
+  &lt;tr&gt; &lt;td&gt;Computador&lt;/td&gt; &lt;td&gt;R$ 3.000&lt;/td&gt; &lt;/tr&gt;
+&lt;/table&gt;</pre>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+            <p>Instituto Federal Fluminense (IFF) - BSI</p>
+            <p class="mt-1">Referências MDN: <a href="https://developer.mozilla.org/pt-BR/docs/Learn/HTML/Tables" target="_blank" class="text-emerald-500 underline">Aceder a Tabelas HTML</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
