@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório de URLs | BSI - IFF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <header class="bg-slate-900 border-b border-emerald-800/40 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-1 bg-emerald-950/80 border border-emerald-500/30 px-3 py-2 rounded-xl">
+                    <span class="w-3 h-7 bg-emerald-500 rounded-full inline-block"></span>
+                    <span class="w-3 h-5 bg-red-500 rounded-full inline-block"></span>
+                    <span class="w-3 h-7 bg-emerald-500 rounded-full inline-block"></span>
+                    <div class="text-left ml-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono-code block leading-none">IFF</span>
+                        <span class="text-[9px] text-slate-400 font-medium block mt-0.5 leading-none">Campos Centro</span>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white tracking-tight">Programação Web</h1>
+                    <p class="text-xs text-slate-400">Bacharelado em Sistemas de Informação &bull; <span class="text-emerald-400">Prof. Ronaldo Amaral</span></p>
+                </div>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span class="text-[10px] uppercase font-mono-code text-slate-400 font-bold tracking-wider">Laboratório Prático</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <div class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div class="flex items-start justify-between flex-col md:flex-row gap-6">
+                <div class="space-y-3">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Módulo 7: URLs e Navegação</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Desafio: Consertando Hiperligações</h2>
+                    <p class="text-slate-300 text-sm leading-relaxed max-w-3xl">
+                        Neste laboratório, você atua como um Engenheiro Frontend auditando um menu de navegação construído por um desenvolvedor júnior. Os atributos <code>href</code> estão quebrados ou ausentes, violando regras de protocolo (Scheme), âncoras (Fragmentos) e passagem de parâmetros (Query Strings).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Editor de Código -->
+            <div class="lg:col-span-7 bg-[#0f172a] border border-slate-800 rounded-2xl overflow-hidden flex flex-col h-[600px] shadow-2xl">
+                <div class="bg-slate-950 px-4 py-3 flex items-center justify-between border-b border-slate-850">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 bg-red-500 rounded-full inline-block"></span>
+                        <span class="w-3 h-3 bg-yellow-500 rounded-full inline-block"></span>
+                        <span class="w-3 h-3 bg-emerald-500 rounded-full inline-block"></span>
+                        <span class="text-xs font-mono-code text-slate-400 ml-2">navegacao_iff.html</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="restoreCode()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium text-[10px] py-1.5 px-3 rounded-lg transition-colors">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+                <textarea id="lab-editor" class="flex-1 w-full bg-[#090d16] text-[#38bdf8] font-mono-code text-xs p-5 focus:outline-none resize-none custom-scrollbar leading-loose" spellcheck="false"></textarea>
+                <div class="bg-slate-900 border-t border-slate-800 p-3 flex justify-end">
+                    <button onclick="executeTests()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-6 rounded-xl transition-colors flex items-center gap-2 shadow-lg shadow-emerald-950">
+                        <i data-lucide="play" class="w-4 h-4 fill-current"></i> Rodar Validador
+                    </button>
+                </div>
+            </div>
+
+            <!-- Console de Validação -->
+            <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col h-[600px] justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-5 border-b border-slate-800 pb-4">
+                        <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                            Pipeline de Validação
+                        </h4>
+                        <span id="suite-score" class="text-xs font-mono-code bg-slate-950 px-3 py-1.5 rounded-lg text-slate-400 border border-slate-850">Score: 0 / 5</span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-950 rounded-full h-2 mb-6 border border-slate-850 overflow-hidden">
+                        <div id="suite-progress" class="bg-gradient-to-r from-emerald-600 to-emerald-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+
+                    <!-- Logs -->
+                    <div class="space-y-3 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar" id="test-logs">
+                        <div class="flex items-start gap-3 bg-slate-950 p-4 rounded-xl border border-slate-850">
+                            <i data-lucide="info" class="w-5 h-5 text-sky-400 shrink-0 mt-0.5"></i>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-200">Aguardando Execução</h5>
+                                <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">Refatore os atributos <code>href</code> no editor ao lado e execute o validador para verificar se aplicou os protocolos (https, mailto, tel), fragmentos (#) e query strings (?) corretamente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Código legado inicial com os links intencionalmente quebrados
+        const codeExercise = `<!-- TAREFA: Conserte os atributos href de todos os links (tags <a>) -->
+<nav class="menu-principal">
+    
+    <!-- 1. Crie uma URL Absoluta SEGURA apontando para o domínio do IFF (iff.edu.br) -->
+    <a href="iff.edu.br">Site Oficial do IFF</a>
+    
+    <!-- 2. Crie uma URL Relativa com Fragmento para rolar a página até o ID "contato" -->
+    <a href="contato">Ir para a seção de Contato</a>
+    
+    <!-- 3. Crie uma URL de busca apontando para "/busca" passando o parâmetro "curso" com o valor "bsi" -->
+    <a href="/busca">Buscar Curso de BSI</a>
+    
+    <!-- 4. Crie um Link Especial que abra o cliente de E-mail nativo para "coord@iff.edu.br" -->
+    <a href="coord@iff.edu.br">E-mail para a Coordenação</a>
+    
+    <!-- 5. Crie um Link Especial que abra o Discador do Telemóvel para o número "+552299999999" -->
+    <a href="+552299999999">Ligar para a Secretaria</a>
+
+</nav>`;
+
+        function restoreCode() {
+            document.getElementById('lab-editor').value = codeExercise;
+            document.getElementById('suite-score').innerText = 'Score: 0 / 5';
+            document.getElementById('suite-progress').style.width = '0%';
+            document.getElementById('test-logs').innerHTML = `
+                <div class="flex items-start gap-3 bg-slate-950 p-4 rounded-xl border border-slate-850">
+                    <i data-lucide="info" class="w-5 h-5 text-sky-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-200">Aguardando Execução</h5>
+                        <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">Refatore os atributos <code>href</code> no editor ao lado e execute o validador para verificar se aplicou os protocolos (https, mailto, tel), fragmentos (#) e query strings (?) corretamente.</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // Motor de Testes
+        function executeTests() {
+            const rawCode = document.getElementById('lab-editor').value;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawCode, 'text/html');
+            
+            let passedCount = 0;
+            const totalTests = 5;
+            const logs = [];
+
+            function logAssert(status, title, feedback) {
+                if (status) passedCount++;
+                logs.push({ status, title, feedback });
+            }
+
+            // Seleciona todos os links do código do aluno
+            const links = doc.querySelectorAll('a');
+            
+            // Garantir que não deletaram os links
+            if(links.length < 5) {
+                document.getElementById('test-logs').innerHTML = `<div class="p-4 bg-red-950/40 border border-red-900/50 rounded-xl text-red-400 text-xs font-bold">Erro crítico: Você removeu algumas tags &lt;a&gt; do documento. Clique em Reiniciar.</div>`;
+                return;
+            }
+
+            // Teste 1: URL Absoluta Segura
+            const link1 = links[0].getAttribute('href') || "";
+            const isAbsoluteSecure = link1.startsWith('https://') && link1.includes('iff.edu.br');
+            logAssert(isAbsoluteSecure, "URL Absoluta com Protocolo Seguro (HTTPS)", 
+                isAbsoluteSecure ? "Excelente! Você definiu o esquema 'https://' necessário para sair da aplicação atual e acessar um domínio externo com segurança." 
+                                 : "Falha. O link 'iff.edu.br' sem o protocolo (https://) faz o navegador tentar acessar uma rota local chamada '/iff.edu.br', gerando erro 404.");
+
+            // Teste 2: Fragmento (Âncora)
+            const link2 = links[1].getAttribute('href') || "";
+            const isFragment = link2 === '#contato';
+            logAssert(isFragment, "Navegação por Fragmento (ID)", 
+                isFragment ? "Correto! O uso do caracter '#' orienta o motor do navegador a buscar o elemento com id='contato' na mesma página." 
+                           : "Falha. Para rolar a tela até um ID específico da mesma página, o valor do href deve iniciar obrigatoriamente com a cerquilha/cardinal (#).");
+
+            // Teste 3: Query Strings (Parâmetros)
+            const link3 = links[2].getAttribute('href') || "";
+            const hasQueryString = link3.includes('/busca') && link3.includes('?') && link3.includes('curso=bsi');
+            logAssert(hasQueryString, "Passagem de Parâmetros via Query String", 
+                hasQueryString ? "Perfeito! A interrogação '?' demarca o fim do caminho (Path) e o início das variáveis dinâmicas em pares de chave=valor." 
+                               : "Falha. Para passar o parâmetro 'curso' com o valor 'bsi' para a rota '/busca', é necessário separar o caminho e os dados com um ponto de interrogação (?).");
+
+            // Teste 4: Protocolo Mailto
+            const link4 = links[3].getAttribute('href') || "";
+            const isMailto = link4.startsWith('mailto:') && link4.includes('coord@iff.edu.br');
+            logAssert(isMailto, "Protocolo de Correio Eletrônico (mailto:)", 
+                isMailto ? "Válido! O navegador interceptará o protocolo 'mailto:' e repassará o comando para o Outlook, Gmail ou Mail nativo do sistema operativo." 
+                         : "Falha. Um e-mail solto no href quebra a página. Você deve adicionar o protocolo 'mailto:' antes do endereço.");
+
+            // Teste 5: Protocolo Tel
+            const link5 = links[4].getAttribute('href') || "";
+            const isTel = link5.startsWith('tel:') && link5.includes('+552299999999');
+            logAssert(isTel, "Protocolo de Telefonia Nativa (tel:)", 
+                isTel ? "Concluído! Especialmente em dispositivos móveis, este protocolo abre o discador (App de Telefone) preenchido com o número." 
+                      : "Falha. O protocolo 'tel:' é estritamente necessário para que celulares e computadores reconheçam o link como um número discável.");
+
+            // Atualiza Pontuações na UI
+            document.getElementById('suite-score').innerText = `Score: ${passedCount} / ${totalTests}`;
+            const percentage = (passedCount / totalTests) * 100;
+            document.getElementById('suite-progress').style.width = `${percentage}%`;
+
+            // Desenha os Logs
+            const logContainer = document.getElementById('test-logs');
+            logContainer.innerHTML = '';
+
+            logs.forEach(log => {
+                const item = document.createElement('div');
+                item.className = `flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 ${
+                    log.status 
+                    ? 'bg-emerald-950/20 border-emerald-900/40 text-emerald-300' 
+                    : 'bg-red-950/20 border-red-900/40 text-red-300'
+                }`;
+                
+                item.innerHTML = `
+                    <i data-lucide="${log.status ? 'check-circle-2' : 'x-circle'}" class="w-5 h-5 shrink-0 mt-0.5 ${log.status ? 'text-emerald-400' : 'text-red-400'}"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-white mb-1">${log.title}</h5>
+                        <p class="text-[11px] leading-relaxed opacity-90">${log.feedback}</p>
+                    </div>
+                `;
+                logContainer.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        window.onload = function() {
+            lucide.createIcons();
+            restoreCode();
+        };
+    </script>
+</body>
+</html>
