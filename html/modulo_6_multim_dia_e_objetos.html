@@ -71,7 +71,7 @@
                     <i data-lucide="app-window" class="w-5 h-5 text-emerald-400"></i> Iframes e Objetos
                 </h3>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    O <code>&lt;iframe&gt;</code> permite incorporar contextos de navegação de terceiros (ex: mapas, vídeos). Por ser um vetor comum para ataques de <em>Clickjacking</em>, o atributo <code>sandbox</code> deve ser sempre configurado rigidamente. O atributo <code>title</code> é crucial para os leitores de ecrã identificarem o conteúdo embutido.
+                    O <code>&lt;iframe&gt;</code> permite incorporar contextos de navegação de terceiros (ex: mapas, vídeos). Por ser um vetor comum para ataques de <em>Clickjacking</em>, o atributo <code>sandbox</code> deve ser sempre configurado rigidamente. O atributo <code>title</code> é crucial para os leitores de tela identificarem o conteúdo embutido.
                 </p>
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono-code text-[11px] text-sky-400 overflow-x-auto shadow-inner">
 &lt;iframe <br>
@@ -201,7 +201,7 @@
             checks.push({
                 status: temTitle,
                 title: "Acessibilidade Visual (iframe title)",
-                msg: "Leitores de ecrã anunciam o conteúdo de um iframe apenas se o atributo 'title' estiver presente e descritivo."
+                msg: "Leitores de tela anunciam o conteúdo de um iframe apenas se o atributo 'title' estiver presente e descritivo."
             });
 
             // Regra 4: Sandbox de Segurança
