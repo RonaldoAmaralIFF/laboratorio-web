@@ -71,10 +71,10 @@
     <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
         <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-850 rounded-2xl p-6 shadow-xl space-y-3">
             <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400 font-mono-code flex items-center gap-1.5">
-                <i data-lucide="award" class="w-4 h-4"></i> Desafio Pro: Portal de Calendário & Multimédia
+                <i data-lucide="award" class="w-4 h-4"></i> Desafio Pro: Portal de Calendário & Multimídia
             </span>
             <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                <strong>O Cenário:</strong> O código legado fornecido representa um portal académico inacessível e inseguro. O seu papel é refatorar a estrutura inserindo semântica de dados (listas e tabelas com scope, thead e caption) e componentes multimédia robustos (vídeo com controlos e faixas de legenda, e iframes protegidos por sandbox). Atingir 100% de conformidade com a suíte de testes IFF garante a sua aprovação.
+                <strong>O Cenário:</strong> O código legado fornecido representa um portal académico inacessível e inseguro. O seu papel é refatorar a estrutura inserindo semântica de dados (listas e tabelas com scope, thead e caption) e componentes Multimídia robustos (vídeo com controles e faixas de legenda, e iframes protegidos por sandbox). Atingir 100% de conformidade com a suíte de testes IFF garante a sua aprovação.
             </p>
         </div>
     </div>
@@ -174,7 +174,7 @@
                 <td>Horário</td>
             </tr>
             <tr>
-                <td>Estruturação Multimédia</td>
+                <td>Estruturação Multimídia</td>
                 <td>19:00 - 20:30</td>
             </tr>
         </table>
@@ -182,7 +182,7 @@
         <p>Recursos necessários:</p>
         <!-- Deve ser refatorado para uma lista não ordenada estruturada -->
         * Computador com IDE configurada<br>
-        * Ficheiros de legenda (.vtt) prontos
+        * Arquivos de legenda (.vtt) prontos
     </div>
 
     <hr>
@@ -190,7 +190,7 @@
     <!-- MÓDULO 6: CONTEÚDO INTEGRADO (PRECISA DE ACESSIBILIDADE E SEGURANÇA) -->
     <div class="bloco-video">
         <h2>Apresentação da Disciplina</h2>
-        <!-- Falta controlo de vídeo e acessibilidade de legendas -->
+        <!-- Falta controle de vídeo e acessibilidade de legendas -->
         <video src="apresentacao.mp4"></video>
     </div>
 
@@ -262,7 +262,7 @@
             // 7. Vídeo - Controls
             const videoEl = doc.querySelector('video');
             const videoControls = videoEl && videoEl.hasAttribute('controls');
-            registerTest(videoControls, "Controlos de Vídeo Nativo", "Permite que qualquer utilizador consiga reproduzir e pausar o vídeo.");
+            registerTest(videoControls, "controles de Vídeo Nativo", "Permite que qualquer utilizador consiga reproduzir e pausar o vídeo.");
 
             // 8. Vídeo - Legendas (Track)
             const trackEl = doc.querySelector('video track[kind="captions"]');
