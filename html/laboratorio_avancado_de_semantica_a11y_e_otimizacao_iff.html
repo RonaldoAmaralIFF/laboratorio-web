@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFF - Programação Web: Laboratório de Semântica Avançada, A11y e SEO Técnico</title>
+    <!-- Tailwind CSS para Estilização de Alta Performance -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-mono-code {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Scrollbars customizadas para simular ambiente de IDE corporativo */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <!-- Modal Customizado de Alerta (Evitando alertas nativos do navegador) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-sm w-full mx-4 space-y-4 shadow-2xl">
+            <div class="flex items-center gap-3 text-emerald-400">
+                <i data-lucide="shield-alert" class="w-6 h-6 animate-bounce"></i>
+                <h4 id="custom-modal-title" class="font-bold text-white text-base">Mensagem do Professor</h4>
+            </div>
+            <p id="custom-modal-message" class="text-xs text-slate-300 leading-relaxed"></p>
+            <button onclick="closeCustomModal()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl transition-all shadow-md">
+                Compreendido
+            </button>
+        </div>
+    </div>
+
+    <!-- Cabeçalho Acadêmico e Institucional -->
+    <header class="bg-slate-900 border-b border-emerald-800/40 sticky top-0 z-40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-1 bg-emerald-950 border border-emerald-500/30 px-3 py-2 rounded-xl">
+                    <span class="w-3 h-7 bg-emerald-500 rounded-full inline-block"></span>
+                    <span class="w-3 h-5 bg-red-500 rounded-full inline-block"></span>
+                    <span class="w-3 h-7 bg-emerald-500 rounded-full inline-block"></span>
+                    <div class="text-left ml-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono-code block leading-none">IFF</span>
+                        <span class="text-[9px] text-slate-400 font-medium block mt-0.5 leading-none">BSI Campos Centro</span>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">Programação Web — Módulo Avançado</h1>
+                    <p class="text-xs text-slate-400">Microdados, WAI-ARIA, DPR &amp; Redes &bull; <span class="text-emerald-400 font-medium">Prof. Ronaldo Amaral</span></p>
+                </div>
+            </div>
+            
+            <nav class="flex items-center gap-1 overflow-x-auto w-full lg:w-auto py-1 justify-start lg:justify-end scrollbar-none custom-scroll">
+                <button onclick="tab('ementa')" id="tab-btn-ementa" class="tab-button px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-emerald-600 text-white shadow-lg shadow-emerald-900/20">
+                    Teoria Avançada
+                </button>
+                <button onclick="tab('debugger')" id="tab-btn-debugger" class="tab-button px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+                    HTTP &amp; ARIA Debugger
+                </button>
+                <button onclick="tab('desafio-pro')" id="tab-btn-desafio-pro" class="tab-button px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white hover:bg-slate-800/50 flex items-center gap-1 border border-emerald-500/10">
+                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-emerald-400 animate-pulse"></i> IDE Pro
+                </button>
+                <button onclick="tab('quiz-sen')" id="tab-btn-quiz-sen" class="tab-button px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+                    Simulado Sênior
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- CONTEÚDO 1: TEORIA AVANÇADA -->
+        <section id="pane-ementa" class="tab-panel block space-y-8 animate-fade-in">
+            <div class="bg-gradient-to-r from-slate-900 via-slate-950 to-emerald-950/10 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Módulo de Especialização Frontend</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2 mb-4 tracking-tight">Estruturação de Dados, Semântica de Negócio e Acessibilidade Dinâmica</h2>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-4xl">
+                    No desenvolvimento de **Sistemas de Informação**, o HTML5 não atua apenas como representação de parágrafos e títulos. Ele é a ponte para a indexação inteligente de dados por algoritmos de Machine Learning dos mecanismos de busca e para a inclusão social por meio de tecnologias assistivas de última geração. Neste módulo, exploramos conceitos de nível sênior.
+                </p>
+            </div>
+
+            <!-- Principais pilares de Engenharia de Software Frontend -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: Microdados & Schema.org -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="database"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-base">Microdados (Schema.org)</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Ao acoplar atributos como <code>itemscope</code>, <code>itemtype</code> e <code>itemprop</code> aos elementos HTML, transformamos texto livre em dados estruturados. Isso permite que rastreadores (Googlebot) entendam exatamente o que é um produto, preço, autor ou evento, gerando *Rich Snippets* destacados na pesquisa orgânica.
+                        </p>
+                    </div>
+                    <a href="https://schema.org" target="_blank" class="text-xs text-emerald-400 hover:underline flex items-center gap-1 mt-2">
+                        Visitar o vocabulário oficial Schema.org <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+
+                <!-- Card 2: WAI-ARIA Avançado -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-950 border border-sky-500/20 flex items-center justify-center text-sky-400">
+                            <i data-lucide="accessibility"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-base">Acessibilidade Ativa (ARIA)</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Sistemas de Informação interativos alteram estados na tela em tempo real sem recarregar a página (comunicação assíncrona). Para que leitores de tela identifiquem essas mutações, utilizamos atributos de acessibilidade dinâmica como <code>role="alert"</code>, <code>aria-live="polite"</code> e <code>aria-describedby</code>.
+                        </p>
+                    </div>
+                    <a href="https://www.w3.org/WAI/standards-guidelines/aria/" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center gap-1 mt-2">
+                        Aceder ao padrão WAI-ARIA da W3C <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3: Densidades Complexas de Pixels (DPR) -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-950 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                            <i data-lucide="monitor-smartphone"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-base">Densidade de Pixels (DPR)</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Dispositivos modernos (Retina Displays, ecrãs AMOLED móveis) possuem resoluções físicas que duplicam ou triplicam a quantidade de pixels em relação ao tamanho lógico em CSS. Declarar densidades como <code>foto-2x.jpg 2x</code> no `srcset` impede que suas imagens fiquem borradas em dispositivos premium sem sobrecarregar conexões comuns.
+                        </p>
+                    </div>
+                    <a href="https://developer.mozilla.org/pt-BR/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images" target="_blank" class="text-xs text-purple-400 hover:underline flex items-center gap-1 mt-2">
+                        Ler sobre Imagens Responsivas na MDN <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bloco de Exemplo de Código Corporativo -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="file-code" class="text-emerald-400"></i>
+                    Exemplo de Estruturação com Microdados e ARIA
+                </h3>
+                <p class="text-xs text-slate-300">
+                    Veja como acoplar semântica de negócios a um produto utilizando o vocabulário oficial da Schema.org de forma unificada no HTML5:
+                </p>
+                <div class="bg-slate-950 border border-slate-850 rounded-xl p-4 overflow-x-auto">
+                    <pre class="text-xs text-emerald-400 font-mono-code leading-relaxed">
+<span class="text-slate-500">&lt;!-- Delimita o escopo de um Produto --&gt;</span>
+&lt;<span class="text-purple-400">article</span> <span class="text-sky-400">itemscope</span> <span class="text-sky-400">itemtype</span>=<span class="text-amber-300">"https://schema.org/Product"</span>&gt;
+    
+    <span class="text-slate-500">&lt;!-- Atributo name indica o nome do produto para crawlers --&gt;</span>
+    &lt;<span class="text-purple-400">h1</span> <span class="text-sky-400">itemprop</span>=<span class="text-amber-300">"name"</span>&gt;Servidor IBM Power10&lt;/<span class="text-purple-400">h1</span>&gt;
+    
+    &lt;<span class="text-purple-400">figure</span>&gt;
+        &lt;<span class="text-purple-400">picture</span>&gt;
+            &lt;<span class="text-purple-400">source</span> <span class="text-sky-400">srcset</span>=<span class="text-amber-300">"server-2x.avif 2x, server-1x.avif 1x"</span> <span class="text-sky-400">type</span>=<span class="text-amber-300">"image/avif"</span>&gt;
+            &lt;<span class="text-purple-400">img</span> <span class="text-sky-400">src</span>=<span class="text-amber-300">"server-fallback.jpg"</span> <span class="text-sky-400">itemprop</span>=<span class="text-amber-300">"image"</span> <span class="text-sky-400">alt</span>=<span class="text-amber-300">"Rack frontal do servidor IBM"</span>&gt;
+        &lt;/<span class="text-purple-400">picture</span>&gt;
+        &lt;<span class="text-purple-400">figcaption</span>&gt;Figura 1.2: Visão do painel de controle.&lt;/<span class="text-purple-400">figcaption</span>&gt;
+    &lt;/<span class="text-purple-400">figure</span>&gt;
+
+    <span class="text-slate-500">&lt;!-- Zona de alerta dinâmico acessível via leitor de tela --&gt;</span>
+    &lt;<span class="text-purple-400">div</span> <span class="text-sky-400">role</span>=<span class="text-amber-300">"status"</span> <span class="text-sky-400">aria-live</span>=<span class="text-amber-300">"polite"</span> <span class="text-sky-400">class</span>=<span class="text-amber-300">"alert-stock"</span>&gt;
+        &lt;<span class="text-purple-400">strong</span>&gt;Apenas 2 unidades restantes no stock do IFF.&lt;/<span class="text-purple-400">strong</span>&gt;
+    &lt;/<span class="text-purple-400">div</span>&gt;
+
+&lt;/<span class="text-purple-400">article</span>&gt;</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTEÚDO 2: HTTP & ARIA DEBUGGER -->
+        <section id="pane-debugger" class="tab-panel hidden space-y-6 animate-fade-in">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                <h3 class="text-xl font-bold text-white mb-2">Simulador de Headers HTTP e Sintetizador ARIA</h3>
+                <p class="text-xs text-slate-400">Experimente simular as comunicações de baixo nível do protocolo de rede e observe o impacto das tags de acessibilidade tátil diretamente no navegador do cliente.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Simulador de Rede e MIME Types -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-white text-md border-b border-slate-850 pb-3 flex items-center gap-2">
+                            <i data-lucide="network" class="text-emerald-500"></i>
+                            Interpretador de Resposta HTTP (MIME Types)
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed mt-2">
+                            Configure o cabeçalho <code>Content-Type</code> que sua futura API Node.js enviará para o cliente e veja o comportamento do navegador em tempo real:
+                        </p>
+
+                        <!-- Parâmetros de Seleção do Header -->
+                        <div class="space-y-4 pt-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Escolher Cabeçalho de Resposta HTTP (Content-Type):</label>
+                                <select id="mime-select" onchange="runMimeSimulation()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none">
+                                    <option value="correct">Content-Type: text/html; charset=utf-8 (Correto)</option>
+                                    <option value="wrong">Content-Type: text/plain; charset=utf-8 (Errado)</option>
+                                    <option value="json">Content-Type: application/json (Errado para Páginas)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Simulador Visual do Ecrã do Browser -->
+                        <div class="bg-slate-950 border border-slate-850 rounded-xl p-4 mt-6">
+                            <div class="flex items-center gap-1.5 text-xs text-slate-500 border-b border-slate-900 pb-2 mb-2 font-mono-code">
+                                <span class="w-2 h-2 rounded-full bg-slate-800"></span>
+                                <span>Output do Navegador Client-Side</span>
+                            </div>
+                            <!-- Box de Exibição do Browser -->
+                            <div id="browser-sandbox-output" class="h-32 rounded-lg border border-slate-850 bg-slate-900 p-4 font-mono-code text-xs overflow-y-auto">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <p id="browser-sandbox-explanation" class="text-[10px] text-slate-400 leading-normal mt-4 bg-slate-950 p-3 rounded-lg border border-slate-850">
+                        <!-- Preenchido via JS -->
+                    </p>
+                </div>
+
+                <!-- Simulador de Leitores de Tela e Estados ARIA -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-white text-md border-b border-slate-850 pb-3 flex items-center gap-2">
+                            <i data-lucide="speech" class="text-sky-500"></i>
+                            Sintetizador Vocal ARIA &amp; Live Region
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed mt-2">
+                            Interaja com os controles abaixo para disparar eventos assíncronos de estoque no sistema. Observe como o atributo <code>aria-live</code> notifica acusticamente leitores de tela em tempo real sem mudar o foco da página.
+                        </p>
+
+                        <!-- Simulador de Stock com botões -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-3 mt-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-slate-400 font-semibold">Quantidade em Estoque (IFF BSI):</span>
+                                <span id="aria-stock-display" class="font-mono-code text-emerald-400 font-bold bg-emerald-950/40 px-2 py-1 rounded border border-emerald-900/30">10 unidades</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="changeAriaStock(-1)" class="flex-1 bg-red-950/40 hover:bg-red-900/40 text-red-300 font-semibold text-xs py-2 px-3 rounded-lg border border-red-900/30 transition-all">Remover 1 Unidade</button>
+                                <button onclick="changeAriaStock(1)" class="flex-1 bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-300 font-semibold text-xs py-2 px-3 rounded-lg border border-emerald-900/30 transition-all">Adicionar 1 Unidade</button>
+                            </div>
+                        </div>
+
+                        <!-- Console de Saída do Sintetizador de Voz -->
+                        <div class="bg-slate-950 border border-slate-850 rounded-xl p-4 mt-4">
+                            <div class="flex items-center gap-1.5 text-xs text-slate-500 border-b border-slate-900 pb-2 mb-2 font-mono-code">
+                                <i data-lucide="volume-2" class="w-3.5 h-3.5 text-sky-400"></i>
+                                <span>Console de Acessibilidade Vocálica (NVDA / VoiceOver)</span>
+                            </div>
+                            <div id="aria-speech-console" class="h-24 flex items-center justify-center text-center p-3 text-xs font-mono-code text-slate-400">
+                                Aguardando alteração crítica no estoque...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-850 text-[10px] text-slate-400 leading-relaxed mt-4">
+                        <strong>Comentário do Professor:</strong> Note que, ao declarar <code>aria-live="polite"</code> (ou <code>assertive</code> em casos graves), o leitor de tela interrompe a audição comum para anunciar a nova mudança. Sem isso, o usuário cego jamais saberia que o estoque do produto esgotou até recarregar a página inteira.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTEÚDO 3: DESAFIO DE REFATORAÇÃO AVANÇADO (IDE PRO) -->
+        <section id="pane-desafio-pro" class="tab-panel hidden space-y-6 animate-fade-in">
+            <!-- Cabeçalho do Desafio -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Laboratório Avançado (Módulos A, B e C)</span>
+                    <h3 class="text-xl font-bold text-white mt-1">IDE Interativa Pro: Refatoração com Microdados, ARIA &amp; Imagens 2x</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">Instrução: Modifique o código legado abaixo para remover todas as tags obsoletas. Adicione metadados de SEO corporativos. Transforme o elemento de imagem comum em uma estrutura responsiva moderna com suporte a resoluções de altíssima densidade de pixels (2x) e fallbacks modernos. Adicione suporte nativo ao vocabulário de **Sistemas de Informação Schema.org/Product** e atributos de **acessibilidade ativa ARIA**. Ao concluir, rode o validador automatizado!</p>
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button onclick="restoreCodeLabPro()" class="flex-1 md:flex-none bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs py-2 px-3 rounded-xl transition-all">
+                        Reiniciar Código
+                    </button>
+                    <button onclick="runHtmlProTests()" class="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950">
+                        <i data-lucide="play" class="w-3.5 h-3.5 fill-current animate-pulse"></i> Rodar Validador
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor e Resultados dos Testes -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Editor de Código -->
+                <div class="lg:col-span-7 bg-[#0f172a] border border-slate-800 rounded-2xl overflow-hidden flex flex-col h-[550px] shadow-2xl">
+                    <div class="bg-slate-950 px-4 py-2.5 flex items-center justify-between border-b border-slate-850">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 bg-red-500 rounded-full inline-block"></span>
+                            <span class="w-3 h-3 bg-yellow-500 rounded-full inline-block"></span>
+                            <span class="w-3 h-3 bg-emerald-500 rounded-full inline-block"></span>
+                            <span class="text-xs font-mono-code text-slate-400 ml-2">produto_bsi_avancado.html</span>
+                        </div>
+                        <span class="text-[9px] font-mono-code text-slate-500 uppercase font-bold tracking-widest">HTML5 Schema &amp; ARIA Compiler</span>
+                    </div>
+                    <textarea id="lab-pro-textarea" class="flex-1 w-full bg-[#090d16] text-[#38bdf8] font-mono-code text-xs p-4 focus:outline-none focus:ring-0 resize-none leading-relaxed custom-scroll" spellcheck="false"></textarea>
+                </div>
+
+                <!-- Resultados de Testes da IDE Pro -->
+                <div class="lg:col-span-5 bg-slate-900 border border-slate-800 p-5 rounded-2xl flex flex-col h-[550px] justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
+                            <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                                Auditoria de Qualidade de Código do IFF
+                            </h4>
+                            <span id="suite-pro-score" class="text-xs font-mono-code bg-slate-950 px-2 py-1 rounded-md text-slate-400 border border-slate-850">Score: 0 / 11</span>
+                        </div>
+
+                        <!-- Barra de progresso interna -->
+                        <div class="w-full bg-slate-950 rounded-full h-1.5 mb-6 border border-slate-850">
+                            <div id="suite-pro-progress" class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width: 0%"></div>
+                        </div>
+
+                        <!-- Lista de Logs -->
+                        <div class="space-y-2.5 overflow-y-auto max-h-[350px] pr-1 custom-scroll" id="suite-pro-log-holder">
+                            <!-- Injetado dinamicamente via JS -->
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-850 text-[10px] text-slate-400 leading-normal flex gap-2 items-start mt-4">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                        <span>A pipeline de CI/CD integrada acima analisa se o código do estudante atinge conformidade técnica sob a ótica de engenharia de software frontend real.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTEÚDO 4: SIMULADO SÊNIOR -->
+        <section id="pane-quiz-sen" class="tab-panel hidden space-y-6 animate-fade-in">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                <h3 class="text-xl font-bold text-white mb-2">Simulado de Diagnóstico Avançado</h3>
+                <p class="text-xs text-slate-400">Avalie os seus conhecimentos técnicos avançados sobre Schema.org, microdados, acessibilidade ARIA de tempo de execução, densidades de tela e cabeçalhos HTTP.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-5" id="quiz-sen-questions-container">
+                <!-- Perguntas Injetadas via JS -->
+            </div>
+
+            <div class="max-w-3xl mx-auto pt-6 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <span id="quiz-sen-status" class="text-xs font-mono-code text-slate-400">Aguardando preenchimento das alternativas...</span>
+                <button onclick="gradeQuizSenAnswers()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-6 rounded-xl transition-all shadow-lg shadow-emerald-950">
+                    Submeter Respostas
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Rodapé Acadêmico Institucional -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-8 text-center text-xs text-slate-500 space-y-2 mt-auto">
+        <p>Instituto Federal de Educação, Ciência e Tecnologia Fluminense — Campus Campos Centro</p>
+        <p>Bacharelado em Sistemas de Informação &bull; Disciplina: Programação Web &bull; Prof. Ronaldo Amaral</p>
+        <p class="text-[10px] text-slate-600">&copy; 2026 IFF. Todos os direitos reservados. Flipped Classroom Platform.</p>
+    </footer>
+
+    <!-- Lógica de Processamento e Controle de Estado (JavaScript) -->
+    <script>
+        // Código legado inicial que os alunos herdam para a atividade prática avançada
+        const legacyCodePro = `<!-- EXERCÍCIO AVANÇADO: APLIQUE METADADOS, MICRODADOS (SCHEMA.ORG), ARIA E PIXEL DENSITY (2X) -->
+<html>
+<head>
+    <title>produto</title>
+</head>
+<body>
+    <!-- TAREFA: Refatore este card genérico aplicando o escopo de Produto da Schema.org -->
+    <div class="card-produto">
+        
+        <!-- TAREFA: Converta para h1 com a respectiva propriedade de nome -->
+        <h2>Câmera Profissional Nikon D850</h2>
+        
+        <!-- TAREFA: Mapeie a imagem utilizando <figure>, <picture> e suporte a resoluções comuns e retina (2x) -->
+        <!-- Utilize os arquivos 'camera-desktop.avif' (media de desktop) e 'camera-mobile.webp' (media de mobile) -->
+        <img src="camera-fallback.jpg" alt="Foto">
+        <p class="legenda-foto">Câmera Nikon DSLR em detalhe físico.</p>
+
+        <div class="info-adicionais">
+            <!-- TAREFA: Utilize a marcação temporal correta para a data de liberação do produto -->
+            <p>Data de liberação no mercado: 20 de Agosto de 2026</p>
+            
+            <p class="descricao">A Nikon D850 é uma câmera DSLR topo de linha para profissionais exigentes.</p>
+            
+            <!-- TAREFA: Adicione suporte ARIA para anúncios dinâmicos de stock baixo neste bloco -->
+            <div class="alerta-estoque">
+                <p><i>Atenção:</i> Apenas <b>2 unidades restantes</b> no estoque.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
+
+        // Banco de Dados de Questões do Simulado Sênior
+        const quizSenDatabase = [
+            {
+                id: 1,
+                question: "1. No ecossistema Schema.org, qual a diferença funcional entre os atributos 'itemscope', 'itemtype' e 'itemprop'?",
+                options: [
+                    "Itemscope delimita a área de CSS da página, itemtype define a fonte e itemprop altera a cor das letras.",
+                    "Itemscope cria uma nova entidade semântica no elemento, itemtype especifica a URL do modelo da entidade (Ex: Product) e itemprop rotula as propriedades internas de dados dessa entidade.",
+                    "Itemscope bloqueia o download de arquivos do servidor, itemtype define o tipo MIME e itemprop cria links hipertexto.",
+                    "Não há diferenças, eles são apenas aliases redundantes usados para compatibilidade antiga."
+                ],
+                correct: 1,
+                explanation: "Itemscope cria o escopo lógico da entidade. Itemtype aponta para a especificação do modelo (Schema.org). Itemprop mapeia as propriedades de valor associadas a essa entidade para leitura de motores de busca e indexadores."
+            },
+            {
+                id: 2,
+                question: "2. Com relação ao pixel density (DPR), por que declarar mídias com especificações como 'imagem-2x.avif 2x' no srcset é considerado uma boa prática de engenharia?",
+                options: [
+                    "Porque impede que o usuário salve a imagem em seu computador.",
+                    "Porque converte automaticamente a imagem para formato vetorial tridimensional.",
+                    "Porque permite que navegadores em telas de alta densidade (Retina/DPR >= 2) carreguem imagens nítidas de alta resolução, enquanto telas comuns de celulares antigos não desperdiçam tráfego baixando o arquivo pesado.",
+                    "Porque remove a necessidade de utilizar o arquivo de fallback no final do picture."
+                ],
+                correct: 2,
+                explanation: "Telas premium possuem densidade física de pixels multiplicada. Ao declarar '2x' no srcset, o navegador calcula o DPR do cliente e faz o download seletivo do arquivo correto, balanceando nitidez e economia de rede."
+            },
+            {
+                id: 3,
+                question: "3. Qual o papel técnico do atributo de acessibilidade dinâmica 'aria-live' no desenvolvimento frontend moderno?",
+                options: [
+                    "Executar transmissões de vídeo ao vivo diretamente pelo HTML.",
+                    "Garantir criptografia de ponta a ponta em conexões de formulários.",
+                    "Sinalizar a tecnologias assistivas (leitores de ecrã) que um elemento dinâmico sofreu alterações em tempo de execução, forçando-as a ditar a alteração para o usuário cego sem que ele precise focar manualmente no elemento.",
+                    "Mudar a paleta de cores do site automaticamente para usuários daltônicos."
+                ],
+                correct: 2,
+                explanation: "aria-live cria uma 'região viva' (Live Region). Quando o conteúdo interno muda (ex: contadores, alertas de stock), o leitor de tela anuncia de forma transparente a alteração ao usuário."
+            },
+            {
+                id: 4,
+                question: "4. No protocolo HTTP, se sua API responder com dados estruturados HTML mas omitir o charset UTF-8 no Content-Type ou na tag meta, qual o impacto técnico provável no cliente?",
+                options: [
+                    "A página falhará silenciosamente no carregamento gerando erro 404.",
+                    "O site renderizará perfeitamente mas não aceitará conexões via formulários.",
+                    "Navegadores em diferentes regiões lúdicas do mundo interpretarão os caracteres sob padrões antigos (como ISO-8859-1), quebrando acentuações nativas e degradando a leitura para sintetizadores de voz.",
+                    "Os scripts JS travarão o navegador impedindo cliques no ecrã."
+                ],
+                correct: 2,
+                explanation: "O charset UTF-8 garante a universalidade dos caracteres latinos. Se ausente, os bytes textuais de acentuação serão decodificados de forma inconsistente dependendo do padrão regional do navegador do cliente."
+            },
+            {
+                id: 5,
+                question: "5. Para que serve o papel dinâmico role='status' (ou role='alert') em termos práticos de usabilidade e inclusão?",
+                options: [
+                    "Estilizar elementos de mensagens de forma colorida usando CSS.",
+                    "Dizer explicitamente a softwares assistivos a relevância de um bloco dinâmico de texto para que ele seja processado com prioridade de leitura imediata na árvore de acessibilidade do sistema.",
+                    "Impedir que bots de busca de spam indexem dados sensíveis do formulário.",
+                    "Forçar o browser a redirecionar o utilizador para a página inicial de suporte."
+                ],
+                correct: 1,
+                explanation: "Os atributos role estabelecem papéis semânticos que estendem o HTML nativo. Ao configurar role='status' ou role='alert', tecnologias assistivas reagem interpretando o bloco como informações críticas de estado."
+            }
+        ];
+
+        // Custom Modal Handlers
+        function showCustomModal(title, msg) {
+            document.getElementById('custom-modal-title').innerText = title;
+            document.getElementById('custom-modal-message').innerText = msg;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Alternação entre abas de conteúdo
+        function tab(paneId) {
+            document.querySelectorAll('.tab-panel').forEach(pane => {
+                pane.classList.add('hidden');
+                pane.classList.remove('block');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white', 'shadow-lg', 'shadow-emerald-900/20');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/50');
+            });
+
+            document.getElementById(`pane-${paneId}`).classList.remove('hidden');
+            document.getElementById(`pane-${paneId}`).classList.add('block');
+            
+            const activeBtn = document.getElementById(`tab-btn-${paneId}`);
+            activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/50');
+            activeBtn.classList.add('bg-emerald-600', 'text-white', 'shadow-lg', 'shadow-emerald-900/20');
+        }
+
+        // Lógica de simulação de MIME Types do Simulador de Rede
+        function runMimeSimulation() {
+            const val = document.getElementById('mime-select').value;
+            const outputBox = document.getElementById('browser-sandbox-output');
+            const explanationBox = document.getElementById('browser-sandbox-explanation');
+
+            if (val === 'correct') {
+                outputBox.innerHTML = `
+                    <div class="space-y-2">
+                        <h4 class="text-white font-bold text-base">Câmera Profissional Nikon D850</h4>
+                        <p class="text-slate-300">Produto disponível para entrega.</p>
+                        <span class="text-xs bg-emerald-950 text-emerald-400 px-2 py-1 rounded">Preço: R$ 15.000,00</span>
+                    </div>
+                `;
+                outputBox.className = "h-32 rounded-lg border border-slate-850 bg-slate-900 p-4 font-sans text-xs overflow-y-auto";
+                explanationBox.innerHTML = "<strong>Comportamento Correto do Browser:</strong> Ao receber <code>text/html</code>, o navegador ativa seu parser interno de HTML5, decodifica as tags de forma estruturada e renderiza a interface gráfica amigável de ecrã para o usuário final.";
+            } else if (val === 'wrong') {
+                outputBox.innerText = "<html>\n<head>\n    <title>produto</title>\n</head>\n<body>\n    <h4>Câmera Profissional Nikon D850</h4>\n</body>\n</html>";
+                outputBox.className = "h-32 rounded-lg border border-slate-850 bg-slate-950 p-4 font-mono-code text-xs text-amber-400 overflow-y-auto";
+                explanationBox.innerHTML = "<strong>Vazamento de Código Fonte (text/plain):</strong> Como o cabeçalho HTTP diz que o recurso é texto simples sem marcação, o browser desativa o interpretador gráfico e cospe os caracteres de tags diretamente na tela como texto comum.";
+            } else {
+                outputBox.innerText = '{\n  "id": "nikon-d850",\n  "name": "Câmera Profissional Nikon D850",\n  "price": 15000.00,\n  "status": "in_stock"\n}';
+                outputBox.className = "h-32 rounded-lg border border-slate-850 bg-slate-950 p-4 font-mono-code text-xs text-sky-400 overflow-y-auto";
+                explanationBox.innerHTML = "<strong>Tratamento de Dados Puros (application/json):</strong> O browser reconhece o formato JSON de APIs. Ele não renderizará layout, mas sim o texto puro de chaves/valores de banco de dados estruturados para tratamento assíncrono via scripts JS.";
+            }
+        }
+
+        // Lógica de Estoque Ativo com Saída de Audio Sintetizada
+        let currentStock = 10;
+        function changeAriaStock(modifier) {
+            currentStock += modifier;
+            if (currentStock < 0) currentStock = 0;
+            if (currentStock > 15) currentStock = 15;
+
+            const display = document.getElementById('aria-stock-display');
+            const speechConsole = document.getElementById('aria-speech-console');
+
+            display.innerText = `${currentStock} unidades`;
+
+            // Ativa simulação acústica baseada no status aria-live
+            if (currentStock === 0) {
+                display.className = "font-mono-code text-red-400 font-bold bg-red-950/40 px-2 py-1 rounded border border-red-900/30";
+                speechConsole.className = "h-24 flex items-center justify-center text-center p-3 text-xs font-mono-code bg-red-950/20 border border-red-900/30 text-red-300 animate-pulse";
+                speechConsole.innerText = '🗣️ [Leitor de Tela]: "Atenção: O estoque do produto esgotou no sistema do IFF!"';
+            } else if (currentStock <= 2) {
+                display.className = "font-mono-code text-yellow-400 font-bold bg-yellow-950/40 px-2 py-1 rounded border border-yellow-900/30";
+                speechConsole.className = "h-24 flex items-center justify-center text-center p-3 text-xs font-mono-code bg-yellow-950/20 border border-yellow-900/30 text-yellow-300 animate-pulse";
+                speechConsole.innerText = `🗣️ [Leitor de Tela]: "Aviso Importante: Estoque crítico! Restam apenas ${currentStock} unidades."`;
+            } else {
+                display.className = "font-mono-code text-emerald-400 font-bold bg-emerald-950/40 px-2 py-1 rounded border border-emerald-900/30";
+                speechConsole.className = "h-24 flex items-center justify-center text-center p-3 text-xs font-mono-code bg-slate-950 text-slate-400";
+                speechConsole.innerText = `🗣️ [Leitor de Tela]: "Quantidade alterada para ${currentStock} unidades."`;
+            }
+        }
+
+        // Reseta e Carrega a IDE de Laboratório Avançada (Aba 3)
+        function restoreCodeLabPro() {
+            document.getElementById('lab-pro-textarea').value = legacyCodePro;
+            document.getElementById('suite-pro-score').innerText = 'Score: 0 / 11';
+            document.getElementById('suite-pro-progress').style.width = '0%';
+            
+            document.getElementById('suite-pro-log-holder').innerHTML = `
+                <div class="flex items-start gap-3 bg-slate-950 p-3 rounded-xl border border-slate-850">
+                    <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-300">Pronto para Auditar</h5>
+                        <p class="text-[10px] text-slate-400 mt-1 leading-normal">Utilize o editor de código ao lado para efetuar as modificações de ecrã e clique no botão verde de "Rodar Validador" para processar o feedback estrito do professor.</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // Suíte de Testes Automatizados Avançados para a IDE Pro (Validador)
+        function runHtmlProTests() {
+            const codeText = document.getElementById('lab-pro-textarea').value;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(codeText, 'text/html');
+            
+            let passedCount = 0;
+            const totalTests = 11;
+            const testLogs = [];
+
+            function assert(status, title, feedback) {
+                if (status) passedCount++;
+                testLogs.push({ status, title, feedback });
+            }
+
+            // Teste 1: Doctype
+            const checkDoctype = codeText.trim().toLowerCase().startsWith('<!doctype html>');
+            assert(checkDoctype, "Declaração de DOCTYPE HTML5", "Sua página deve iniciar estritamente com <!DOCTYPE html> para definir o padrão de renderização correto para o navegador.");
+
+            // Teste 2: Idioma
+            const checkLanguage = doc.documentElement && doc.documentElement.getAttribute('lang')?.toLowerCase() === 'pt-br';
+            assert(checkLanguage, "Idioma do Documento (lang='pt-BR')", "Define o português como idioma do arquivo para que leitores de ecrã não pronunciem termos de forma incorreta.");
+
+            // Teste 3: Charset UTF-8
+            const checkCharset = doc.querySelector('meta[charset]')?.getAttribute('charset')?.toUpperCase() === 'UTF-8';
+            assert(checkCharset, "Mapeamento Charset UTF-8", "Evita erros gráficos de acentuação nos caracteres latinos em diferentes servidores.");
+
+            // Teste 4: Viewport
+            const checkViewport = !!doc.querySelector('meta[name="viewport"]');
+            assert(checkViewport, "Meta Viewport Responsiva", "Informa aos dispositivos móveis para que se adaptem nativamente ao tamanho físico de ecrã sem zoom forçado.");
+
+            // Teste 5: Título SEO descritivo do Produto
+            const titleEl = doc.querySelector('title');
+            const checkTitle = titleEl && titleEl.innerText !== 'produto' && titleEl.innerText.trim().length > 10;
+            assert(checkTitle, "Título Descritivo de SEO", "O título não deve ser genérico como 'produto' para que seu site ganhe relevância orgânica.");
+
+            // Teste 6: Meta Description
+            const metaDesc = doc.querySelector('meta[name="description"]');
+            const checkDesc = metaDesc && metaDesc.getAttribute('content')?.trim().length > 15;
+            assert(checkDesc, "Meta Descrição do Produto", "Forneça uma meta descrição rica para ser exibida nos snippets de pesquisa do Google.");
+
+            // Teste 7: Escopo de Produto da Schema.org
+            const articleEl = doc.querySelector('[itemscope][itemtype="https://schema.org/Product"]');
+            assert(!!articleEl, "Escopo Semântico de Produto (Schema.org)", "Envolva o card do produto com a declaração itemscope e o tipo correto de especificação (itemtype='https://schema.org/Product').");
+
+            // Teste 8: Mapeamento de Propriedades de Dados
+            const nameProp = doc.querySelector('[itemprop="name"]');
+            const imgProp = doc.querySelector('[itemprop="image"]');
+            const descProp = doc.querySelector('[itemprop="description"]');
+            assert(!!nameProp && !!imgProp && !!descProp, "Mapeamento itemprop (name, image, description)", "Casar propriedades internas às tags corretas utilizando os atributos itemprop correspondentes do vocabulário Schema.org.");
+
+            // Teste 9: Ilustração Semântica Figure
+            const figureEl = doc.querySelector('figure');
+            const figcaptionEl = doc.querySelector('figure figcaption');
+            assert(!!figureEl && !!figcaptionEl, "Contêiner de Ilustração <figure> & <figcaption>", "Envolva a imagem e legenda com a estrutura descritiva correta de ilustração semântica.");
+
+            // Teste 10: Responsividade de Alta Densidade (srcset 2x)
+            const sourceAvif = doc.querySelector('picture source[type="image/avif"]');
+            const checkSrcset = sourceAvif && sourceAvif.getAttribute('srcset')?.includes('2x');
+            assert(checkSrcset, "Densidade de Pixels (srcset 2x)", "Mapeie os arquivos responsivos no picture contendo a variação de alta densidade física de ecrãs de retina (ex: camera-desktop.avif 2x).");
+
+            // Teste 11: Acessibilidade Ativa ARIA (role/aria-live)
+            const ariaEl = doc.querySelector('[role="status"][aria-live="polite"]') || doc.querySelector('[role="alert"]') || doc.querySelector('[aria-live="assertive"]');
+            assert(!!ariaEl, "Acessibilidade Ativa (ARIA Role & aria-live)", "Insira atributos aria-live e papeis adequados (role='status') na div de stock crítico para alertar sintetizadores de voz dinamicamente.");
+
+            // Atualização de Score e Progresso
+            document.getElementById('suite-pro-score').innerText = `Score: ${passedCount} / ${totalTests}`;
+            const pct = (passedCount / totalTests) * 100;
+            document.getElementById('suite-pro-progress').style.width = `${pct}%`;
+
+            // Desenha resultados no painel de logs
+            const holder = document.getElementById('suite-pro-log-holder');
+            holder.innerHTML = '';
+
+            testLogs.forEach(log => {
+                const item = document.createElement('div');
+                item.className = `flex items-start gap-3 p-3 rounded-xl border transition-all ${
+                    log.status 
+                    ? 'bg-emerald-950/20 border-emerald-900/40 text-emerald-300' 
+                    : 'bg-red-950/20 border-red-900/40 text-red-300'
+                }`;
+                
+                item.innerHTML = `
+                    <i data-lucide="${log.status ? 'check' : 'x'}" class="w-4 h-4 shrink-0 mt-0.5 ${log.status ? 'text-emerald-400' : 'text-red-400'}"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-white">${log.title}</h5>
+                        <p class="text-[10px] text-slate-400 mt-1 leading-normal">${log.feedback}</p>
+                    </div>
+                `;
+                holder.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        // Constrói as Questões do Simulado Sênior (Aba 4)
+        function renderQuizSen() {
+            const container = document.getElementById('quiz-sen-questions-container');
+            container.innerHTML = '';
+
+            quizSenDatabase.forEach(q => {
+                const qBlock = document.createElement('div');
+                qBlock.className = 'bg-slate-900 border border-slate-850 p-6 rounded-2xl space-y-4';
+                qBlock.innerHTML = `
+                    <h4 class="font-bold text-white text-xs sm:text-sm">${q.question}</h4>
+                    <div class="space-y-2">
+                        ${q.options.map((opt, i) => `
+                            <label class="flex items-start gap-3 p-3 rounded-xl bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-all cursor-pointer text-xs">
+                                <input type="radio" name="sim-q-sen-${q.id}" value="${i}" class="mt-0.5 text-emerald-600 focus:ring-emerald-500 shrink-0">
+                                <span class="text-slate-300 leading-normal">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="sim-explain-sen-${q.id}" class="hidden p-3.5 rounded-xl text-xs leading-relaxed"></div>
+                `;
+                container.appendChild(qBlock);
+            });
+        }
+
+        // Corrige o Simulado Sênior
+        function gradeQuizSenAnswers() {
+            let score = 0;
+            let answeredAll = true;
+
+            quizSenDatabase.forEach(q => {
+                const selected = document.querySelector(`input[name="sim-q-sen-${q.id}"]:checked`);
+                const explainDiv = document.getElementById(`sim-explain-sen-${q.id}`);
+                
+                if (!selected) {
+                    answeredAll = false;
+                    return;
+                }
+
+                const answerIdx = parseInt(selected.value);
+                explainDiv.classList.remove('hidden');
+
+                if (answerIdx === q.correct) {
+                    score++;
+                    explainDiv.className = 'p-3.5 rounded-xl text-xs leading-relaxed bg-emerald-950/30 border border-emerald-900/40 text-emerald-300';
+                    explainDiv.innerHTML = `<strong>Correto!</strong> ${q.explanation}`;
+                } else {
+                    explainDiv.className = 'p-3.5 rounded-xl text-xs leading-relaxed bg-red-950/30 border border-red-900/40 text-red-300';
+                    explainDiv.innerHTML = `<strong>Incorreto.</strong> A alternativa correta é a opção ${q.correct + 1}. <br><span class="text-slate-300 block mt-1.5">${q.explanation}</span>`;
+                }
+            });
+
+            if (!answeredAll) {
+                showCustomModal("Aviso", "Por favor, selecione uma resposta para cada pergunta antes de enviar para avaliação!");
+                return;
+            }
+
+            const status = document.getElementById('quiz-sen-status');
+            status.innerText = `Resultado final: ${score} de ${quizSenDatabase.length} corretas (${(score / quizSenDatabase.length) * 100}%)`;
+            status.className = `text-xs font-bold font-mono-code ${score >= 4 ? 'text-emerald-400' : 'text-yellow-400'}`;
+        }
+
+        // Execuções ao Inicializar a Janela
+        window.onload = function() {
+            // Desenha Ícones Lucide
+            lucide.createIcons();
+            
+            // Inicia simulações do debugger
+            runMimeSimulation();
+            
+            // Reseta IDE do laboratório avançado
+            restoreCodeLabPro();
+            
+            // Desenha questões do Simulado
+            renderQuizSen();
+        }
+    </script>
+</body>
+</html>
