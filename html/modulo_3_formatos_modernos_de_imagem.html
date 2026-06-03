@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3: Formatos Modernos de Imagem | BSI - IFF</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <!-- Cabeçalho de Navegação Académica -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono-code text-emerald-400 font-bold">
+                    IFF - BSI
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-none">Programação Web</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">Especialização em Frontend Estrutural &bull; Prof. Ronaldo Amaral</p>
+                </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-900/40 px-3 py-1 rounded-xl">
+                Módulo 3: Formatos Modernos
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 space-y-8">
+        
+        <!-- Banner Teórico -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Física de Mídias Web</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Os Algoritmos de Compressão: AVIF e WebP</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Os formatos clássicos (JPEG/PNG) nasceram nos primórdios da internet e carregam esquemas pesados e redundantes de armazenamento de canais cromáticos. O desenvolvimento moderno exige o uso de formatos estruturados sob codecs de vídeo avançados (como a compressão intra-frame VP8 do WebP e a eficiência espacial AV1 do AVIF), garantindo poupança extrema de banda.
+            </p>
+        </div>
+
+        <!--  -->
+
+        <!-- Calculadora Prática de Consumo de Largura de Banda -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6">
+            <div class="space-y-1">
+                <h3 class="font-bold text-white text-md flex items-center gap-2">
+                    <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i>
+                    Calculadora de Tempo de Descarregamento de Ativos
+                </h3>
+                <p class="text-xs text-slate-400">
+                    Selecione a velocidade de ligação à internet do utilizador para simular e mensurar cientificamente a latência e o consumo de dados móveis em cada formato.
+                </p>
+            </div>
+
+            <!-- Parâmetros de Entrada -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-850">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Qualidade de Conexão do Utilizador</label>
+                    <select id="calc-network" onchange="computeLatency()" class="w-full bg-slate-900 border border-slate-800 text-slate-100 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none">
+                        <option value="3g">Ligação 3G Móvel Limitada (1.5 Mbps)</option>
+                        <option value="4g" selected>Ligação 4G Móvel Padrão (15 Mbps)</option>
+                        <option value="5g">Ligação 5G Corporativa / Fibra (150 Mbps)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Tamanho Teórico do Ativo (Resolução de Origem)</label>
+                    <select id="calc-dimension" onchange="computeLatency()" class="w-full bg-slate-900 border border-slate-800 text-slate-100 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none">
+                        <option value="small">Dimensões Reduzidas (Cards/Avatares)</option>
+                        <option value="medium" selected>Dimensões Médias (Imagens de Conteúdo)</option>
+                        <option value="large">Dimensões Grandes (Imagens Hero / Fundo)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Gráfico Dinâmico e Output de Tempos -->
+            <div class="space-y-4">
+                
+                <!-- JPEG Clássico -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs font-mono-code">
+                        <span class="text-slate-400 font-bold">JPEG Clássico (1992)</span>
+                        <span id="weight-jpg" class="text-red-400 font-bold">380 KB</span>
+                    </div>
+                    <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-850">
+                        <div id="bar-jpg" class="bg-red-600 h-full transition-all" style="width: 100%"></div>
+                    </div>
+                    <p id="latency-jpg" class="text-[10px] text-slate-500 font-mono-code">Tempo para descarregar: 2.03s</p>
+                </div>
+
+                <!-- WebP Moderno -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs font-mono-code">
+                        <span class="text-slate-400 font-bold">WebP Moderno (Google)</span>
+                        <span id="weight-webp" class="text-sky-400 font-bold">110 KB</span>
+                    </div>
+                    <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-850">
+                        <div id="bar-webp" class="bg-sky-500 h-full transition-all" style="width: 28.9%"></div>
+                    </div>
+                    <p id="latency-webp" class="text-[10px] text-slate-500 font-mono-code">Tempo para descarregar: 0.58s</p>
+                </div>
+
+                <!-- AVIF Avançado -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs font-mono-code">
+                        <span class="text-slate-400 font-bold">AVIF Alta Performance (AOMedia)</span>
+                        <span id="weight-avif" class="text-emerald-400 font-bold">45 KB</span>
+                    </div>
+                    <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-850">
+                        <div id="bar-avif" class="bg-emerald-500 h-full transition-all" style="width: 11.8%"></div>
+                    </div>
+                    <p id="latency-avif" class="text-[10px] text-slate-500 font-mono-code">Tempo para descarregar: 0.24s</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Rodapé do Módulo -->
+        <div class="text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+            <p>Instituto Federal Fluminense (IFF) - Bacharelado em Sistemas de Informação</p>
+            <p class="mt-1">Ementa Curricular - Referência MDN Web Docs: <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Content_categories#seções_de_conteúdo" target="_blank" class="text-emerald-500 underline">Aceder às Categorias de Conteúdo</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        // Inicializa ícones do Lucide
+        lucide.createIcons();
+
+        // Database de tamanhos de mídias estruturadas por tamanho (KB)
+        const sizeSpecs = {
+            'small': { jpg: 80, webp: 22, avif: 9 },
+            'medium': { jpg: 380, webp: 110, avif: 45 },
+            'large': { jpg: 1200, webp: 340, avif: 115 }
+        };
+
+        function computeLatency() {
+            const network = document.getElementById('calc-network').value;
+            const dimension = document.getElementById('calc-dimension').value;
+            const data = sizeSpecs[dimension];
+
+            // Define velocidade da rede simulada em Mbps
+            let speedMbps = 15;
+            if (network === '3g') speedMbps = 1.5;
+            if (network === '5g') speedMbps = 150;
+
+            const formats = ['jpg', 'webp', 'avif'];
+            const maxWeight = data.jpg;
+
+            formats.forEach(f => {
+                const w = data[f];
+                const sizeInBits = w * 1024 * 8;
+                const networkSpeedBits = speedMbps * 1000 * 1000;
+                let finalLatency = sizeInBits / networkSpeedBits;
+
+                if (finalLatency < 0.005) finalLatency = 0.005;
+
+                // Atualiza dados textuais no ecrã
+                document.getElementById(`weight-${f}`).innerText = `${w} KB`;
+                document.getElementById(`latency-${f}`).innerText = `Tempo de descarregamento estimado: ${finalLatency.toFixed(3)}s na velocidade de ligação escolhida.`;
+
+                // Atualiza largura visual da barra gráfica correspondente
+                const percentage = (w / maxWeight) * 100;
+                document.getElementById(`bar-${f}`).style.width = `${percentage}%`;
+            });
+        }
+
+        // Executa computação inicial no carregamento
+        computeLatency();
+    </script>
+</body>
+</html>

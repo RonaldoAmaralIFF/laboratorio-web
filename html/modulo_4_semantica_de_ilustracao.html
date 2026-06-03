@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4: Semântica de Ilustração | BSI - IFF</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <!-- Cabeçalho Académico -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono-code text-emerald-400 font-bold">
+                    IFF - BSI
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-none">Programação Web</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">Especialização em Frontend Estrutural &bull; Prof. Ronaldo Amaral</p>
+                </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-900/40 px-3 py-1 rounded-xl">
+                Módulo 4: Ilustração Semântica
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 space-y-8">
+        
+        <!-- Banner de Contexto -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Arquitetura de Dados</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">O Agrupamento Semântico: figure e figcaption</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Ilustrações de fluxos lógicos, esquemas de bases de dados relacionais, diagramas de arquitetura, fotografias de infraestrutura física e trechos autónomos de código-fonte devem ser agrupados de forma que o leitor de ecrã estabeleça uma <strong>associação irreversível de parentesco estrutural</strong> entre o conteúdo visual e a sua legenda descritiva.
+            </p>
+        </div>
+
+        <!--  -->
+
+        <!-- Comparativos de Marcação de Dados -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Antigo padrão genérico -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <div class="flex items-center gap-2 text-red-400">
+                    <i data-lucide="x-circle" class="w-5 h-5 shrink-0"></i>
+                    <h3 class="font-bold text-white text-md">Padrão Legado Obsoleto (Apenas Visual)</h3>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Antes do HTML5, os desenvolvedores separavam as imagens com estruturas baseadas em <code>&lt;div&gt;</code> genéricas acompanhadas de parágrafos comuns de texto estilizados por classes:
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+                    <pre class="text-xs text-red-400 font-mono-code leading-relaxed overflow-x-auto whitespace-pre">
+&lt;div class="container-foto"&gt;
+  &lt;img src="rack-servidores.jpg"&gt;
+  &lt;p class="legenda-estilo"&gt;
+    Figura 1: Servidores do IFF.
+  &lt;/p&gt;
+&lt;/div&gt;</pre>
+                </div>
+                <p class="text-[11px] text-slate-400">
+                    <strong>Falha técnica grave:</strong> Não há ligação de parentesco estrutural reconhecida na árvore de acessibilidade do navegador. O parágrafo é catalogado como texto solto disperso, ignorando a ligação direta à imagem.
+                </p>
+            </div>
+
+            <!-- Padrão Ouro HTML5 -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <div class="flex items-center gap-2 text-emerald-400">
+                    <i data-lucide="check-circle" class="w-5 h-5 shrink-0"></i>
+                    <h3 class="font-bold text-white text-md">Padrão Ouro Recomendado</h3>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    A tag semântica <code>&lt;figure&gt;</code> avisa o navegador que o bloco constitui um fluxo autónomo, enquanto a tag de fecho <code>&lt;figcaption&gt;</code> rotula explicitamente a imagem:
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+                    <pre class="text-xs text-emerald-400 font-mono-code leading-relaxed overflow-x-auto whitespace-pre">
+&lt;figure&gt;
+  &lt;img src="rack-servidores.jpg"&gt;
+  &lt;figcaption&gt;
+    Figura 1: Servidores do IFF.
+  &lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+                </div>
+                <p class="text-[11px] text-slate-400">
+                    <strong>Impacto de Acessibilidade (A11y):</strong> O leitor de ecrã foca o contêiner e dita de forma robusta e integrada: <em>"Ilustração: Figura 1, Servidores do IFF"</em>. Isto previne a leitura redundante e confusa das marcas de forma isolada.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Rodapé do Módulo -->
+        <div class="text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+            <p>Instituto Federal Fluminense (IFF) - Bacharelado em Sistemas de Informação</p>
+            <p class="mt-1">Ementa Curricular - Referência MDN Web Docs: <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/figure" target="_blank" class="text-emerald-500 underline">Aceder à Documentação de Figure</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        // Inicializa ícones do Lucide
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)https://programacao-web-bsi-2026-1.github.io/ExerciciosHTML/laboratorio/ -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Interativo: Programação Web - IFF</title>
+    <!-- Tailwind CSS para Estilização de Alto Nível -->
+    <script src="./Portal Interativo_ Programação Web - IFF_files/saved_resource"></script>
+    <!-- Ícones Lucide para Interface Moderna -->
+    <script src="./Portal Interativo_ Programação Web - IFF_files/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-mono-code {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Custom scrollbar para o painel de código */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sticky{position:sticky}.top-0{top:0px}.z-40{z-index:40}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-1{margin-left:0.25rem}.ml-2{margin-left:0.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:0.375rem}.h-3{height:0.75rem}.h-3\.5{height:0.875rem}.h-36{height:9rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.h-\[550px\]{height:550px}.max-h-\[350px\]{max-height:350px}.min-h-screen{min-height:100vh}.w-2\.5{width:0.625rem}.w-3{width:0.75rem}.w-3\.5{width:0.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-8{width:2rem}.w-full{width:100%}.max-w-3xl{max-width:48rem}.max-w-7xl{max-width:80rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.scale-\[1\.02\]{--tw-scale-x:1.02;--tw-scale-y:1.02;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-start{justify-content:flex-start}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-500\/40{border-color:rgb(245 158 11 / 0.4)}.border-amber-900\/30{border-color:rgb(120 53 15 / 0.3)}.border-emerald-500\/20{border-color:rgb(16 185 129 / 0.2)}.border-emerald-500\/30{border-color:rgb(16 185 129 / 0.3)}.border-emerald-500\/40{border-color:rgb(16 185 129 / 0.4)}.border-emerald-800\/40{border-color:rgb(6 95 70 / 0.4)}.border-emerald-900\/30{border-color:rgb(6 78 59 / 0.3)}.border-emerald-900\/40{border-color:rgb(6 78 59 / 0.4)}.border-pink-500\/40{border-color:rgb(236 72 153 / 0.4)}.border-purple-500\/40{border-color:rgb(168 85 247 / 0.4)}.border-sky-500\/40{border-color:rgb(14 165 233 / 0.4)}.border-slate-700\/50{border-color:rgb(51 65 85 / 0.5)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-slate-900{--tw-border-opacity:1;border-color:rgb(15 23 42 / var(--tw-border-opacity, 1))}.border-teal-500\/40{border-color:rgb(20 184 166 / 0.4)}.border-yellow-500\/40{border-color:rgb(234 179 8 / 0.4)}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.bg-\[\#0b141a\]{--tw-bg-opacity:1;background-color:rgb(11 20 26 / var(--tw-bg-opacity, 1))}.bg-\[\#0f172a\]{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-\[\#202c33\]{--tw-bg-opacity:1;background-color:rgb(32 44 51 / var(--tw-bg-opacity, 1))}.bg-amber-950\/20{background-color:rgb(69 26 3 / 0.2)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-emerald-950{--tw-bg-opacity:1;background-color:rgb(2 44 34 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-800\/50{background-color:rgb(30 41 59 / 0.5)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-emerald-950\/40{background-color:rgb(2 44 34 / 0.4)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-slate-900{--tw-gradient-from:#0f172a var(--tw-gradient-from-position);--tw-gradient-to:rgb(15 23 42 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-emerald-950\/20{--tw-gradient-to:rgb(2 44 34 / 0.2) var(--tw-gradient-to-position)}.to-slate-950{--tw-gradient-to:#020617 var(--tw-gradient-to-position)}.bg-cover{background-size:cover}.bg-center{background-position:center}.fill-current{fill:currentColor}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:0.5rem}.pb-4{padding-bottom:1rem}.pr-2{padding-right:0.5rem}.pt-2{padding-top:0.5rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[10px\]{font-size:10px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-normal{line-height:1.5}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-\[\#38bdf8\]{--tw-text-opacity:1;color:rgb(56 189 248 / var(--tw-text-opacity, 1))}.text-\[\#e9edef\]{--tw-text-opacity:1;color:rgb(233 237 239 / var(--tw-text-opacity, 1))}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-blue-300{--tw-text-opacity:1;color:rgb(147 197 253 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.text-pink-400{--tw-text-opacity:1;color:rgb(244 114 182 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-sky-400{--tw-text-opacity:1;color:rgb(56 189 248 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-teal-400{--tw-text-opacity:1;color:rgb(45 212 191 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-400{--tw-text-opacity:1;color:rgb(250 204 21 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-emerald-900\/30{--tw-shadow-color:rgb(6 78 59 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:border-emerald-500\/30:hover{border-color:rgb(16 185 129 / 0.3)}.hover\:border-emerald-500\/50:hover{border-color:rgb(16 185 129 / 0.5)}.hover\:bg-amber-950\/20:hover{background-color:rgb(69 26 3 / 0.2)}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-950\/20:hover{background-color:rgb(2 44 34 / 0.2)}.hover\:bg-pink-950\/20:hover{background-color:rgb(80 7 36 / 0.2)}.hover\:bg-purple-950\/20:hover{background-color:rgb(59 7 100 / 0.2)}.hover\:bg-sky-950\/30:hover{background-color:rgb(8 47 73 / 0.3)}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-950\/20:hover{background-color:rgb(4 47 46 / 0.2)}.hover\:bg-yellow-950\/20:hover{background-color:rgb(66 32 6 / 0.2)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:border-emerald-500:focus{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-0:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-emerald-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(16 185 129 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:w-auto{width:auto}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:justify-end{justify-content:flex-end}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pb-0{padding-bottom:0px}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 768px){.md\:col-span-3{grid-column:span 3 / span 3}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header Principal do IFF -->
+    <header class="bg-slate-900 border-b border-emerald-800/40 sticky top-0 z-40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <!-- Marca/Logo Simbólica do IFF (Verde/Vermelho Federal) -->
+                <div class="flex items-center gap-1 bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg">
+                    <span class="w-2.5 h-6 bg-emerald-500 rounded-full inline-block"></span>
+                    <span class="w-2.5 h-4 bg-red-500 rounded-full inline-block"></span>
+                    <span class="w-2.5 h-6 bg-emerald-500 rounded-full inline-block"></span>
+                    <span class="text-xs font-bold tracking-wider text-emerald-400 font-mono-code ml-1">IFF - BSI</span>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">Programação Web</h1>
+                    <p class="text-xs text-slate-400">Bacharelado em Sistemas de Informação</p>
+                </div>
+            </div>
+            
+            <nav class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 justify-start sm:justify-end">
+                <button onclick="switchTab(&#39;apresentacao&#39;)" id="btn-apresentacao" class="tab-btn px-3 py-1.5 text-xs rounded-md font-medium transition-all bg-emerald-600 text-white shadow-md shadow-emerald-900/30">
+                    Apresentação
+                </button>
+                <button onclick="switchTab(&#39;anatomia&#39;)" id="btn-anatomia" class="tab-btn px-3 py-1.5 text-xs rounded-md font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    Anatomia Semântica
+                </button>
+                <button onclick="switchTab(&#39;seo-social&#39;)" id="btn-seo-social" class="tab-btn px-3 py-1.5 text-xs rounded-md font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    SEO &amp; Head
+                </button>
+                <button onclick="switchTab(&#39;formulario&#39;)" id="btn-formulario" class="tab-btn px-3 py-1.5 text-xs rounded-md font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    Formulários &amp; A11y
+                </button>
+                <button onclick="switchTab(&#39;playground&#39;)" id="btn-playground" class="tab-btn px-3 py-1.5 text-xs rounded-md font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5 border border-emerald-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="code" aria-hidden="true" class="lucide lucide-code w-3.5 h-3.5 text-emerald-400"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg> Laboratório
+                </button>
+                <!-- <button onclick="switchTab('simulado')" id="btn-simulado" class="tab-btn px-3 py-1.5 text-xs rounded-md font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    Simulado
+                </button> -->
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- TAB 1: APRESENTAÇÃO & HISTÓRICO -->
+        <section id="tab-apresentacao" class="tab-content block space-y-8">
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Tecnologias Web -HTML</span>
+                    <h2 class="text-3xl font-extrabold text-white mt-2 mb-4 tracking-tight">O Frontend Estrutural na Web Corporativa</h2>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-sm sm:text-base">
+                        Seja bem-vindo(a) ao portal interativo de preparação. Como futuro(a) Bacharel em Sistemas de Informação, compreender que o HTML não é "só visual", mas sim a <strong>camada de modelagem semântica de dados</strong> no lado do cliente, é vital para o desenvolvimento de sistemas robustos, acessíveis e seguros.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 px-3 py-2 rounded-lg text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="compass" aria-hidden="true" class="lucide lucide-compass w-4 h-4 text-emerald-500"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>
+                            <span>Foco: Semântica, A11y e SEO</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 px-3 py-2 rounded-lg text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="git-branch" aria-hidden="true" class="lucide lucide-git-branch w-4 h-4 text-emerald-500"><path d="M15 6a9 9 0 0 0-9 9V3"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle></svg>
+                            <span><a href="https://github.com/Programacao-Web-BSI-2026-1/ExerciciosHTML">Entregas via Git &amp; GitHub</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evolução Histórica Interativa -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="hourglass" aria-hidden="true" class="lucide lucide-hourglass w-5 h-5 text-emerald-500"><path d="M5 22h14"></path><path d="M5 2h14"></path><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path></svg>
+                    A Linha do Tempo do HTML
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2 hover:border-emerald-500/30 transition-all">
+                        <span class="text-xs font-bold text-emerald-400 font-mono-code">1990 — A Fundação</span>
+                        <h4 class="font-bold text-white text-sm">Tim Berners-Lee</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Criado no CERN com o objetivo de conectar relatórios acadêmicos globais através de Hipertextos (Links).</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2 hover:border-emerald-500/30 transition-all">
+                        <span class="text-xs font-bold text-emerald-400 font-mono-code">1999 — O Padrão Rígido</span>
+                        <h4 class="font-bold text-white text-sm">HTML 4.01 / XHTML</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Domínio absoluto da web estática. A tentativa do W3C de criar o XHTML punia rigidamente qualquer erro de sintaxe do desenvolvedor.</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2 hover:border-emerald-500/30 transition-all">
+                        <span class="text-xs font-bold text-emerald-400 font-mono-code">Anos 2000 — Plugins</span>
+                        <h4 class="font-bold text-white text-sm">A Era do Adobe Flash</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Sem suporte multimídia nativo no navegador, a web dependia de plugins proprietários inseguros de terceiros para rodar áudio e vídeo.</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-850 bg-gradient-to-br from-slate-900 to-emerald-950/20 border-emerald-900/30 p-4 rounded-xl space-y-2 hover:border-emerald-500/50 transition-all">
+                        <span class="text-xs font-bold text-emerald-400 font-mono-code">2014 - Presente</span>
+                        <h4 class="font-bold text-white text-sm">HTML5 Semântico</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Surgimento do WHATWG. Lançamento da semântica nativa, validações de formulário modernas, áudio, vídeo e eliminação de dependências externas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mecânica de Rede e Arquivos -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-lg flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-text" aria-hidden="true" class="lucide lucide-file-text w-5 h-5 text-emerald-500"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+                        A Natureza Física do Arquivo
+                    </h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Ao contrário de documentos gerados em suítes office (como o Microsoft Word ou arquivos PDF), os arquivos HTML são salvos estritamente como <strong>texto puro</strong>. Não existem fontes ou imagens embutidas no arquivo. O que você escreve é o que é salvo.
+                    </p>
+                    <div class="bg-slate-950 p-3 rounded border border-slate-850">
+                        <div class="flex items-center justify-between text-xs text-slate-400 border-b border-slate-800 pb-2 mb-2 font-mono-code">
+                            <span>Exemplo de Texto (index.html)</span>
+                            <span class="text-emerald-400">Texto Puro</span>
+                        </div>
+                        <code class="text-xs text-emerald-400 font-mono-code">&lt;p&gt;O HTML5 unifica a estrutura do software client-side.&lt;/p&gt;</code>
+                    </div>
+                    <p class="text-xs text-slate-400 italic">
+                        Nota: A extensão <span class="font-mono-code text-white">.html</span> apenas orienta o interpretador de tela do sistema operacional a chamar o renderizador do navegador Web.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-lg flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="globe" aria-hidden="true" class="lucide lucide-globe w-5 h-5 text-emerald-500"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                        O Cabeçalho Content-Type e MIME Type
+                    </h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Quando um servidor backend entrega uma resposta para o navegador do cliente, ele precisa anexar o <strong>MIME Type</strong> no cabeçalho HTTP <code>Content-Type</code>. Isso indica ao motor do navegador como analisar o arquivo recebido.
+                    </p>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center bg-slate-950 px-3 py-2 rounded text-xs border border-slate-850">
+                            <span class="font-mono-code text-slate-300">HTML</span>
+                            <span class="font-mono-code text-emerald-400">Content-Type: text/html</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-950 px-3 py-2 rounded text-xs border border-slate-850">
+                            <span class="font-mono-code text-slate-300">CSS</span>
+                            <span class="font-mono-code text-emerald-400">Content-Type: text/css</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-950 px-3 py-2 rounded text-xs border border-slate-850">
+                            <span class="font-mono-code text-slate-300">Dados (API)</span>
+                            <span class="font-mono-code text-emerald-400">Content-Type: application/json</span>
+                        </div>
+                    </div>
+                    <div class="bg-amber-950/20 border border-amber-900/30 p-3 rounded text-xs text-amber-200">
+                        <strong>Aviso do Professor:</strong> Se sua API responder com um HTML usando o MIME type incorreto (ex: <code>text/plain</code>), o navegador irá desenhar o código HTML como texto literal na tela em vez de interpretá-lo como tags de renderização.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: ANATOMIA SEMÂNTICA INTERATIVA -->
+        <section id="tab-anatomia" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                <h3 class="text-xl font-bold text-white mb-2">Estrutura de Blocos vs Elementos de Texto Inline</h3>
+                <p class="text-xs text-slate-400">Clique em qualquer componente do modelo abaixo para revelar suas propriedades semânticas, obrigações de SEO e relevância para leitores de tela (Acessibilidade).</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Modelo de Layout Interativo (Visualizer) -->
+                <div class="lg:col-span-7 bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+                    <span class="text-xs text-slate-500 uppercase tracking-widest font-mono-code">Modelo de Layout Semântico (Clique nas Tags)</span>
+                    
+                    <div id="vis-header" onclick="highlightTag(&#39;header&#39;)" class="cursor-pointer border border-dashed border-emerald-500/40 hover:bg-emerald-950/20 p-3 rounded text-center transition-all bg-slate-900">
+                        <span class="font-mono-code text-xs font-bold text-emerald-400">&lt;header&gt;</span>
+                        <div class="mt-1 flex justify-between items-center px-4">
+                            <span class="text-xs text-slate-400">Logo IFF</span>
+                            <div id="vis-nav" onclick="event.stopPropagation(); highlightTag(&#39;nav&#39;)" class="border border-dashed border-sky-500/40 hover:bg-sky-950/30 px-3 py-1 rounded text-center transition-all bg-slate-950">
+                                <span class="font-mono-code text-[10px] font-bold text-sky-400">&lt;nav&gt; (Links Menu)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div id="vis-main" onclick="highlightTag(&#39;main&#39;)" class="md:col-span-3 cursor-pointer border border-dashed border-purple-500/40 hover:bg-purple-950/20 p-4 rounded transition-all bg-slate-900 space-y-3 bg-emerald-950/40 border-emerald-500 scale-[1.02]">
+                            <div class="flex justify-between">
+                                <span class="font-mono-code text-xs font-bold text-purple-400">&lt;main&gt;</span>
+                                <span class="text-[10px] text-slate-500">Único por Página</span>
+                            </div>
+                            
+                            <div id="vis-section" onclick="event.stopPropagation(); highlightTag(&#39;section&#39;)" class="border border-dashed border-pink-500/40 hover:bg-pink-950/20 p-3 rounded transition-all bg-slate-950 space-y-2">
+                                <span class="font-mono-code text-[10px] font-bold text-pink-400">&lt;section&gt; (Agrupamento)</span>
+                                
+                                <div id="vis-article" onclick="event.stopPropagation(); highlightTag(&#39;article&#39;)" class="border border-dashed border-amber-500/40 hover:bg-amber-950/20 p-2 rounded transition-all bg-slate-900 space-y-1 text-left">
+                                    <span class="font-mono-code text-[10px] font-bold text-amber-400">&lt;article&gt; (Independente)</span>
+                                    <p class="text-[10px] text-slate-300">Este conteúdo faz sentido mesmo se extraído do sistema.</p>
+                                    <div class="flex flex-wrap gap-1 mt-1">
+                                        <span onclick="event.stopPropagation(); highlightTag(&#39;strong&#39;)" class="text-[9px] font-mono-code bg-slate-950 px-1 py-0.5 rounded text-blue-300 hover:bg-slate-800">&lt;strong&gt;</span>
+                                        <span onclick="event.stopPropagation(); highlightTag(&#39;em&#39;)" class="text-[9px] font-mono-code bg-slate-950 px-1 py-0.5 rounded text-blue-300 hover:bg-slate-800">&lt;em&gt;</span>
+                                        <span onclick="event.stopPropagation(); highlightTag(&#39;code&#39;)" class="text-[9px] font-mono-code bg-slate-950 px-1 py-0.5 rounded text-blue-300 hover:bg-slate-800">&lt;code&gt;</span>
+                                        <span onclick="event.stopPropagation(); highlightTag(&#39;time&#39;)" class="text-[9px] font-mono-code bg-slate-950 px-1 py-0.5 rounded text-blue-300 hover:bg-slate-800">&lt;time&gt;</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="vis-aside" onclick="highlightTag(&#39;aside&#39;)" class="cursor-pointer border border-dashed border-yellow-500/40 hover:bg-yellow-950/20 p-3 rounded text-center transition-all bg-slate-900 flex flex-col justify-between">
+                            <span class="font-mono-code text-xs font-bold text-yellow-400">&lt;aside&gt;</span>
+                            <span class="text-[10px] text-slate-400">Conteúdo Relacionado Indiretamente (Ex: Widgets, Anúncios)</span>
+                            <span class="text-[10px] text-slate-500">Secundário</span>
+                        </div>
+                    </div>
+
+                    <div id="vis-footer" onclick="highlightTag(&#39;footer&#39;)" class="cursor-pointer border border-dashed border-teal-500/40 hover:bg-teal-950/20 p-3 rounded text-center transition-all bg-slate-900">
+                        <span class="font-mono-code text-xs font-bold text-teal-400">&lt;footer&gt;</span>
+                        <p class="text-[10px] text-slate-400 mt-1">Copyright, Termos de Uso do Sistema do IFF e Assinatura Técnica</p>
+                    </div>
+                </div>
+
+                <!-- Detalhes do Elemento Selecionado -->
+                <div class="lg:col-span-5 bg-slate-900 border border-slate-800 p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 border-b border-slate-800 pb-4 mb-4">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-950 flex items-center justify-center text-emerald-400 font-bold font-mono-code" id="info-tag-symbol">&lt;main&gt;</div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg" id="info-tag-title">&lt;main&gt;</h4>
+                                <span class="text-xs text-slate-400 font-mono-code" id="info-tag-type">Tipo do Elemento: Elemento de Nível de Bloco (Único)</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Responsabilidade Semântica</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed" id="info-tag-desc">Encapsula o conteúdo central e exclusivo da aplicação web atual. Não deve conter nada que se repita entre as páginas da sua aplicação.</p>
+                            </div>
+
+                            <div class="bg-slate-950 p-3 rounded border border-slate-850">
+                                <h5 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="eye" aria-hidden="true" class="lucide lucide-eye w-3.5 h-3.5"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg> Impacto na Acessibilidade (A11y)
+                                </h5>
+                                <p class="text-xs text-slate-300 leading-relaxed" id="info-tag-a11y">O marco mais relevante de acessibilidade. Tecnologias assistivas disponibilizam atalhos diretos que focam instantaneamente neste elemento.</p>
+                            </div>
+
+                            <div class="bg-slate-950 p-3 rounded border border-slate-850">
+                                <h5 class="text-xs font-bold text-sky-400 flex items-center gap-1.5 mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" aria-hidden="true" class="lucide lucide-search w-3.5 h-3.5"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg> Relevância de SEO
+                                </h5>
+                                <p class="text-xs text-slate-300 leading-relaxed" id="info-tag-seo">É o núcleo de leitura para rastreabilidade de bots. Conteúdo indexado dentro da main tem relevância de destaque.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-800">
+                        <a id="info-tag-link" href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/main" target="_blank" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs py-2 px-4 rounded transition-colors flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="external-link" aria-hidden="true" class="lucide lucide-external-link w-3.5 h-3.5 text-slate-400"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+                            Ler documentação oficial da MDN Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: SIMULADOR DE HEAD & SEO/SOCIAL -->
+        <section id="tab-seo-social" class="tab-content hidden space-y-8">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                <h3 class="text-xl font-bold text-white mb-2">Simulador de Metadados e SEO Social</h3>
+                <p class="text-xs text-slate-400">Modifique os parâmetros das metatags abaixo para visualizar como os motores de busca (Google) e ferramentas sociais (WhatsApp/Slack) processam os dados do cabeçalho de forma unificada.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Formulário de Entrada dos Metadados -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-md border-b border-slate-800 pb-2 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="settings" aria-hidden="true" class="lucide lucide-settings w-4 h-4 text-emerald-500"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        Parâmetros da Tag &lt;head&gt;
+                    </h4>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Título do Documento (&lt;title&gt;)</label>
+                            <input type="text" id="meta-input-title" value="Bacharelado em Sistemas de Informação | IFF" oninput="updateSeoSimulator()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded px-3 py-1.5 text-xs focus:border-emerald-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Meta Descrição (description)</label>
+                            <textarea id="meta-input-desc" rows="3" oninput="updateSeoSimulator()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded px-3 py-1.5 text-xs focus:border-emerald-500 focus:outline-none">O Curso de Sistemas de Informação do IFF prepara profissionais com sólida fundamentação em engenharia de computação e arquitetura de desenvolvimento web.</textarea>
+                            <div class="flex justify-between mt-1">
+                                <span class="text-[10px] text-slate-500">Recomendado: 140-160 caracteres</span>
+                                <span id="meta-char-count" class="text-[10px] text-emerald-400 font-mono-code">153 carac.</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">URL da Imagem Open Graph (og:image)</label>
+                            <input type="text" id="meta-input-image" value="https://portal1.iff.edu.br/cursos/ensino-superior/SistesmasdeInformacao2.jpg/@@images/60113ca9-fb0d-4cda-bd41-dbd5c0fb1b40.jpeg" oninput="updateSeoSimulator()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded px-3 py-1.5 text-xs focus:border-emerald-500 focus:outline-none">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 pt-2">
+                            <div class="bg-slate-950 p-3 rounded border border-slate-800">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-slate-300 font-medium">Meta Charset</span>
+                                    <span class="text-[10px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded font-mono-code font-bold">Ativa</span>
+                                </div>
+                                <p class="text-[10px] text-slate-500 mt-1">UTF-8: Previne caracteres quebrados em palavras acentuadas.</p>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded border border-slate-800">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-slate-300 font-medium">Meta Viewport</span>
+                                    <span class="text-[10px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded font-mono-code font-bold">Ativa</span>
+                                </div>
+                                <p class="text-[10px] text-slate-500 mt-1">Responsividade: Ajusta a escala da tela nativamente em mobile.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painéis de visualização em tempo real -->
+                <div class="space-y-6">
+                    <!-- Google Search Preview -->
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-3">
+                        <h4 class="font-bold text-slate-400 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" aria-hidden="true" class="lucide lucide-search w-4 h-4 text-sky-400"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                            Snippet de Busca Orgânica do Google
+                        </h4>
+                        <div class="bg-white text-slate-900 p-4 rounded-lg shadow-inner">
+                            <span class="text-xs text-slate-600 block truncate">https://portal.iff.edu.br › bsi</span>
+                            <span id="preview-google-title" class="text-lg text-blue-800 hover:underline cursor-pointer font-medium block truncate leading-snug">Bacharelado em Sistemas de Informação | IFF</span>
+                            <p id="preview-google-desc" class="text-xs text-slate-700 mt-1 leading-normal">O Curso de Sistemas de Informação do IFF prepara profissionais com sólida fundamentação em engenharia de computação e arquitetura de desenvolvimento web.</p>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp / Slack Card Preview -->
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-3">
+                        <h4 class="font-bold text-slate-400 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="share-2" aria-hidden="true" class="lucide lucide-share-2 w-4 h-4 text-emerald-400"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+                            Card de Compartilhamento Social (Open Graph)
+                        </h4>
+                        
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 max-w-sm">
+                            <div class="bg-[#0b141a] text-[#e9edef] rounded-lg overflow-hidden border border-emerald-900/40 shadow-lg">
+                                <div id="preview-og-image" class="h-36 bg-cover bg-center bg-slate-900" style="background-image: url(&quot;https://portal1.iff.edu.br/cursos/ensino-superior/SistesmasdeInformacao2.jpg/@@images/60113ca9-fb0d-4cda-bd41-dbd5c0fb1b40.jpeg&quot;);"></div>
+                                <div class="p-3 bg-[#202c33]">
+                                    <span class="text-[10px] text-slate-400 font-mono-code block">PORTAL.IFF.EDU.BR</span>
+                                    <span id="preview-og-title" class="text-xs font-bold text-white block mt-0.5 truncate">Bacharelado em Sistemas de Informação | IFF</span>
+                                    <span id="preview-og-desc" class="text-[10px] text-slate-300 block truncate mt-1">O Curso de Sistemas de Informação do IFF prepara profissionais com sólida fundamentação em engenharia de computação e arquitetura de desenvolvimento web.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: FORMULÁRIOS & VALIDAÇÕES NATIVAS -->
+        <section id="tab-formulario" class="tab-content hidden space-y-8">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                <h3 class="text-xl font-bold text-white mb-2">Formulários Nativos e o Escudo do Cliente</h3>
+                <p class="text-xs text-slate-400">Os formulários do HTML5 transferem validações estruturais para o motor do browser. Digite dados inválidos e clique em submeter para simular o comportamento de validação nativa em tempo real.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Simulador de Submissão de Formulário -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-md border-b border-slate-800 pb-2 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clipboard-list" aria-hidden="true" class="lucide lucide-clipboard-list w-4 h-4 text-emerald-500"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>
+                        Simulação de Inscrição em Disciplina - IFF
+                    </h4>
+                    
+                    <form id="sim-form" onsubmit="handleFormSubmission(event)" class="space-y-4">
+                        <div>
+                            <label for="sim-nome" class="block text-xs font-semibold text-slate-300 mb-1 flex justify-between">
+                                <span>Nome do Aluno:</span>
+                                <span class="text-[10px] text-emerald-400 font-mono-code">required minlength="3"</span>
+                            </label>
+                            <input type="text" id="sim-nome" required="" minlength="3" placeholder="Ex: João da Silva" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded px-3 py-1.5 text-xs focus:border-emerald-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label for="sim-email" class="block text-xs font-semibold text-slate-300 mb-1 flex justify-between">
+                                <span>Email Acadêmico:</span>
+                                <span class="text-[10px] text-emerald-400 font-mono-code">required type="email"</span>
+                            </label>
+                            <input type="email" id="sim-email" required="" placeholder="joao@estudante.iff.edu.br" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded px-3 py-1.5 text-xs focus:border-emerald-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label for="sim-celular" class="block text-xs font-semibold text-slate-300 mb-1 flex justify-between">
+                                <span>Telefone Celular (Apenas Números com DDD):</span>
+                                <span class="text-[10px] text-emerald-400 font-mono-code">required pattern="[0-9]{11}"</span>
+                            </label>
+                            <!-- Regex para exigir exatamente 11 dígitos -->
+                            <input type="text" id="sim-celular" required="" pattern="[0-9]{11}" placeholder="Ex: 22999998888" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded px-3 py-1.5 text-xs focus:border-emerald-500 focus:outline-none">
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-800">
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2 px-4 rounded transition-colors">
+                                Simular Submissão Nativa (POST)
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Detalhes sobre a arquitetura segura de dados -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-6">
+                    <h4 class="font-bold text-white text-md border-b border-slate-800 pb-2">O Ciclo de Validação Client-Side vs Server-Side</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                                1
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-white mb-1">Mecanismo do Browser (UX)</h5>
+                                <p class="text-xs text-slate-300 leading-normal">
+                                    Antes de desperdiçar banda enviando dados incorretos pela internet, o browser valida a expressão regular e os tipos. Se falhar, exibe balões de erro automáticos no idioma nativo do sistema operativo do utilizador.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-850 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                                2
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-white mb-1">Insegurança Inerente do Cliente</h5>
+                                <p class="text-xs text-slate-300 leading-normal">
+                                    Como o código HTML5 corre na tela do usuário, qualquer atacante pode inspecionar a árvore do DOM, remover os atributos <code>required</code> ou <code>pattern</code> em segundos, ou até simular requisições diretamente via console ou terminais cURL.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                                3
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-white mb-1">Validação Backend Obrigatória (Node.js)</h5>
+                                <p class="text-xs text-slate-300 leading-normal">
+                                    Por questões de segurança cibernética corporativa, a API desenvolvida em Node.js deve replicar todas as regras utilizando bibliotecas robustas de schema validation (ex: Zod ou Joi). O backend é o nosso verdadeiro e inviolável portão de dados.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: LABORATÓRIO DE REFATORAÇÃO INTERATIVO -->
+        <section id="tab-playground" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Desafio Prático - IFF</span>
+                    <h3 class="text-xl font-bold text-white mt-1">Laboratório de Refatoração Semântica</h3>
+                    <p class="text-xs text-slate-400">Instrução: Modifique o código legado no painel da IDE à esquerda para satisfazer todos os requisitos corporativos de Semântica, Acessibilidade, Metadados e Validação. Clique no botão de validação para executar a suíte de testes!</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="resetLegacyCode()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs py-2 px-3 rounded transition-colors">
+                        Reiniciar Código
+                    </button>
+                    <button onclick="runHtmlValidatorSuite()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded transition-colors flex items-center gap-1.5 shadow-lg shadow-emerald-900/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="play" aria-hidden="true" class="lucide lucide-play w-3.5 h-3.5 fill-current"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg> Rodar Validador
+                    </button>
+                </div>
+            </div>
+
+            <!-- IDE Integrada de Laboratório -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Editor Pane -->
+                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col h-[550px] shadow-2xl">
+                    <div class="bg-slate-950 px-4 py-2 flex items-center justify-between border-b border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                            <span class="text-xs font-mono-code text-slate-400 ml-2">index.html</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500 font-mono-code">HTML5 Editor</span>
+                    </div>
+                    
+                    <textarea id="code-editor-area" class="flex-1 w-full bg-[#0f172a] text-[#38bdf8] font-mono-code text-xs p-4 focus:outline-none focus:ring-0 resize-none leading-relaxed" spellcheck="false"></textarea>
+                </div>
+
+                <!-- Painel de Testes Executáveis -->
+                <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col h-[550px] justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
+                            <h4 class="font-bold text-white text-md flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check w-5 h-5 text-emerald-400"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                                Suíte de Testes do IFF
+                            </h4>
+                            <span id="validator-score" class="text-xs font-mono-code bg-slate-850 px-2 py-1 rounded text-slate-400">Score: 0 / 11</span>
+                        </div>
+
+                        <!-- Barra de progresso -->
+                        <div class="w-full bg-slate-800 rounded-full h-1.5 mb-6">
+                            <div id="validator-progress-bar" class="bg-emerald-500 h-1.5 rounded-full transition-all" style="width: 0%"></div>
+                        </div>
+
+                        <!-- Lista dos testes -->
+                        <div class="space-y-3 overflow-y-auto max-h-[350px] pr-2" id="test-results-container">
+                <div class="flex items-start gap-3 bg-slate-950 p-2.5 rounded border border-slate-850">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="info" aria-hidden="true" class="lucide lucide-info w-4 h-4 text-sky-400 shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-300">Pronto para Validação</h5>
+                        <p class="text-[10px] text-slate-400">Modifique o código legado no editor e clique no botão de "Rodar Validador" para analisar sua conformidade técnica de engenharia web.</p>
+                    </div>
+                </div>
+            </div>
+                    </div>
+                    
+                    <div class="bg-slate-950 p-3 rounded border border-slate-800 mt-4 text-[10px] text-slate-400 leading-normal flex items-start gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="graduation-cap" aria-hidden="true" class="lucide lucide-graduation-cap w-4 h-4 text-emerald-400 shrink-0"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+                        <span>Este validador analisa dinamicamente a estrutura lógica da árvore do seu documento HTML aplicando padrões corporativos de validação semântica e de acessibilidade A11y.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: SIMULADO PRÉ-AULA -->
+        <section id="tab-simulado" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                <h3 class="text-xl font-bold text-white mb-2">Simulado de Diagnóstico Pré-Aula</h3>
+                <p class="text-xs text-slate-400">Avalie os seus conhecimentos antes do encontro prático presencial no IFF. Responda às 5 questões abaixo e obtenha o resultado instantâneo com explicações detalhadas.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-6" id="quiz-container"><div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-sm">1. O que representa fisicamente um documento HTML na rede de dados?</h4>
+                    <div class="space-y-2">
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-1" value="0" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Um arquivo binário encriptado interpretável apenas pelo browser.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-1" value="1" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Um arquivo de texto puro (plain text) interpretado pelo renderizador do navegador após a recepção.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-1" value="2" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Um conjunto compactado de imagens com código de scripts proprietários pré-compilados.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-1" value="3" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Um documento rich text format proprietário com estilos embutidos no binário.</span>
+                            </label>
+                        
+                    </div>
+                    <div id="explanation-1" class="hidden p-3 rounded text-xs leading-relaxed"></div>
+                </div><div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-sm">2. Se sua API Node.js responder com um HTML e enviar o Content-Type 'text/plain' na resposta HTTP, o que ocorrerá?</h4>
+                    <div class="space-y-2">
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-2" value="0" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">O navegador renderizará o site perfeitamente.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-2" value="1" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">O site exibirá as imagens, mas nenhum link funcionará.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-2" value="2" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">O browser exibirá o código-fonte cru na tela (incluindo as tags literais) sem renderização visual.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-2" value="3" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">O Node.js emitirá um erro fatal no console e impedirá a conexão do cliente.</span>
+                            </label>
+                        
+                    </div>
+                    <div id="explanation-2" class="hidden p-3 rounded text-xs leading-relaxed"></div>
+                </div><div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-sm">3. Por que a tag genérica <div> não deve ser abusada na estrutura do HTML5 moderno?</div></h4>
+                    <div class="space-y-2">
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-3" value="0" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Porque ela é bloqueada por padrão por firewalls corporativos.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-3" value="1" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Porque ela não possui qualquer semântica, impedindo que leitores de tela entendam os marcos do layout (Landmarks) e degradando o SEO.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-3" value="2" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Porque ela consome o triplo de banda de rede se comparada ao <main>.
+                            
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-3" value="3" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Porque ela impede a execução de scripts JavaScript assíncronos no client-side.</span>
+                            </label>
+                        
+                    </main></span></label></div>
+                    <div id="explanation-3" class="hidden p-3 rounded text-xs leading-relaxed"></div>
+                </div><div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-sm">4. Qual é a principal importância técnica do atributo 'for' em uma tag <label>?</label></h4>
+                    <div class="space-y-2">
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-4" value="0" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Aumentar o tamanho visual do texto na tela do utilizador.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-4" value="1" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Associar explicitamente o rótulo de texto ao 'id' do input correspondente para acessibilidade e melhor usabilidade.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-4" value="2" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Conectar o banco de dados do backend às variáveis do formulário.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-4" value="3" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Desabilitar o foco automático de digitação do browser.</span>
+                            </label>
+                        
+                    </div>
+                    <div id="explanation-4" class="hidden p-3 rounded text-xs leading-relaxed"></div>
+                </div><div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="font-bold text-white text-sm">5. No quesito de Engenharia e Segurança Corporativa, qual a validade das validações de formulário no HTML5 (required, pattern, etc.)?</h4>
+                    <div class="space-y-2">
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-5" value="0" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Invioláveis. Elas protegem totalmente o banco de dados contra injeção SQL e abusos na rede.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-5" value="1" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Nenhuma. Elas não servem para nada e devem ser descartadas.</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-5" value="2" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Melhoram a UX (feedback imediato ao usuário) e evitam desperdício de requisições, mas devem ser obrigatoriamente replicadas e validadas no backend (Node.js).</span>
+                            </label>
+                        
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-5" value="3" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">Servem apenas para estilizar bordas de campos no layout CSS.</span>
+                            </label>
+                        
+                    </div>
+                    <div id="explanation-5" class="hidden p-3 rounded text-xs leading-relaxed"></div>
+                </div></div>
+
+            <div class="max-w-3xl mx-auto pt-6 border-t border-slate-800 flex justify-between items-center">
+                <span id="quiz-score-display" class="text-sm font-mono-code text-slate-400">Status: Aguardando respostas</span>
+                <button onclick="gradeQuiz()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-6 rounded transition-colors shadow-lg shadow-emerald-900/30">
+                    Enviar Respostas para Avaliação
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Rodapé Institucional do IFF -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-12 text-center text-xs text-slate-500 space-y-2">
+        <p>Instituto Federal de Educação, Ciência e Tecnologia Fluminense — Campus Campos Centro</p>
+        <p>Bacharelado em Sistemas de Informação • Disciplina: Programação Web • Professor Ronaldo Amaral</p>
+        <p class="text-[10px] text-slate-600">© 2026 IFFluminense. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Scripts de Controle de Estado e Validação -->
+    <script>
+        // Código legado original quebrado entregue aos alunos
+        const legacyCode = `<!-- ESTE CÓDIGO POSSUI FALHAS GRAVES DE METADADOS, SEMÂNTICA, ACESSIBILIDADE E SEGURANÇA -->
+<html>
+<head>
+    <title>página</title>
+</head>
+<body>
+    <div id="cabecalho">
+        <div class="titulo">Área de Contato do Cliente</div>
+        <div class="menu">
+            <a href="#">Ajuda</a> | <a href="#">Sair</a>
+        </div>
+    </div>
+
+    <div id="corpo-da-pagina">
+        <div class="subtitulo">Envie sua mensagem para a nossa equipe de suporte backend</div>
+        
+        <form action="/enviar" method="GET">
+            Nome: <input type="text" name="nome"><br><br>
+            Email: <input type="text" name="email"><br><br>
+            Telefone Celular: <input type="text" name="celular"><br><br>
+            Mensagem: <textarea name="msg"></textarea><br><br>
+            
+            <input type="button" value="Disparar Dados">
+        </form>
+    </div>
+
+    <div id="rodape">
+        Suporte Tech 2026
+    </div>
+</body>
+</html>`;
+
+        // Atribuição de dados interativos de tags
+        const tagData = {
+            'header': {
+                title: '&lt;header&gt;',
+                type: 'Elemento de Nível de Bloco',
+                desc: 'Delimita a seção introdutória global de um documento ou seção. Geralmente envelopa logos, marcas corporativas e elementos de título do sistema.',
+                a11y: 'Atua como um marco de acessibilidade no cabeçalho superior. Evita que o leitor confunda elementos introdutórios com conteúdo ativo.',
+                seo: 'Possui peso estrutural primário para os bots de indexação lerem as marcas logo no início do arquivo.'
+            },
+            'nav': {
+                title: '&lt;nav&gt;',
+                type: 'Elemento de Nível de Bloco',
+                desc: 'Destinado exclusivamente para envelopar conjuntos de links que servem para navegação no sistema ou navegação externa.',
+                a11y: 'Marco vital para acessibilidade. Permite que leitores de tela listem diretamente os links ou os pulem para otimizar a experiência.',
+                seo: 'Informa explicitamente ao Google a arquitetura e hierarquia de páginas internas do seu sistema (sitemap visual).'
+            },
+            'main': {
+                title: '&lt;main&gt;',
+                type: 'Elemento de Nível de Bloco (Único)',
+                desc: 'Encapsula o conteúdo central e exclusivo da aplicação web atual. Não deve conter nada que se repita entre as páginas da sua aplicação.',
+                a11y: 'O marco mais relevante de acessibilidade. Tecnologias assistivas disponibilizam atalhos diretos que focam instantaneamente neste elemento.',
+                seo: 'É o núcleo de leitura para rastreabilidade de bots. Conteúdo indexado dentro da main tem relevância de destaque.'
+            },
+            'section': {
+                title: '&lt;section&gt;',
+                type: 'Elemento de Nível de Bloco',
+                desc: 'Representa uma seção temática genérica e lógica de dados do documento. Por boa prática corporativa, deve conter sempre seu próprio cabeçalho h2-h6.',
+                a11y: 'Divide o fluxo do documento em blocos cognitivamente mais fáceis de ler por sistemas de síntese de voz.',
+                seo: 'Organiza a leitura do robô para discernir os temas secundários da sua aplicação.'
+            },
+            'article': {
+                title: '&lt;article&gt;',
+                type: 'Elemento de Nível de Bloco',
+                desc: 'Composição totalmente independente e autocontida. Se removida do layout, o texto ainda mantém significado isolado (Ex: Notícia, postagem).',
+                a11y: 'Informa ao leitor que aquele elemento é uma peça textual fechada de conteúdo.',
+                seo: 'Valor máximo de peso para artigos de relevância, posts e dados públicos que buscam ranqueamento orgânico de conteúdo.'
+            },
+            'aside': {
+                title: '&lt;aside&gt;',
+                type: 'Elemento de Nível de Bloco',
+                desc: 'Representa seções de conteúdo que se relacionam indiretamente ao conteúdo principal (Ex: Widgets colaterais, anúncios, barras de navegação adjacentes).',
+                a11y: 'Permite que usuários excluam esta seção secundária do foco visual de escuta se assim desejarem.',
+                seo: 'Diz ao bot de busca que o conteúdo dentro dele é marginal ao tópico principal da página.'
+            },
+            'footer': {
+                title: '&lt;footer&gt;',
+                type: 'Elemento de Nível de Bloco',
+                desc: 'Representa o rodapé do documento. Geralmente acomoda direitos autorais, termos de uso, contatos institucionais do IFF e links de suporte.',
+                a11y: 'Identifica o fechamento textual e referencial da página para o leitor de tela.',
+                seo: 'Fornece metadados informativos de confiabilidade da empresa dona do sistema.'
+            },
+            'strong': {
+                title: '&lt;strong&gt;',
+                type: 'Elemento de Texto Inline (Linha)',
+                desc: 'Representa um texto com forte importância, urgência ou gravidade. O navegador por padrão exibe em negrito como representação visual deste destaque.',
+                a11y: 'Leitores de tela modernos alteram a entonação ou dão ênfase vocal extra ao ler termos envoltos por esta tag.',
+                seo: 'Robôs entendem que o termo destacado em strong é uma palavra-chave mais importante no fluxo textual.'
+            },
+            'em': {
+                title: '&lt;em&gt;',
+                type: 'Elemento de Texto Inline (Linha)',
+                desc: 'Atribui uma ênfase enfática que altera o sentido falado da sentença. O navegador renderiza por padrão em estilo itálico.',
+                a11y: 'Altera o tom fonético de leitura do software de tecnologia assistiva.',
+                seo: 'Traz significado sutil para os dicionários e interpretadores léxicos semânticos.'
+            },
+            'code': {
+                title: '&lt;code&gt;',
+                type: 'Elemento de Texto Inline (Linha)',
+                desc: 'Encapsula qualquer fragmento ou termo que represente comandos de computador, nomes de arquivos, expressões ou código de programação real.',
+                a11y: 'Impede que o leitor de tela tente ler termos técnicos de programação (como camelCase) como se fossem palavras nativas do português.',
+                seo: 'Ajuda motores de busca técnicos a indexar tutoriais, documentações e discussões sobre códigos de programação.'
+            },
+            'time': {
+                title: '&lt;time&gt;',
+                type: 'Elemento de Texto Inline (Linha)',
+                desc: 'Associa uma data e/ou hora de exibição a um formato legível por máquina através do atributo datetime (Ex: datetime="2026-06-01").',
+                a11y: 'Permite ao leitor ditar datas e calendários de forma limpa e inequívoca para o usuário.',
+                seo: 'Permite que mecanismos como o Google classifiquem a data de publicação da página para ordenação cronológica precisa e listagem de eventos.'
+            }
+        };
+
+        // Banco de Dados de Questões do Simulado
+        const quizQuestions = [
+            {
+                id: 1,
+                question: "1. O que representa fisicamente um documento HTML na rede de dados?",
+                options: [
+                    "Um arquivo binário encriptado interpretável apenas pelo browser.",
+                    "Um arquivo de texto puro (plain text) interpretado pelo renderizador do navegador após a recepção.",
+                    "Um conjunto compactado de imagens com código de scripts proprietários pré-compilados.",
+                    "Um documento rich text format proprietário com estilos embutidos no binário."
+                ],
+                correct: 1,
+                explanation: "O HTML é puramente texto simples (texto puro), sendo interpretado sequencialmente pelo renderizador do browser local ao ser baixado pela rede."
+            },
+            {
+                id: 2,
+                question: "2. Se sua API Node.js responder com um HTML e enviar o Content-Type 'text/plain' na resposta HTTP, o que ocorrerá?",
+                options: [
+                    "O navegador renderizará o site perfeitamente.",
+                    "O site exibirá as imagens, mas nenhum link funcionará.",
+                    "O browser exibirá o código-fonte cru na tela (incluindo as tags literais) sem renderização visual.",
+                    "O Node.js emitirá um erro fatal no console e impedirá a conexão do cliente."
+                ],
+                correct: 2,
+                explanation: "O MIME Type 'text/plain' diz ao navegador que os dados são apenas texto sem marcação. Logo, o browser exibe o código cru em vez de interpretá-lo como tags de layout."
+            },
+            {
+                id: 3,
+                question: "3. Por que a tag genérica <div> não deve ser abusada na estrutura do HTML5 moderno?",
+                options: [
+                    "Porque ela é bloqueada por padrão por firewalls corporativos.",
+                    "Porque ela não possui qualquer semântica, impedindo que leitores de tela entendam os marcos do layout (Landmarks) e degradando o SEO.",
+                    "Porque ela consome o triplo de banda de rede se comparada ao <main>.",
+                    "Porque ela impede a execução de scripts JavaScript assíncronos no client-side."
+                ],
+                correct: 1,
+                explanation: "A div é uma tag neutra sem semântica. Abusar dela remove as pistas de navegação usadas por tecnologias assistivas e diminui o valor de indexação no robô do Google."
+            },
+            {
+                id: 4,
+                question: "4. Qual é a principal importância técnica do atributo 'for' em uma tag <label>?",
+                options: [
+                    "Aumentar o tamanho visual do texto na tela do utilizador.",
+                    "Associar explicitamente o rótulo de texto ao 'id' do input correspondente para acessibilidade e melhor usabilidade.",
+                    "Conectar o banco de dados do backend às variáveis do formulário.",
+                    "Desabilitar o foco automático de digitação do browser."
+                ],
+                correct: 1,
+                explanation: "O 'for' associa de forma segura e acessível o texto descritivo ao input. Isso faz com que leitores identifiquem o campo corretamente e permite que cliques no texto foquem o campo, melhorando a área ativa de toque."
+            },
+            {
+                id: 5,
+                question: "5. No quesito de Engenharia e Segurança Corporativa, qual a validade das validações de formulário no HTML5 (required, pattern, etc.)?",
+                options: [
+                    "Invioláveis. Elas protegem totalmente o banco de dados contra injeção SQL e abusos na rede.",
+                    "Nenhuma. Elas não servem para nada e devem ser descartadas.",
+                    "Melhoram a UX (feedback imediato ao usuário) e evitam desperdício de requisições, mas devem ser obrigatoriamente replicadas e validadas no backend (Node.js).",
+                    "Servem apenas para estilizar bordas de campos no layout CSS."
+                ],
+                correct: 2,
+                explanation: "A validação client-side é fantástica para a experiência do usuário (UX), mas pode ser removida ou ignorada facilmente alterando o DOM localmente ou usando requisições diretas por ferramentas externas de API. Por isso, a validação de segurança sempre reside no backend."
+            }
+        ];
+
+        // Alterna entre abas (Tabs) do portal de forma fluida
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('block');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white', 'shadow-md', 'shadow-emerald-900/30');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('block');
+            
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+            activeBtn.classList.add('bg-emerald-600', 'text-white', 'shadow-md', 'shadow-emerald-900/30');
+        }
+
+        // Destaca elementos no Visualizador de Tags da Aba 2
+        function highlightTag(tagId) {
+            // Remove destaque de todos
+            document.querySelectorAll('[id^="vis-"]').forEach(el => {
+                el.classList.remove('bg-emerald-950/40', 'border-emerald-500', 'scale-[1.02]');
+            });
+            
+            // Adiciona no alvo
+            const target = document.getElementById(`vis-${tagId}`);
+            if (target) {
+                target.classList.add('bg-emerald-950/40', 'border-emerald-500', 'scale-[1.02]');
+            }
+
+            // Atualiza painel lateral de dados
+            const data = tagData[tagId];
+            if (data) {
+                document.getElementById('info-tag-symbol').innerHTML = `&lt;${tagId}&gt;`;
+                document.getElementById('info-tag-title').innerText = data.title.replace('&lt;', '<').replace('&gt;', '>');
+                document.getElementById('info-tag-type').innerText = `Tipo do Elemento: ${data.type}`;
+                document.getElementById('info-tag-desc').innerText = data.desc;
+                document.getElementById('info-tag-a11y').innerText = data.a11y;
+                document.getElementById('info-tag-seo').innerText = data.seo;
+                document.getElementById('info-tag-link').href = `https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/${tagId}`;
+            }
+        }
+
+        // Simulador em Tempo Real de SEO & Social da Aba 3
+        function updateSeoSimulator() {
+            const titleVal = document.getElementById('meta-input-title').value;
+            const descVal = document.getElementById('meta-input-desc').value;
+            const imageVal = document.getElementById('meta-input-image').value;
+
+            // Caracteres descrição
+            document.getElementById('meta-char-count').innerText = `${descVal.length} carac.`;
+            if (descVal.length > 160) {
+                document.getElementById('meta-char-count').className = 'text-[10px] text-red-400 font-mono-code';
+            } else {
+                document.getElementById('meta-char-count').className = 'text-[10px] text-emerald-400 font-mono-code';
+            }
+
+            // Google Update
+            document.getElementById('preview-google-title').innerText = titleVal || 'Preencha o título...';
+            document.getElementById('preview-google-desc').innerText = descVal || 'Preencha a descrição...';
+
+            // Social Card Update
+            document.getElementById('preview-og-title').innerText = titleVal || 'Preencha o título...';
+            document.getElementById('preview-og-desc').innerText = descVal || 'Preencha a descrição...';
+            
+            const imagePreviewDiv = document.getElementById('preview-og-image');
+            if (imageVal) {
+                imagePreviewDiv.style.backgroundImage = `url('${imageVal}')`;
+            } else {
+                imagePreviewDiv.style.backgroundImage = 'none';
+            }
+        }
+
+        // Trata submissão do formulário demo (Aba 4)
+        function handleFormSubmission(event) {
+            event.preventDefault();
+            // Mostra notificação personalizada simulando backend
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-emerald-950 border border-emerald-500 text-emerald-200 text-xs py-3 px-5 rounded-lg shadow-2xl flex items-center gap-3 z-50 animate-bounce';
+            notification.innerHTML = `
+                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+                <div>
+                    <strong class="block text-white">Client-side Validado!</strong>
+                    <span>Dados de formulário enviados com sucesso via método POST.</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // Funções da IDE de Laboratório (Aba 5)
+        function resetLegacyCode() {
+            document.getElementById('code-editor-area').value = legacyCode;
+            document.getElementById('validator-score').innerText = 'Score: 0 / 11';
+            document.getElementById('validator-progress-bar').style.width = '0%';
+            
+            document.getElementById('test-results-container').innerHTML = `
+                <div class="flex items-start gap-3 bg-slate-950 p-2.5 rounded border border-slate-850">
+                    <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-300">Pronto para Validação</h5>
+                        <p class="text-[10px] text-slate-400">Modifique o código legado no editor e clique no botão de "Rodar Validador" para analisar sua conformidade técnica de engenharia web.</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // Executa Validador de HTML Complexo
+        function runHtmlValidatorSuite() {
+            const code = document.getElementById('code-editor-area').value;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(code, 'text/html');
+            
+            let passedCount = 0;
+            const totalTests = 11;
+            const testLogs = [];
+
+            function logTest(status, title, feedback) {
+                if (status) passedCount++;
+                testLogs.push({ status, title, feedback });
+            }
+
+            // Teste 1: Doctype
+            const doctypeCheck = code.trim().toLowerCase().startsWith('<!doctype html>');
+            logTest(doctypeCheck, "Declaração de Doctype HTML5", "Sua página deve iniciar estritamente com a instrução <!DOCTYPE html> para forçar a interpretação no modo Standard do browser.");
+
+            // Teste 2: Idioma
+            const langCheck = doc.documentElement && doc.documentElement.getAttribute('lang')?.toLowerCase() === 'pt-br';
+            logTest(langCheck, "Idioma do Documento (lang='pt-BR')", "Define se o idioma do site está mapeado para Português, o que é vital para que os sintetizadores de leitores de tela adotem a fonética de leitura correta.");
+
+            // Teste 3: Charset
+            const charsetCheck = doc.querySelector('meta[charset]')?.getAttribute('charset')?.toUpperCase() === 'UTF-8';
+            logTest(charsetCheck, "Mapeamento Charset UTF-8", "Previne erros de codificação em caracteres latinos especiais comuns na língua portuguesa (Ex: acentuações, cedilhas).");
+
+            // Teste 4: Viewport
+            const viewportCheck = !!doc.querySelector('meta[name="viewport"]');
+            logTest(viewportCheck, "Controle de Responsividade Viewport", "Informa aos browsers móveis para escalarem a interface baseada na largura física de tela do dispositivo.");
+
+            // Teste 5: Título SEO
+            const titleEl = doc.querySelector('title');
+            const titleCheck = titleEl && titleEl.innerText !== 'página' && titleEl.innerText.trim().length > 5;
+            logTest(titleCheck, "Título de SEO Descritivo", "O título não deve ser genérico (como 'página') para que bots indexem as palavras do seu sistema com propriedade na rede.");
+
+            // Teste 6: Meta Description
+            const descEl = doc.querySelector('meta[name="description"]');
+            const descCheck = descEl && descEl.getAttribute('content')?.trim().length > 15;
+            logTest(descCheck, "Meta Descrição Descritiva", "Ajuda os crawlers do Google a catalogarem um snippet legível sobre o que a página oferece nos canais de pesquisa.");
+
+            // Teste 7: Semântica estrutural (Não abusar de divs)
+            const structuralTags = ['header', 'nav', 'main', 'article', 'footer'];
+            const allStructsPresent = structuralTags.every(tag => !!doc.querySelector(tag));
+            logTest(allStructsPresent, "Tags Estruturais HTML5", "Substituição de divs aninhadas por <header>, <nav>, <main>, <article> e <footer>.");
+
+            // Teste 8: Validação Acessibilidade Labels
+            const inputs = Array.from(doc.querySelectorAll('input:not([type="button"]):not([type="submit"]), textarea'));
+            let labelsOk = inputs.length > 0;
+            inputs.forEach(input => {
+                const id = input.getAttribute('id');
+                if (!id) {
+                    labelsOk = false;
+                } else {
+                    const label = doc.querySelector(`label[for="${id}"]`);
+                    if (!label) labelsOk = false;
+                }
+            });
+            logTest(labelsOk, "Associação de Acessibilidade (Labels & Inputs)", "Todos os campos do formulário devem conter ids que casam exatamente com o atributo 'for' de suas respectivas etiquetas labels.");
+
+            // Teste 9: Envio de dados seguro (POST)
+            const form = doc.querySelector('form');
+            const postCheck = form && form.getAttribute('method')?.toUpperCase() === 'POST';
+            logTest(postCheck, "Tráfego de Dados Seguro (Método POST)", "Garante que o formulário utilize o verbo POST para evitar o vazamento de credenciais e informações pessoais expostas na Query String da URL.");
+
+            // Teste 10: Validações básicas (Required & Email type)
+            const emailInput = doc.querySelector('input[name="email"]') || doc.querySelector('input[type="email"]');
+            const nameInput = doc.querySelector('input[name="nome"]') || doc.querySelector('input[type="text"]');
+            const nameCheck = nameInput && nameInput.hasAttribute('required') && nameInput.getAttribute('minlength') >= 3;
+            const emailCheck = emailInput && emailInput.getAttribute('type') === 'email' && emailInput.hasAttribute('required');
+            logTest(nameCheck && emailCheck, "Validação de Dados no Navegador (Nome/Email)", "Os inputs de nome e e-mail devem ser obrigatórios, com tamanho mínimo estipulado de caracteres e o e-mail configurado para o tipo nativo correto.");
+
+            // Teste 11: Validação de Telefone com DDD (Pattern Regex)
+            const phoneInput = doc.querySelector('input[name="celular"]') || doc.querySelector('input[type="tel"]');
+            const regexCheck = phoneInput && phoneInput.hasAttribute('required') && (phoneInput.getAttribute('pattern') === '[0-9]{11}' || phoneInput.getAttribute('pattern')?.replace(/\s/g, '') === '[0-9]{11}');
+            logTest(regexCheck, "Filtro de Telefone Celular por Expressão Regular", "O campo celular deve possuir o atributo pattern configurado para exigir exatamente 11 caracteres numéricos consecutivos.");
+
+            // Atualiza Score
+            document.getElementById('validator-score').innerText = `Score: ${passedCount} / ${totalTests}`;
+            const percentage = (passedCount / totalTests) * 100;
+            document.getElementById('validator-progress-bar').style.width = `${percentage}%`;
+
+            // Renderiza Resultados no Painel
+            const container = document.getElementById('test-results-container');
+            container.innerHTML = '';
+
+            testLogs.forEach(test => {
+                const item = document.createElement('div');
+                item.className = `flex items-start gap-3 p-3 rounded-lg border transition-all ${
+                    test.status 
+                    ? 'bg-emerald-950/20 border-emerald-900/40 text-emerald-300' 
+                    : 'bg-red-950/20 border-red-900/40 text-red-300'
+                }`;
+                
+                item.innerHTML = `
+                    <i data-lucide="${test.status ? 'check-circle' : 'x-circle'}" class="w-4 h-4 shrink-0 mt-0.5 ${test.status ? 'text-emerald-400' : 'text-red-400'}"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-white">${test.title}</h5>
+                        <p class="text-[10px] text-slate-400 mt-1 leading-normal">${test.feedback}</p>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        // Renderiza o Simulado (Aba 6)
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            quizQuestions.forEach(q => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4';
+                qDiv.innerHTML = `
+                    <h4 class="font-bold text-white text-sm">${q.question}</h4>
+                    <div class="space-y-2">
+                        ${q.options.map((opt, i) => `
+                            <label class="flex items-start gap-3 p-3 rounded bg-slate-950 border border-slate-850 hover:bg-slate-800 transition-colors cursor-pointer text-xs">
+                                <input type="radio" name="question-${q.id}" value="${i}" class="mt-0.5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-slate-300 leading-normal">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="explanation-${q.id}" class="hidden p-3 rounded text-xs leading-relaxed"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        // Corrige e Avalia o Simulado
+        function gradeQuiz() {
+            let score = 0;
+            let answeredAll = true;
+
+            quizQuestions.forEach(q => {
+                const selected = document.querySelector(`input[name="question-${q.id}"]:checked`);
+                const explanationDiv = document.getElementById(`explanation-${q.id}`);
+                
+                if (!selected) {
+                    answeredAll = false;
+                    return;
+                }
+
+                const answerIdx = parseInt(selected.value);
+                explanationDiv.classList.remove('hidden');
+
+                if (answerIdx === q.correct) {
+                    score++;
+                    explanationDiv.className = 'p-3 rounded text-xs leading-relaxed bg-emerald-950/30 border border-emerald-900/40 text-emerald-300';
+                    explanationDiv.innerHTML = `<strong>Correto!</strong> ${q.explanation}`;
+                } else {
+                    explanationDiv.className = 'p-3 rounded text-xs leading-relaxed bg-red-950/30 border border-red-900/40 text-red-300';
+                    explanationDiv.innerHTML = `<strong>Incorreto.</strong> A resposta certa é a opção ${q.correct + 1}. <br><span class="text-slate-300 mt-1 block">${q.explanation}</span>`;
+                }
+            });
+
+            if (!answeredAll) {
+                alert("Por favor, responda a todas as questões antes de enviar para avaliação!");
+                return;
+            }
+
+            const display = document.getElementById('quiz-score-display');
+            display.innerText = `Resultado: ${score} de ${quizQuestions.length} corretas (${(score / quizQuestions.length) * 100}%)`;
+            display.className = `text-sm font-bold font-mono-code ${score >= 4 ? 'text-emerald-400' : 'text-yellow-400'}`;
+        }
+
+        // Inicialização de Componentes e Estados no Carregamento
+        window.onload = function() {
+            // Inicializa Lucide
+            lucide.createIcons();
+            
+            // Ativa o Editor
+            resetLegacyCode();
+            
+            // Desenha Questões do Simulado
+            renderQuiz();
+            
+            // Define tag inicial no Visualizador
+            highlightTag('main');
+            
+            // Atualiza Simulação de SEO Inicial
+            updateSeoSimulator();
+        }
+    </script>
+
+
+</body></html>

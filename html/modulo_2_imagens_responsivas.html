@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2: Imagens Responsivas | BSI - IFF</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <!-- Cabeçalho Académico -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono-code text-emerald-400 font-bold">
+                    IFF - BSI
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-none">Programação Web</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">Especialização em Frontend Estrutural &bull; Prof. Ronaldo Amaral</p>
+                </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-900/40 px-3 py-1 rounded-xl">
+                Módulo 2: Imagens Responsivas
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 space-y-8">
+        
+        <!-- Banner de Contexto -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Mapeamento de Ecrãs</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Imagens Responsivas: Multi-Resolução e Direção de Arte</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                O motor do navegador inicia o descarregamento das imagens no primeiro varrimento da árvore DOM, muito antes das folhas de estilo CSS serem carregadas e interpretadas. Logo, a lógica responsiva e a direção de arte de imagens devem ser resolvidas <strong>nativamente na estrutura do HTML5</strong>, utilizando os atributos <code>srcset</code>, <code>sizes</code> e o elemento condicional <code>&lt;picture&gt;</code>.
+            </p>
+        </div>
+
+        <!-- Simulador Interativo de Viewport -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6">
+            <div class="space-y-1">
+                <h3 class="font-bold text-white text-md flex items-center gap-2">
+                    <i data-lucide="monitor" class="w-4 h-4 text-emerald-400"></i>
+                    Simulador Ativo de Resoluções e Disparos de Mídia
+                </h3>
+                <p class="text-xs text-slate-400">
+                    Modifique a barra de largura do ecrã simulado para compreender como o navegador descobre e decide qual ativo de imagem descarregar com base nas media queries estruturais de largura em pixels.
+                </p>
+            </div>
+
+            <!-- Painel de Controle de Largura -->
+            <div class="space-y-3 bg-slate-950 p-4 rounded-xl border border-slate-850">
+                <div class="flex justify-between items-center text-xs">
+                    <span class="text-slate-400 font-semibold">Arraste para redimensionar o viewport simulado:</span>
+                    <span id="width-badge" class="font-mono-code bg-emerald-950 border border-emerald-900/40 text-emerald-400 px-3 py-1 rounded-lg font-bold">1200px (Desktop)</span>
+                </div>
+                <input id="width-slider" type="range" min="320" max="1400" value="1200" oninput="resizeSimulation()" class="w-full accent-emerald-500 bg-slate-900 h-2 rounded-lg cursor-pointer">
+            </div>
+
+            <!-- Bloco Visualizador da Imagem Escolhida -->
+            <div class="border border-dashed border-slate-800 p-4 rounded-xl flex flex-col items-center justify-center min-h-[220px] bg-slate-950/60 relative overflow-hidden" id="simulation-image-box">
+                <div class="bg-slate-900/95 border border-slate-800 p-4 rounded-xl backdrop-blur-sm space-y-2 max-w-sm text-center">
+                    <i id="image-icon" data-lucide="image" class="w-8 h-8 text-emerald-400 mx-auto"></i>
+                    <span class="text-[10px] font-mono-code text-slate-500 uppercase tracking-widest block font-bold">Ativo Carregado pelo Browser</span>
+                    <h4 id="simulated-filename" class="font-mono-code font-bold text-white text-xs">banner-desktop-large.avif</h4>
+                    <span id="saving-badge" class="text-[10px] font-bold font-mono-code bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded">Economia de rede: 78%</span>
+                </div>
+            </div>
+
+            <!-- Dados técnicos da seleção corrente -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-850 space-y-1">
+                    <span class="text-[9px] font-mono-code text-slate-500 uppercase font-bold block">Tag/Atributo Técnico em Execução</span>
+                    <p id="technical-details" class="text-xs text-slate-200 font-semibold">&lt;source media="(min-width: 1024px)" srcset="banner-desktop.avif"&gt;</p>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-850 space-y-1">
+                    <span class="text-[9px] font-mono-code text-slate-500 uppercase font-bold block">Mecanismo de Decisão (Física de Redes)</span>
+                    <p id="decision-details" class="text-xs text-slate-200">A largura excede 1024px. O navegador decide ignorar as fontes de dispositivos móveis para poupar as requisições HTTP redundantes no servidor.</p>
+                </div>
+            </div>
+        </div>
+
+        <!--  -->
+
+        <!-- Rodapé do Módulo -->
+        <div class="text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+            <p>Instituto Federal Fluminense (IFF) - Bacharelado em Sistemas de Informação</p>
+            <p class="mt-1">Ementa Curricular - Referência MDN Web Docs: <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/picture" target="_blank" class="text-emerald-500 underline">Aceder à Documentação de Picture</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        // Inicializa ícones do Lucide
+        lucide.createIcons();
+
+        function resizeSimulation() {
+            const width = document.getElementById('width-slider').value;
+            const widthBadge = document.getElementById('width-badge');
+            const filename = document.getElementById('simulated-filename');
+            const saving = document.getElementById('saving-badge');
+            const technical = document.getElementById('technical-details');
+            const decision = document.getElementById('decision-details');
+            const imageBox = document.getElementById('simulation-image-box');
+
+            widthBadge.innerText = `${width}px`;
+
+            if (width < 640) {
+                widthBadge.className = "font-mono-code bg-red-950 border border-red-900/40 text-red-400 px-3 py-1 rounded-lg font-bold";
+                widthBadge.innerText = `${width}px (Mobile)`;
+                filename.innerText = "banner-mobile.webp";
+                saving.innerText = "Economia de rede: 92%";
+                technical.innerText = '<source media="(max-width: 639px)" srcset="banner-mobile.webp">';
+                decision.innerText = "Para ecrãs inferiores a 640px, o navegador bloqueia o descarregamento das imagens de desktop, consumindo apenas 14 KB de dados móveis em redes 3G/4G.";
+                imageBox.style.backgroundColor = "#1c0d0d";
+            } else if (width >= 640 && width < 1024) {
+                widthBadge.className = "font-mono-code bg-sky-950 border border-sky-900/40 text-sky-400 px-3 py-1 rounded-lg font-bold";
+                widthBadge.innerText = `${width}px (Tablet)`;
+                filename.innerText = "banner-tablet.webp";
+                saving.innerText = "Economia de rede: 84%";
+                technical.innerText = '<source media="(min-width: 640px) and (max-width: 1023px)" srcset="banner-tablet.webp">';
+                decision.innerText = "O tablet é identificado no intervalo de ecrã médio. O navegador busca o ativo recortado de forma proporcional à largura intermédia para não esmagar as fontes lúdicas.";
+                imageBox.style.backgroundColor = "#0d161c";
+            } else {
+                widthBadge.className = "font-mono-code bg-emerald-950 border border-emerald-900/40 text-emerald-400 px-3 py-1 rounded-lg font-bold";
+                widthBadge.innerText = `${width}px (Desktop)`;
+                filename.innerText = "banner-desktop-large.avif";
+                saving.innerText = "Economia de rede: 78%";
+                technical.innerText = '<source media="(min-width: 1024px)" srcset="banner-desktop-large.avif">';
+                decision.innerText = "Com largura suficiente de ecrã para albergar o layout panorâmico total, o navegador puxa a versão AVIF otimizada de alta fidelidade visual.";
+                imageBox.style.backgroundColor = "#0d1c13";
+            }
+        }
+
+        // Executa primeira simulação no carregamento
+        resizeSimulation();
+    </script>
+</body>
+</html>

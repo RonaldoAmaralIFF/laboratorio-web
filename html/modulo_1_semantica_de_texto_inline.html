@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Semântica de Texto Inline | BSI - IFF</title>
+    <!-- Tailwind CSS para Estilização de Alta Performance -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <!-- Cabeçalho de Navegação Académica -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-950 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono-code text-emerald-400 font-bold">
+                    IFF - BSI
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white leading-none">Programação Web</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">Especialização em Frontend Estrutural &bull; Prof. Ronaldo Amaral</p>
+                </div>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/50 border border-emerald-900/40 px-3 py-1 rounded-xl">
+                Módulo 1: Semântica Inline
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 space-y-8">
+        
+        <!-- Banner de Enquadramento -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Fundamentos de Marcação</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Tags Semânticas ao Nível de Texto</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                As tags de nível de texto modificam o significado intrínseco de palavras ou sentenças específicas dentro de um parágrafo. Lembre-se de uma diretriz de ouro de engenharia frontend: <strong>o HTML define o significado lógico; o CSS define a estética visual.</strong> Nunca escolha uma tag pelo seu aspeto visual predefinido no ecrã.
+            </p>
+        </div>
+
+        <!--  -->
+
+        <!-- Grelha de Explicação Detalhada das Tags -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Tag: strong -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <span class="text-xs font-mono-code font-bold text-emerald-400 bg-slate-950 border border-slate-800 px-2 py-1 rounded">&lt;strong&gt;</span>
+                    <h3 class="font-bold text-white text-base">Importância e Urgência</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Representa relevância forte, seriedade ou urgência contextual. Os navegadores renderizam este elemento em negrito, mas o seu propósito real é avisar leitores de ecrã e spiders que o termo é crucial.
+                    </p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-850">
+                    <span class="text-[9px] font-mono-code text-slate-500 uppercase block mb-1">Exemplo de Código</span>
+                    <code class="text-xs text-sky-400 font-mono-code block">&lt;p&gt;&lt;strong&gt;Erro 500:&lt;/strong&gt; Falha na base de dados.&lt;/p&gt;</code>
+                </div>
+            </div>
+
+            <!-- Tag: em -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <span class="text-xs font-mono-code font-bold text-emerald-400 bg-slate-950 border border-slate-800 px-2 py-1 rounded">&lt;em&gt;</span>
+                    <h3 class="font-bold text-white text-base">Ênfase de Pronúncia</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Indica ênfase enfática, alterando o sentido fonético da sentença baseando-se em qual palavra recebe a carga falada. Tipicamente renderizado em itálico pelos navegadores.
+                    </p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-850">
+                    <span class="text-[9px] font-mono-code text-slate-500 uppercase block mb-1">Exemplo de Código</span>
+                    <code class="text-xs text-sky-400 font-mono-code block">&lt;p&gt;Tens de clonar &lt;em&gt;este&lt;/em&gt; repositório.&lt;/p&gt;</code>
+                </div>
+            </div>
+
+            <!-- Tag: code -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <span class="text-xs font-mono-code font-bold text-emerald-400 bg-slate-950 border border-slate-800 px-2 py-1 rounded">&lt;code&gt;</span>
+                    <h3 class="font-bold text-white text-base">Código de Computador</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Sinaliza sequências brutas de comandos de terminal, trechos de código-fonte de linguagens ou nomes físicos de ficheiros do sistema operacional.
+                    </p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-850">
+                    <span class="text-[9px] font-mono-code text-slate-500 uppercase block mb-1">Exemplo de Código</span>
+                    <code class="text-xs text-sky-400 font-mono-code block">&lt;p&gt;Rode &lt;code&gt;npm run dev&lt;/code&gt; no terminal.&lt;/p&gt;</code>
+                </div>
+            </div>
+
+            <!-- Tag: time -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                <div class="space-y-3">
+                    <span class="text-xs font-mono-code font-bold text-emerald-400 bg-slate-950 border border-slate-800 px-2 py-1 rounded">&lt;time&gt;</span>
+                    <h3 class="font-bold text-white text-base">Marcação Cronológica</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Permite associar datas descritas para consumo humano a formatos padronizados legíveis por máquina através do atributo vital <code>datetime</code> (norma ISO 8601).
+                    </p>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-850">
+                    <span class="text-[9px] font-mono-code text-slate-500 uppercase block mb-1">Exemplo de Código</span>
+                    <code class="text-xs text-sky-400 font-mono-code block">&lt;time datetime="2026-06-02"&gt;2 de Junho&lt;/time&gt;</code>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Secção Interativa de Teste de Semântica -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <h3 class="font-bold text-white text-md flex items-center gap-2">
+                <i data-lucide="play" class="w-4 h-4 text-emerald-400"></i>
+                Simulador de Acessibilidade Vocálica
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Interaja com os botões abaixo para simular a diferença acústica de entonação que um leitor de ecrã (softwares NVDA/VoiceOver) executa ao encontrar tags semânticas inline de texto.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                <button onclick="simulateAudio('neutral')" class="bg-slate-950 border border-slate-850 p-4 rounded-xl text-left hover:border-slate-700 transition-all space-y-1">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono-code">Leitura Neutra (Sem Tags)</span>
+                    <p class="text-xs text-white">"Atenção, o envio expira hoje."</p>
+                    <span class="text-[10px] text-slate-400 block italic pt-1">Voz linear, sem variações.</span>
+                </button>
+                
+                <button onclick="simulateAudio('strong')" class="bg-slate-950 border border-slate-850 p-4 rounded-xl text-left hover:border-slate-700 transition-all space-y-1">
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest font-mono-code">&lt;strong&gt; Ativo</span>
+                    <p class="text-xs text-white">"<strong>Atenção:</strong> o envio expira hoje."</p>
+                    <span class="text-[10px] text-emerald-400 block font-bold pt-1">Voz com tom de gravidade e pausa estrutural.</span>
+                </button>
+
+                <button onclick="simulateAudio('em')" class="bg-slate-950 border border-slate-850 p-4 rounded-xl text-left hover:border-slate-700 transition-all space-y-1">
+                    <span class="text-[10px] font-bold text-sky-400 uppercase tracking-widest font-mono-code">&lt;em&gt; Ativo</span>
+                    <p class="text-xs text-white">"Atenção, o envio expira <em>hoje</em>."</p>
+                    <span class="text-[10px] text-sky-400 block italic pt-1">Ênfase fonética marcante na palavra 'hoje'.</span>
+                </button>
+            </div>
+            <div id="simulation-box" class="hidden p-3 rounded-lg text-xs font-mono-code bg-slate-950 border border-slate-800 text-slate-400 text-center animate-pulse"></div>
+        </div>
+
+        <!-- Rodapé do Módulo -->
+        <div class="text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+            <p>Instituto Federal Fluminense (IFF) - Bacharelado em Sistemas de Informação</p>
+            <p class="mt-1">Ementa Curricular - Referência MDN Web Docs: <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element" target="_blank" class="text-emerald-500 underline">Aceder à Documentação</a></p>
+        </div>
+
+    </main>
+
+    <script>
+        // Inicializa ícones do Lucide
+        lucide.createIcons();
+
+        function simulateAudio(type) {
+            const box = document.getElementById('simulation-box');
+            box.classList.remove('hidden');
+            if (type === 'neutral') {
+                box.innerText = "🗣️ [Leitor de Ecrã]: Leitura em tom constante sem alteração de velocidade ou decibéis.";
+                box.className = "p-3 rounded-lg text-xs font-mono-code bg-slate-950 border border-slate-800 text-slate-400 text-center animate-none";
+            } else if (type === 'strong') {
+                box.innerText = "🗣️ [Leitor de Ecrã]: Tom elevado e pausa tática em 'Atenção' [+3dB, pausa de 400ms].";
+                box.className = "p-3 rounded-lg text-xs font-mono-code bg-emerald-950/30 border border-emerald-900/40 text-emerald-400 text-center animate-pulse";
+            } else if (type === 'em') {
+                box.innerText = "🗣️ [Leitor de Ecrã]: Aceleração tonal expressiva de frequência fónica sobre a palavra 'hoje'.";
+                box.className = "p-3 rounded-lg text-xs font-mono-code bg-sky-950/30 border border-sky-900/40 text-sky-400 text-center animate-pulse";
+            }
+        }
+    </script>
+</body>
+</html>
