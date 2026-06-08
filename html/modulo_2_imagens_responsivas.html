@@ -38,7 +38,7 @@
         
         <!-- Banner de Contexto -->
         <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-3">
-            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Mapeamento de Ecrãs</span>
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono-code">Mapeamento de telas</span>
             <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Imagens Responsivas: Multi-Resolução e Direção de Arte</h2>
             <p class="text-slate-300 text-sm leading-relaxed">
                 O motor do navegador inicia o descarregamento das imagens no primeiro varrimento da árvore DOM, muito antes das folhas de estilo CSS serem carregadas e interpretadas. Logo, a lógica responsiva e a direção de arte de imagens devem ser resolvidas <strong>nativamente na estrutura do HTML5</strong>, utilizando os atributos <code>srcset</code>, <code>sizes</code> e o elemento condicional <code>&lt;picture&gt;</code>.
@@ -53,7 +53,7 @@
                     Simulador Ativo de Resoluções e Disparos de Mídia
                 </h3>
                 <p class="text-xs text-slate-400">
-                    Modifique a barra de largura do ecrã simulado para compreender como o navegador descobre e decide qual ativo de imagem descarregar com base nas media queries estruturais de largura em pixels.
+                    Modifique a barra de largura do tela simulado para compreender como o navegador descobre e decide qual ativo de imagem descarregar com base nas media queries estruturais de largura em pixels.
                 </p>
             </div>
 
@@ -120,7 +120,7 @@
                 filename.innerText = "banner-mobile.webp";
                 saving.innerText = "Economia de rede: 92%";
                 technical.innerText = '<source media="(max-width: 639px)" srcset="banner-mobile.webp">';
-                decision.innerText = "Para ecrãs inferiores a 640px, o navegador bloqueia o descarregamento das imagens de desktop, consumindo apenas 14 KB de dados móveis em redes 3G/4G.";
+                decision.innerText = "Para telas inferiores a 640px, o navegador bloqueia o descarregamento das imagens de desktop, consumindo apenas 14 KB de dados móveis em redes 3G/4G.";
                 imageBox.style.backgroundColor = "#1c0d0d";
             } else if (width >= 640 && width < 1024) {
                 widthBadge.className = "font-mono-code bg-sky-950 border border-sky-900/40 text-sky-400 px-3 py-1 rounded-lg font-bold";
@@ -128,7 +128,7 @@
                 filename.innerText = "banner-tablet.webp";
                 saving.innerText = "Economia de rede: 84%";
                 technical.innerText = '<source media="(min-width: 640px) and (max-width: 1023px)" srcset="banner-tablet.webp">';
-                decision.innerText = "O tablet é identificado no intervalo de ecrã médio. O navegador busca o ativo recortado de forma proporcional à largura intermédia para não esmagar as fontes lúdicas.";
+                decision.innerText = "O tablet é identificado no intervalo de tela médio. O navegador busca o ativo recortado de forma proporcional à largura intermédia para não esmagar as fontes lúdicas.";
                 imageBox.style.backgroundColor = "#0d161c";
             } else {
                 widthBadge.className = "font-mono-code bg-emerald-950 border border-emerald-900/40 text-emerald-400 px-3 py-1 rounded-lg font-bold";
@@ -136,7 +136,7 @@
                 filename.innerText = "banner-desktop-large.avif";
                 saving.innerText = "Economia de rede: 78%";
                 technical.innerText = '<source media="(min-width: 1024px)" srcset="banner-desktop-large.avif">';
-                decision.innerText = "Com largura suficiente de ecrã para albergar o layout panorâmico total, o navegador puxa a versão AVIF otimizada de alta fidelidade visual.";
+                decision.innerText = "Com largura suficiente de tela para albergar o layout panorâmico total, o navegador puxa a versão AVIF otimizada de alta fidelidade visual.";
                 imageBox.style.backgroundColor = "#0d1c13";
             }
         }
