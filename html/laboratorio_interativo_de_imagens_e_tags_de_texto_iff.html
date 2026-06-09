@@ -140,7 +140,7 @@
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
                     <i data-lucide="terminal" class="text-emerald-400"></i>
-                    Anatomia de um Ativo de Multimédia Semântico Padrão Ouro
+                    Anatomia de um Ativo de Multimídia Semântico Padrão Ouro
                 </h3>
                 <p class="text-xs text-slate-300">
                     Para associar uma legenda ou explicação técnica a uma imagem ou bloco de código, a especificação do HTML5 impõe o empacotamento com a dupla <code>&lt;figure&gt;</code> e <code>&lt;figcaption&gt;</code>. Veja como implementar o fallback de mídias modernas de forma robusta:
@@ -151,10 +151,10 @@
 <span class="text-slate-500">&lt;!-- Semântica estrutural para agrupamento de ilustração --&gt;</span>
 <span class="text-emerald-400">&lt;figure&gt;</span>
     <span class="text-purple-400">&lt;picture&gt;</span>
-        <span class="text-slate-500">&lt;!-- 1. Primeira escolha: Formato AVIF de altíssima performance para ecrãs grandes --&gt;</span>
+        <span class="text-slate-500">&lt;!-- 1. Primeira escolha: Formato AVIF de altíssima performance para telas grandes --&gt;</span>
         &lt;source <span class="text-sky-400">srcset</span>=<span class="text-amber-300">"banner-desktop.avif"</span> <span class="text-sky-400">media</span>=<span class="text-amber-300">"(min-width: 1024px)"</span> <span class="text-sky-400">type</span>=<span class="text-amber-300">"image/avif"</span>&gt;
         
-        <span class="text-slate-500">&lt;!-- 2. Segunda escolha: Formato WebP eficiente para ecrãs menores (telemóvel/tablet) --&gt;</span>
+        <span class="text-slate-500">&lt;!-- 2. Segunda escolha: Formato WebP eficiente para telas menores (smartphone/tablet) --&gt;</span>
         &lt;source <span class="text-sky-400">srcset</span>=<span class="text-amber-300">"banner-mobile.webp"</span> <span class="text-sky-400">media</span>=<span class="text-amber-300">"(max-width: 1023px)"</span> <span class="text-sky-400">type</span>=<span class="text-amber-300">"image/webp"</span>&gt;
         
         <span class="text-slate-500">&lt;!-- 3. Fallback obrigatório: Imagem JPG padrão para navegadores antigos ou legados --&gt;</span>
@@ -171,7 +171,7 @@
         <!-- CONTEÚDO 2: SIMULADOR DE RESOLUÇÃO VISUAL -->
         <section id="pane-simulador" class="tab-panel hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
-                <h3 class="text-lg font-bold text-white mb-2">Simulador de Descarregamento de Ativos Baseado em Resolução</h3>
+                <h3 class="text-lg font-bold text-white mb-2">Simulador de Download de Ativos Baseado em Resolução</h3>
                 <p class="text-xs text-slate-400">Redimensione a largura simulada do viewport para observar qual arquivo de imagem o motor do navegador escolheria carregar. Isso demonstra na prática como as regras de <code>media queries</code> e formatos de fallback economizam largura de banda de dados em redes móveis no desenvolvimento de Sistemas de Informação.</p>
             </div>
 
@@ -222,7 +222,7 @@
                         <div class="h-64 rounded-xl flex flex-col items-center justify-center text-center p-6 transition-all duration-300 bg-cover bg-center border border-dashed border-slate-800" id="sim-graphic-box">
                             <div class="bg-slate-950/90 border border-slate-800 p-4 rounded-xl backdrop-blur-sm space-y-2 max-w-sm">
                                 <i id="sim-file-icon" data-lucide="image" class="w-8 h-8 text-emerald-400 mx-auto"></i>
-                                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500 font-mono-code block">Ficheiro Ativo Solicitado</span>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500 font-mono-code block">Arquivo Ativo Solicitado</span>
                                 <h4 id="sim-file-name" class="font-bold text-white text-sm font-mono-code">banner-desktop.avif</h4>
                                 <p id="sim-file-size" class="text-xs text-emerald-400 font-mono-code">Tamanho estimado: 42 KB (AVIF)</p>
                             </div>
@@ -257,7 +257,7 @@
                     </div>
 
                     <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 text-[10px] text-slate-400 leading-relaxed mt-4">
-                        <strong>Comentário do Prof. Ronaldo:</strong> Note que, ao redimensionar para larguras de telemóvel, o navegador desiste de descarregar a versão pesada de desktop e puxa apenas a imagem comprimida recortada para ecrãs pequenos. Isso reduz drasticamente o tráfego de dados na rede móvel do utilizador.
+                        <strong>Comentário do Prof. Ronaldo:</strong> Note que, ao redimensionar para larguras de smartphone, o navegador desiste de fazer o download da versão maior para desktop e baixa apenas a imagem comprimida recortada para telas pequenas. Isso reduz drasticamente o tráfego de dados na rede de dados móvel do usuário.
                     </div>
                 </div>
             </div>
@@ -319,7 +319,7 @@
                                 <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
                                 <div>
                                     <h5 class="text-xs font-bold text-slate-300">Pronto para Auditar</h5>
-                                    <p class="text-[10px] text-slate-400 mt-1 leading-normal">Utilize o editor de código ao lado para efetuar as modificações de ecrã e clique no botão verde de "Rodar Validador" para processar o feedback estrito do professor.</p>
+                                    <p class="text-[10px] text-slate-400 mt-1 leading-normal">Utilize o editor de código ao lado para efetuar as modificações de tela e clique no botão verde de "Rodar Validador" para processar o feedback estrito do professor.</p>
                                 </div>
                             </div>
                         </div>
