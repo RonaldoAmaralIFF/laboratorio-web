@@ -43,6 +43,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/typescript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/yaml.min.js"></script>
 
     <style>
         /* Custom Styles & Scrollbar */
@@ -97,6 +98,9 @@
                 <li><a href="#arquitetura" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-layer-group w-5 text-center"></i> 2. Clean Architecture</a></li>
                 <li><a href="#implementacao" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-code w-5 text-center"></i> 3. Implementação</a></li>
                 <li><a href="#ambiente" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-terminal w-5 text-center"></i> 4. Variáveis de Ambiente</a></li>
+                <li><a href="#swagger-jsdoc" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-magic w-5 text-center"></i> 5. Swagger JSDoc</a></li>
+                <li><a href="#organizacao-avancada" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-folder-open w-5 text-center"></i> 6. Organização e YAML</a></li>
+                <li><a href="#postman" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-rocket w-5 text-center"></i> 7. Teste no Postman</a></li>
                 <li><a href="#quiz" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-clipboard-check w-5 text-center"></i> Exercícios</a></li>
             </ul>
         </nav>
@@ -385,6 +389,280 @@ app.listen(PORT, () => {
             </div>
         </section>
 
+        <!-- Section 5: Swagger JSDoc -->
+        <section id="swagger-jsdoc" class="mb-16 scroll-mt-20 border-t border-slate-200 pt-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">5</div>
+                <h2 class="text-2xl font-bold text-slate-800">Automação com Swagger-JSDoc</h2>
+            </div>
+            
+            <p class="text-slate-600 mb-6 leading-relaxed">
+                Manter um único arquivo JSON ou objeto TypeScript gigante com toda a documentação pode se tornar inviável à medida que o projeto cresce. Uma alternativa escalável é o <strong>swagger-jsdoc</strong>, que permite escrever a documentação da API em formato de comentários (JSDoc) de forma fragmentada, diretamente acima das rotas ou controladores.
+            </p>
+
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">5.1. Instalação</h3>
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono">Terminal</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-install-jsdoc')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-install-jsdoc" class="language-bash">npm install swagger-jsdoc
+npm install -D @types/swagger-jsdoc</code></pre>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">5.2. Configuração Básica</h3>
+                <p class="text-slate-600 mb-4">Atualizamos o nosso arquivo de documentação para gerar a especificação dinamicamente baseada nos arquivos do projeto em vez de usar um objeto estático longo.</p>
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-brands fa-js text-yellow-400 mr-2"></i>src/infrastructure/http/docs/swagger.ts</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-swagger-jsdoc')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-swagger-jsdoc" class="language-typescript">import swaggerJsDoc from 'swagger-jsdoc';
+
+const PORT = process.env.PORT || 3000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}/api`;
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'API de Gestão de Tarefas',
+            version: '1.0.0',
+            description: 'Documentação automatizada utilizando swagger-jsdoc',
+        },
+        servers: [{ url: BASE_URL }],
+    },
+    // Define os caminhos onde o JSDoc vai procurar as anotações @swagger
+    apis: [
+        './src/infrastructure/http/routes/*.ts', 
+        './src/infrastructure/http/controllers/*.ts'
+    ], 
+};
+
+// Gera a especificação JSON baseada nas configurações e comentários
+export const swaggerSpec = swaggerJsDoc(swaggerOptions);</code></pre>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">5.3. Documentando com Comentários</h3>
+                <p class="text-slate-600 mb-4">Agora, você pode documentar suas rotas diretamente nos arquivos correspondentes usando o padrão JSDoc <code>@swagger</code>.</p>
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-brands fa-js text-yellow-400 mr-2"></i>src/infrastructure/http/routes/tarefas.routes.ts</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-route-jsdoc')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-route-jsdoc" class="language-typescript">import { Router } from 'express';
+
+const router = Router();
+
+/**
+ * @swagger
+ * /tarefas:
+ *   get:
+ *     summary: Retorna a lista de tarefas
+ *     tags: [Tarefas]
+ *     responses:
+ *       200:
+ *         description: Lista de tarefas obtida com sucesso
+ */
+router.get('/tarefas', (req, res) => {
+    res.json([{ id: 1, titulo: 'Estudar Clean Architecture' }]);
+});
+
+export default router;</code></pre>
+                </div>
+                <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg mt-6 flex items-center gap-3">
+                    <i class="fa-solid fa-code text-indigo-500 text-xl"></i>
+                    <p class="text-indigo-800 text-sm m-0">
+                        No seu <code>server.ts</code>, você atualizará a configuração para usar a nova variável gerada: <code class="bg-white/50 px-1 rounded">swaggerUi.setup(swaggerSpec)</code>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Advanced Organization (YAML & Routes) -->
+        <section id="organizacao-avancada" class="mb-16 scroll-mt-20 border-t border-slate-200 pt-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">6</div>
+                <h2 class="text-2xl font-bold text-slate-800">Organização Avançada: YAML e Rotas</h2>
+            </div>
+            
+            <p class="text-slate-600 mb-6 leading-relaxed">
+                À medida que a API escala, manter os Schemas (modelos de dados) dentro de comentários JSDoc polui os controladores e as rotas. Uma excelente prática é extrair os Schemas para arquivos <strong>YAML</strong> e separar toda a lógica do Swagger em uma rota dedicada, limpando completamente nosso ponto de entrada da aplicação.
+            </p>
+
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">6.1. Definindo Schemas em YAML</h3>
+                <p class="text-slate-600 mb-4">Crie um arquivo <code>schemas.yaml</code> na pasta <code>docs/</code>. A formatação baseada em identação do YAML torna as definições de objetos muito mais legíveis do que em JSON.</p>
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800 mb-4">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-file-lines text-yellow-400 mr-2"></i>src/infrastructure/http/docs/schemas.yaml</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-yaml')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-yaml" class="language-yaml">components:
+  schemas:
+    CriarTarefaDTO:
+      type: object
+      required:
+        - titulo
+      properties:
+        titulo:
+          type: string
+          description: O título descritivo da tarefa.
+        descricao:
+          type: string
+          description: Detalhes adicionais (opcional).
+    Tarefa:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        titulo:
+          type: string
+        concluida:
+          type: boolean</code></pre>
+                </div>
+                <p class="text-slate-600 text-sm mt-3">
+                    <strong>Importante:</strong> Para que o <code>swagger-jsdoc</code> leia este arquivo, atualize a opção <code>apis</code> no <code>swagger.ts</code> adicionando o caminho: <code>'./src/infrastructure/http/docs/*.yaml'</code>.
+                </p>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">6.2. Isolando a Rota de Documentação</h3>
+                <p class="text-slate-600 mb-4">Para respeitar a responsabilidade única, vamos mover as chamadas do <code>swagger-ui-express</code> que estavam no <code>server.ts</code> para um arquivo de rotas próprio.</p>
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-brands fa-js text-yellow-400 mr-2"></i>src/infrastructure/http/routes/docs.routes.ts</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-docs-routes')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-docs-routes" class="language-typescript">import { Router } from 'express';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from '../docs/swagger'; // Configuração do JSDoc gerada anteriormente
+
+const router = Router();
+
+// Rota 1: Interface Visual do Swagger UI
+router.use('/', swaggerUi.serve);
+router.get('/', swaggerUi.setup(swaggerSpec));
+
+// Rota 2: Exportação do JSON cru (Para uso no Postman/Insomnia)
+router.get('/json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
+
+export default router;</code></pre>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">6.3. O Arquivo Server.ts Completo e Limpo</h3>
+                <p class="text-slate-600 mb-4">Veja como nosso <code>server.ts</code> fica focado exclusivamente na inicialização e injeção de rotas, sem conhecer os detalhes da biblioteca de documentação.</p>
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-brands fa-js text-yellow-400 mr-2"></i>src/infrastructure/http/server.ts</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-server-final')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-server-final" class="language-typescript">import express from 'express';
+import tarefasRoutes from './routes/tarefas.routes';
+import docsRoutes from './routes/docs.routes'; // Importamos nossa rota de docs
+
+const app = express();
+
+// Middlewares
+app.use(express.json());
+
+// Registro das Rotas da Aplicação
+app.use('/api', tarefasRoutes);
+
+// Registro da Rota de Documentação (aponta para /api-docs e /api-docs/json)
+app.use('/api-docs', docsRoutes); 
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`\n🚀 Servidor em execução na porta ${PORT}`);
+    console.log(`📄 Documentação visual: http://localhost:${PORT}/api-docs`);
+    console.log(`🔗 Especificação JSON:  http://localhost:${PORT}/api-docs/json`);
+});</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Postman -->
+        <section id="postman" class="mb-16 scroll-mt-20 border-t border-slate-200 pt-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold">7</div>
+                <h2 class="text-2xl font-bold text-slate-800">Testando a Coleção no Postman</h2>
+            </div>
+            
+            <p class="text-slate-600 mb-6 leading-relaxed">
+                O Swagger UI é excelente para visualização, mas equipes de QA frequentemente utilizam o <strong>Postman</strong> para criar testes automatizados e gerenciar ambientes complexos. Graças ao padrão OpenAPI e à rota que separamos, podemos exportar nossa documentação e gerar uma Coleção no Postman instantaneamente.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-3">Passo 1: Identificar a URL do JSON</h3>
+                    <p class="text-slate-600 mb-4 text-sm">Como configuramos na Seção 6.2, nosso <code>docs.routes.ts</code> possui um endpoint dedicado que retorna a especificação bruta. Essa é a URL que vamos fornecer ao Postman.</p>
+                    
+                    <div class="bg-slate-100 rounded-lg p-4 font-mono text-sm border border-slate-200 text-slate-700 font-bold mb-4">
+                        http://localhost:3000/api-docs/json
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-3">Passo 2: Importar no Postman</h3>
+                    <ul class="space-y-4 text-slate-600 text-sm">
+                        <li class="flex gap-3 items-start">
+                            <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 shrink-0">1</span>
+                            <span>Com o servidor rodando, copie a URL do JSON acima.</span>
+                        </li>
+                        <li class="flex gap-3 items-start">
+                            <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 shrink-0">2</span>
+                            <span>Abra o aplicativo do <strong>Postman</strong> e clique no botão <strong>"Import"</strong> (localizado no topo do menu lateral esquerdo).</span>
+                        </li>
+                        <li class="flex gap-3 items-start">
+                            <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 shrink-0">3</span>
+                            <span>Na janela que abrir, cole a URL copiada e pressione Enter.</span>
+                        </li>
+                        <li class="flex gap-3 items-start">
+                            <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 shrink-0">4</span>
+                            <span>O Postman converterá automaticamente a documentação e gerará uma nova <strong>Collection</strong> com todas as rotas e <em>bodies</em> prontos para uso!</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-100 p-5 rounded-xl shadow-sm flex items-start gap-4">
+                <div class="p-3 bg-white rounded-lg shadow-sm">
+                    <i class="fa-solid fa-bolt text-2xl text-orange-500"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 mb-1">Single Source of Truth (Única Fonte da Verdade)</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Essa abordagem garante alta produtividade. Você atualiza o código no back-end (JSDoc), o Swagger UI atualiza visualmente, e a equipe de QA só precisa dar um re-import no Postman para ter as requisições sempre sincronizadas, minimizando falhas de comunicação.
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <!-- Quiz Section -->
         <section id="quiz" class="mb-16 scroll-mt-20 border-t border-slate-200 pt-12">
             <div class="text-center mb-10">
@@ -415,21 +693,61 @@ app.listen(PORT, () => {
                     <div class="feedback hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
                 </div>
 
-                <!-- Question 2 -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 quiz-question" data-answer="a">
-                    <h3 class="font-bold text-slate-800 mb-4 text-lg">2. Segundo a Clean Architecture, onde os arquivos de documentação (como o <code>swagger.ts</code>) devem ser alocados?</h3>
+                <!-- Question 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 quiz-question" data-answer="c">
+                    <h3 class="font-bold text-slate-800 mb-4 text-lg">3. Qual a principal vantagem de utilizar a biblioteca <code>swagger-jsdoc</code>?</h3>
                     <div class="space-y-3">
                         <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
-                            <input type="radio" name="q2" value="a" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
-                            <span class="text-slate-700">Na camada de Infraestrutura, pois é um detalhe de comunicação/rede externa.</span>
+                            <input type="radio" name="q3" value="a" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Ela substitui totalmente o Express, rodando a aplicação mais rápido.</span>
                         </label>
                         <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
-                            <input type="radio" name="q2" value="b" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
-                            <span class="text-slate-700">Na camada de Domínio (Entidades), para que toda a aplicação a acesse.</span>
+                            <input type="radio" name="q3" value="b" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Ela cria automaticamente os testes unitários da aplicação usando Jest.</span>
                         </label>
                         <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
-                            <input type="radio" name="q2" value="c" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
-                            <span class="text-slate-700">Diretamente dentro dos Casos de Uso (Services).</span>
+                            <input type="radio" name="q3" value="c" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Permite gerar a especificação OpenAPI dinamicamente a partir de comentários espalhados pelo código, evitando um arquivo JSON gigante e difícil de manter.</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 quiz-question" data-answer="b">
+                    <h3 class="font-bold text-slate-800 mb-4 text-lg">4. Como integramos a especificação gerada no código com o Postman de forma eficiente?</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q4" value="a" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">É necessário reescrever manualmente todas as rotas no Postman observando o Swagger UI no navegador.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q4" value="b" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Basta apontar para a nossa rota <code>/api-docs/json</code> na opção "Import" do Postman, e ele gerará a Collection automaticamente.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q4" value="c" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">O Postman precisa de acesso direto ao banco de dados da aplicação para extrair e entender as rotas criadas.</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 quiz-question" data-answer="a">
+                    <h3 class="font-bold text-slate-800 mb-4 text-lg">5. Por que extraímos os Schemas para arquivos YAML e isolamos as rotas do Swagger em <code>docs.routes.ts</code>?</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q5" value="a" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Para manter o arquivo <code>server.ts</code> limpo aderindo à separação de responsabilidades (Clean Architecture) e para evitar comentários JSDoc excessivamente longos no código.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q5" value="b" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Porque o Swagger UI não consegue ler definições de schema a não ser que estejam unicamente em formato YAML.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q5" value="c" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Para aumentar a segurança da API, já que arquivos YAML criptografam os dados sensíveis da requisição.</span>
                         </label>
                     </div>
                     <div class="feedback hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
