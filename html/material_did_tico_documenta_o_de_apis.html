@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação de APIs RESTful com Swagger e OpenAPI</title>
+    
+    <!-- Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/bash.min.js"></script>
+
+    <style>
+        /* Custom Styles & Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .code-block-wrapper { position: relative; }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .code-block-wrapper:hover .copy-btn { opacity: 1; }
+        @media (max-width: 768px) { .copy-btn { opacity: 1; } } /* Always show on mobile */
+        
+        .toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: bottom 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 50;
+        }
+        .toast.show { bottom: 20px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col md:flex-row">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-64 lg:w-72 bg-white border-r border-slate-200 flex-shrink-0 md:h-screen md:sticky top-0 z-40 flex flex-col shadow-sm">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between md:justify-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-book-code"></i>
+                </div>
+                <h1 class="font-bold text-lg leading-tight text-slate-800 tracking-tight">API Docs<br><span class="text-brand-600 text-sm">Dev Web - ENG</span></h1>
+            </div>
+            <!-- Mobile Menu Toggle -->
+            <button id="menuToggle" class="md:hidden text-slate-500 hover:text-brand-600 focus:outline-none">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <nav id="sidebarNav" class="flex-1 overflow-y-auto p-4 hidden md:block">
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 px-3">Conteúdo</p>
+            <ul class="space-y-1">
+                <li><a href="#intro" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-info-circle w-5 text-center"></i> 1. O que é?</a></li>
+                <li><a href="#arquitetura" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-layer-group w-5 text-center"></i> 2. Clean Architecture</a></li>
+                <li><a href="#implementacao" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-code w-5 text-center"></i> 3. Implementação</a></li>
+                <li><a href="#ambiente" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-terminal w-5 text-center"></i> 4. Variáveis de Ambiente</a></li>
+                <li><a href="#quiz" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors"><i class="fa-solid fa-clipboard-check w-5 text-center"></i> Exercícios</a></li>
+            </ul>
+        </nav>
+        
+        <div class="p-4 border-t border-slate-100 hidden md:block">
+            <div class="bg-slate-50 rounded-lg p-3 text-xs text-slate-500 text-center">
+                Módulo: Programação Back-end
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 w-full max-w-5xl mx-auto">
+        
+        <!-- Header -->
+        <header class="mb-12">
+            <span class="inline-block py-1 px-3 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-widest mb-4">Material Interativo</span>
+            <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-6 tracking-tight">
+                Documentação de APIs RESTful com <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600">Swagger</span> e <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-indigo-600">OpenAPI</span>
+            </h1>
+            <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                Aprenda a criar o "manual de instruções" perfeito para o seu back-end, integrando documentação interativa em projetos Node.js com TypeScript e princípios de Clean Architecture.
+            </p>
+        </header>
+
+        <!-- Section 1: Introduction -->
+        <section id="intro" class="mb-16 scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">1</div>
+                <h2 class="text-2xl font-bold text-slate-800">O que é e por que documentar?</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="prose prose-slate max-w-none text-slate-600">
+                    <p class="mb-4">
+                        Uma API só é verdadeiramente útil se os desenvolvedores (front-end, mobile ou terceiros) souberem como consumi-la. A documentação serve como o <strong>"manual de instruções"</strong> do seu <em>back-end</em>, especificando quais rotas existem, quais dados devem ser enviados e o que será retornado.
+                    </p>
+                    <p class="mb-4">
+                        O padrão de mercado para documentação de APIs RESTful é a <strong>OpenAPI Specification (OAS)</strong>, frequentemente implementada através da ferramenta <strong>Swagger</strong>.
+                    </p>
+                    <p>
+                        O Swagger não apenas descreve a API visualmente, mas também cria uma <strong>interface interativa</strong> onde é possível testar as rotas diretamente pelo navegador, dispensando muitas vezes o uso de ferramentas externas como Postman ou Insomnia.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-center gap-4">
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                        <i class="fa-solid fa-file-code text-3xl text-emerald-500"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800">OpenAPI</h3>
+                            <p class="text-sm text-slate-500">A especificação escrita (o formato/padrão).</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                        <i class="fa-solid fa-laptop-code text-3xl text-brand-500"></i>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Swagger</h3>
+                            <p class="text-sm text-slate-500">A ferramenta que gera a interface visual a partir da especificação.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Clean Architecture -->
+        <section id="arquitetura" class="mb-16 scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">2</div>
+                <h2 class="text-2xl font-bold text-slate-800">Documentação na Clean Architecture</h2>
+            </div>
+
+            <div class="bg-indigo-50 rounded-2xl p-6 md:p-8 border border-indigo-100 mb-6">
+                <div class="flex gap-4 items-start">
+                    <i class="fa-solid fa-lightbulb text-2xl text-indigo-500 mt-1"></i>
+                    <div>
+                        <h3 class="font-bold text-indigo-900 text-lg mb-2">A Regra de Ouro</h3>
+                        <p class="text-indigo-800">
+                            Um dos princípios fundamentais da Arquitetura Limpa (Clean Architecture) é a separação de responsabilidades. <strong>A documentação é um detalhe de Infraestrutura.</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-slate-600 mb-6 leading-relaxed">
+                Nossas Entidades, Casos de Uso (Services) e Controladores não devem saber que o Swagger existe. Não devemos poluir o "coração" da nossa aplicação com anotações de documentação diretamente no código de domínio. Por isso, os arquivos do Swagger devem ficar isolados.
+            </p>
+
+            <div class="bg-slate-800 rounded-xl p-5 font-mono text-sm text-slate-300 shadow-md">
+                <div class="flex items-center gap-2 mb-3 pb-3 border-b border-slate-700">
+                    <i class="fa-solid fa-folder-tree text-brand-400"></i>
+                    <span class="font-bold text-slate-200">Estrutura de Pastas Recomendada</span>
+                </div>
+                <ul class="space-y-2">
+                    <li><i class="fa-regular fa-folder text-yellow-400 mr-2"></i>src/</li>
+                    <li class="ml-4"><i class="fa-regular fa-folder text-yellow-400 mr-2"></i>domain/ <span class="text-slate-500 ml-2">// Longe da documentação</span></li>
+                    <li class="ml-4"><i class="fa-regular fa-folder text-yellow-400 mr-2"></i>application/ <span class="text-slate-500 ml-2">// Longe da documentação</span></li>
+                    <li class="ml-4"><i class="fa-regular fa-folder-open text-yellow-400 mr-2"></i>infrastructure/</li>
+                    <li class="ml-8"><i class="fa-regular fa-folder-open text-yellow-400 mr-2"></i>http/</li>
+                    <li class="ml-12"><i class="fa-regular fa-folder-open text-brand-400 mr-2"></i>docs/</li>
+                    <li class="ml-16"><i class="fa-brands fa-js text-yellow-300 mr-2"></i><span class="text-white font-bold bg-brand-500/30 px-1 rounded">swagger.ts</span> <span class="text-brand-300 ml-2">&lt;-- Aqui fica!</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 3: Implementation -->
+        <section id="implementacao" class="mb-16 scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">3</div>
+                <h2 class="text-2xl font-bold text-slate-800">Implementação Prática</h2>
+            </div>
+            
+            <p class="text-slate-600 mb-8">Vamos ver como configurar isso utilizando Node.js, Express e TypeScript.</p>
+
+            <!-- 3.1 Install -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">3.1. Instalação das Dependências</h3>
+                <p class="text-slate-600 mb-4">Para integrar a interface visual do Swagger ao Express, utilizamos a biblioteca <code>swagger-ui-express</code>.</p>
+                
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono">Terminal</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-install')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-install" class="language-bash">npm install swagger-ui-express
+npm install -D @types/swagger-ui-express</code></pre>
+                </div>
+            </div>
+
+            <!-- 3.2 Swagger Spec -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">3.2. Criando o Arquivo de Especificação</h3>
+                <p class="text-slate-600 mb-4">
+                    Dentro de <code>src/infrastructure/http/docs/</code>, criamos o arquivo <code>swagger.ts</code>.
+                </p>
+                
+                <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg mb-6">
+                    <h4 class="font-bold text-amber-800 flex items-center gap-2"><i class="fa-solid fa-star"></i> Boa Prática de Mercado</h4>
+                    <p class="text-amber-700 text-sm mt-1">
+                        Nunca faça <em>hardcode</em> (valores fixos) da URL ou porta do servidor. Quando a API for para a nuvem, a porta mudará dinamicamente. Utilizamos variáveis de ambiente (<code>process.env</code>) para garantir que a documentação se adapte ao ambiente onde está rodando.
+                    </p>
+                </div>
+
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-brands fa-js text-yellow-400 mr-2"></i>src/infrastructure/http/docs/swagger.ts</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-swagger')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-swagger" class="language-typescript">const PORT = process.env.PORT || 3000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}/api`;
+
+export const swaggerDocument = {
+    openapi: '3.0.0',
+    info: {
+        title: 'API de Gestão de Tarefas',
+        version: '1.0.0',
+        description: 'Documentação oficial da API estruturada em Clean Architecture.'
+    },
+    servers: [
+        { 
+            url: BASE_URL, 
+            description: 'Servidor da API' 
+        }
+    ],
+    paths: {
+        '/tarefas': {
+            get: {
+                summary: 'Lista todas as tarefas',
+                tags: ['Tarefas'],
+                responses: {
+                    '200': {
+                        description: 'Sucesso'
+                    }
+                }
+            },
+            post: {
+                summary: 'Cria uma nova tarefa',
+                tags: ['Tarefas'],
+                requestBody: {
+                    required: true,
+                    content: {
+                        'application/json': {
+                            schema: {
+                                $ref: '#/components/schemas/CriarTarefaDTO'
+                            }
+                        }
+                    }
+                },
+                responses: {
+                    '201': { description: 'Criado com sucesso' },
+                    '400': { description: 'Dados inválidos' }
+                }
+            }
+        }
+    },
+    components: {
+        schemas: {
+            CriarTarefaDTO: {
+                type: 'object',
+                required: ['titulo'],
+                properties: {
+                    titulo: { type: 'string' },
+                    descricao: { type: 'string' }
+                }
+            }
+        }
+    }
+};</code></pre>
+                </div>
+            </div>
+
+            <!-- 3.3 Server Setup -->
+            <div>
+                <h3 class="text-xl font-bold text-slate-800 mb-4">3.3. Acoplando ao Servidor Express</h3>
+                <p class="text-slate-600 mb-4">
+                    No ponto de entrada da nossa infraestrutura web (<code>server.ts</code>), importamos a biblioteca do Swagger e a nossa especificação para criar uma rota dedicada à documentação, geralmente <code>/api-docs</code>.
+                </p>
+
+                <div class="code-block-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                    <div class="bg-slate-900 px-4 py-2 flex items-center justify-between border-b border-slate-700">
+                        <span class="text-xs text-slate-400 font-mono"><i class="fa-brands fa-js text-yellow-400 mr-2"></i>src/infrastructure/http/server.ts</span>
+                        <button class="text-slate-400 hover:text-white transition-colors" onclick="copyCode(this, 'code-server')" title="Copiar">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto text-sm"><code id="code-server" class="language-typescript">import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import tarefasRoutes from './routes/tarefas.routes';
+import { swaggerDocument } from './docs/swagger';
+
+const app = express();
+
+app.use(express.json());
+
+// Expondo a rota da documentação visual
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Nossas rotas de negócio
+app.use('/api', tarefasRoutes);
+
+// Consumindo a mesma porta dinâmica definida para o Swagger
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`\n✅ Servidor rodando na porta ${PORT}`);
+    console.log(`📄 Documentação interativa em: http://localhost:${PORT}/api-docs`);
+});</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Env Vars -->
+        <section id="ambiente" class="mb-16 scroll-mt-20">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">4</div>
+                <h2 class="text-2xl font-bold text-slate-800">Testando as Variáveis de Ambiente</h2>
+            </div>
+            
+            <p class="text-slate-600 mb-6">
+                Para verificar se a parametrização dinâmica da porta está funcionando, os desenvolvedores podem injetar as variáveis diretamente pelo terminal ao iniciar o projeto:
+            </p>
+
+            <div class="bg-black rounded-lg p-5 font-mono text-sm shadow-xl mb-6 transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                <div class="flex gap-2 mb-3">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <div class="text-gray-300">
+                    <span class="text-green-400">user@machine</span>:<span class="text-blue-400">~/projeto</span>$ PORT=8080 BASE_URL=http://localhost:8080/api npm run dev<br><br>
+                    <span class="text-slate-400">> api-tarefas dev</span><br>
+                    <span class="text-slate-400">> ts-node-dev src/infrastructure/http/server.ts</span><br><br>
+                    <span class="text-green-500">✅ Servidor rodando na porta 8080</span><br>
+                    <span class="text-blue-300">📄 Documentação interativa em: http://localhost:8080/api-docs</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex gap-4">
+                <i class="fa-solid fa-circle-check text-2xl text-emerald-500 mt-1"></i>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Ao fazer isso, o servidor iniciará na porta <code>8080</code>. Ao acessar <code>http://localhost:8080/api-docs</code>, você verá que a URL base de testes (o botão "Try it out") dentro do próprio Swagger também foi atualizada automaticamente, provando que a documentação está pronta para qualquer ambiente de produção.
+                </p>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="mb-16 scroll-mt-20 border-t border-slate-200 pt-12">
+            <div class="text-center mb-10">
+                <span class="inline-block bg-indigo-100 text-indigo-700 py-1 px-3 rounded-full text-xs font-bold uppercase tracking-widest mb-3">Hora da Prática</span>
+                <h2 class="text-3xl font-extrabold text-slate-800">Verifique seu Aprendizado</h2>
+                <p class="text-slate-500 mt-2">Responda as questões abaixo para consolidar o conhecimento.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto space-y-8" id="quiz-container">
+                
+                <!-- Question 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 quiz-question" data-answer="b">
+                    <h3 class="font-bold text-slate-800 mb-4 text-lg">1. Qual é o papel da ferramenta Swagger na documentação de APIs?</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q1" value="a" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Testar a segurança da API automaticamente.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q1" value="b" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Gerar uma interface interativa baseada na especificação OpenAPI.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q1" value="c" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Criar o banco de dados das aplicações de forma automatizada.</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 quiz-question" data-answer="a">
+                    <h3 class="font-bold text-slate-800 mb-4 text-lg">2. Segundo a Clean Architecture, onde os arquivos de documentação (como o <code>swagger.ts</code>) devem ser alocados?</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q2" value="a" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Na camada de Infraestrutura, pois é um detalhe de comunicação/rede externa.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q2" value="b" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Na camada de Domínio (Entidades), para que toda a aplicação a acesse.</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="radio" name="q2" value="c" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-slate-700">Diretamente dentro dos Casos de Uso (Services).</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="text-center pt-4">
+                    <button onclick="checkQuiz()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-brand-500/30 transition-all transform hover:-translate-y-1">
+                        Verificar Respostas
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-20 border-t border-slate-200 pt-8 pb-12 text-center text-slate-500 text-sm">
+            <p>Criado para fins educacionais. Disciplina de Programação.</p>
+        </footer>
+    </main>
+
+    <!-- Global Toast Notification for Copy Action -->
+    <div id="toast" class="toast bg-slate-800 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 font-medium">
+        <i class="fa-solid fa-check-circle text-emerald-400"></i>
+        <span>Código copiado para a área de transferência!</span>
+    </div>
+
+    <script>
+        // Initialize Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+
+        // Mobile Sidebar Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarNav = document.getElementById('sidebarNav');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebarNav.classList.toggle('hidden');
+        });
+
+        // Active Link highlighting on scroll
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach((link) => {
+                link.classList.remove("text-brand-600", "bg-brand-50", "font-bold");
+                link.classList.add("text-slate-600", "font-medium");
+                if (link.getAttribute("href").includes(current) && current !== "") {
+                    link.classList.add("text-brand-600", "bg-brand-50", "font-bold");
+                    link.classList.remove("text-slate-600", "font-medium");
+                }
+            });
+        });
+
+        // Copy Code Functionality
+        function copyCode(btnElement, targetId) {
+            const codeText = document.getElementById(targetId).innerText;
+            
+            // Fallback for document.execCommand if clipboard API is blocked in iframe
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(codeText).then(showToast);
+            } else {
+                let textArea = document.createElement("textarea");
+                textArea.value = codeText;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Falha ao copiar', err);
+                }
+                textArea.remove();
+            }
+
+            // Visual feedback on button
+            const icon = btnElement.querySelector('i');
+            icon.classList.remove('fa-regular', 'fa-copy');
+            icon.classList.add('fa-solid', 'fa-check', 'text-emerald-400');
+            setTimeout(() => {
+                icon.classList.remove('fa-solid', 'fa-check', 'text-emerald-400');
+                icon.classList.add('fa-regular', 'fa-copy');
+            }, 2000);
+        }
+
+        // Toast Notification
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Quiz Logic
+        function checkQuiz() {
+            const questions = document.querySelectorAll('.quiz-question');
+            let allAnswered = true;
+            let score = 0;
+
+            questions.forEach((q, index) => {
+                const correctAnswer = q.getAttribute('data-answer');
+                const selectedOption = q.querySelector(`input[name="q${index+1}"]:checked`);
+                const feedbackDiv = q.querySelector('.feedback');
+                
+                feedbackDiv.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-red-100', 'text-red-800');
+
+                if (!selectedOption) {
+                    allAnswered = false;
+                    feedbackDiv.classList.add('bg-amber-100', 'text-amber-800');
+                    feedbackDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Por favor, selecione uma resposta.';
+                    feedbackDiv.classList.remove('hidden');
+                } else {
+                    if (selectedOption.value === correctAnswer) {
+                        score++;
+                        feedbackDiv.classList.add('bg-emerald-100', 'text-emerald-800');
+                        feedbackDiv.innerHTML = '<i class="fa-solid fa-check mr-2"></i> <strong>Correto!</strong> Excelente trabalho.';
+                    } else {
+                        feedbackDiv.classList.add('bg-red-100', 'text-red-800');
+                        feedbackDiv.innerHTML = '<i class="fa-solid fa-xmark mr-2"></i> <strong>Incorreto.</strong> Tente novamente revisando o material acima.';
+                    }
+                    feedbackDiv.classList.remove('hidden');
+                }
+            });
+
+            if (!allAnswered) {
+                // Smooth scroll to first unanswered question if needed
+            }
+        }
+    </script>
+</body>
+</html>
