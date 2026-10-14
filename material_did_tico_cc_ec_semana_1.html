@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engenharia da Computação - Semana 01: Protocolo HTTP & Sockets Bare-Metal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Mermaid JS for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                            dark: '#0f172a',
+                            panel: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .crlf-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            font-size: 0.7rem;
+            padding: 1px 4px;
+            border-radius: 3px;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-slate-950">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="p-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">
+                    <i class="fa-solid fa-terminal text-lg"></i>
+                </span>
+                <div>
+                    <h1 class="text-sm font-bold text-slate-100 uppercase tracking-wider">Trilha CC/EC &bull; Semana 01</h1>
+                    <p class="text-xs text-slate-400">Sistemas Web &bull; Abordagem Systems-First Bare-Metal</p>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-400">
+                <a href="#teoria-redes" class="hover:text-emerald-400 transition-colors">1. Camada de Rede</a>
+                <a href="#rfc-7230" class="hover:text-emerald-400 transition-colors">2. RFC 7230 & ASCII</a>
+                <a href="#simulador" class="hover:text-emerald-400 transition-colors">3. Inspector de Sockets</a>
+                <a href="#laboratorio" class="hover:text-emerald-400 transition-colors">4. Laboratório Prático</a>
+                <a href="#entregavel" class="hover:text-emerald-400 transition-colors">5. Memória de Dev</a>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    200 min (4h/a)
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="lg:col-span-3 space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 sticky top-24">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 px-2">Conteúdo da Aula</h2>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li>
+                        <a href="#objetivos" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-bullseye w-4 text-emerald-500"></i> Objetivos Pedagógicos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#teoria-redes" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-network-wired w-4 text-emerald-500"></i> Sockets & TCP/IP
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#rfc-7230" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-file-code w-4 text-emerald-500"></i> RFC 7230 & Bytes ASCII
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#simulador" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-microchip w-4 text-emerald-500"></i> Inspector de Bytes & CRLF
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#laboratorio" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-vial w-4 text-emerald-500"></i> Lab Netcat & Curl
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#entregavel" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-book-bookmark w-4 text-emerald-500"></i> Entregável no Git
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="mt-6 pt-6 border-t border-slate-800 px-2">
+                    <span class="text-xs text-slate-500 block mb-2">Comando rápido do dia:</span>
+                    <code class="block bg-slate-950 p-2 rounded text-xs font-mono text-emerald-400 border border-slate-800 break-all select-all">
+                        nc -C example.com 80
+                    </code>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="lg:col-span-9 space-y-12">
+
+            <!-- Hero / Objectives -->
+            <section id="objetivos" class="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold mb-2">
+                    <i class="fa-solid fa-graduation-cap"></i> Ciência e Engenharia da Computação
+                </div>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight mb-4">
+                    Semana 1: Arquitetura de Redes para Web & Injeção HTTP Bare-Metal
+                </h2>
+                <p class="text-slate-300 leading-relaxed mb-6 text-base">
+                    Nesta primeira semana, desconstruímos a abstração do navegador. A Web não é uma coleção de arquivos abertos localmente, mas um ecossistema de requisições de rede enviadas por canais TCP em formato de bytes brutos padronizados pela RFC 7230.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-4">
+                        <div class="text-emerald-400 font-semibold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> 1. Socket & Rede
+                        </div>
+                        <p class="text-xs text-slate-400">Rastrear o encapsulamento desde o Handshake TCP até a abertura do socket no SO.</p>
+                    </div>
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-4">
+                        <div class="text-emerald-400 font-semibold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-code"></i> 2. Sintaxe CRLF
+                        </div>
+                        <p class="text-xs text-slate-400">Compreender a necessidade física dos bytes <code class="text-emerald-300">0x0D 0x0A</code> na RFC 7230.</p>
+                    </div>
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-4">
+                        <div class="text-emerald-400 font-semibold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-terminal"></i> 3. Injeção Manual
+                        </div>
+                        <p class="text-xs text-slate-400">Injetar payloads brutos via <code class="text-emerald-300">netcat</code> e diagnosticar respostas via <code class="text-emerald-300">curl -v</code>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 1: Network Layer and TCP Sockets -->
+            <section id="teoria-redes" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 1</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">1. Da Física ao Socket TCP</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed">
+                    A comunicação web na camada de aplicação depende da infraestrutura subjacente de transporte. Antes que qualquer caractere do protocolo HTTP possa ser interpretado pelo servidor, o sistema operacional do cliente precisa resolver o endereço do destino e fechar um contrato de conexão bidirecional confiável.
+                </p>
+
+                <!-- Flow Diagram -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                    <h4 class="text-sm font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project text-emerald-400"></i> Sequência de Estabelecimento de Conexão Web
+                    </h4>
+                    
+                    <div class="mermaid bg-slate-950 p-4 rounded-lg border border-slate-800">
+                        sequenceDiagram
+                            autonumber
+                            participant C as Cliente (Browser / Netcat)
+                            participant D as Servidor DNS
+                            participant S as Servidor HTTP (Porta 80)
+
+                            Note over C,D: Resolução de Nome de Domínio
+                            C->>D: Consulta A Record (example.com)
+                            D-->>C: Retorna IP (93.184.215.14)
+
+                            Note over C,S: Handshake TCP (Três Vias)
+                            C->>S: TCP SYN (Porta Destino: 80)
+                            S-->>C: TCP SYN-ACK
+                            C->>S: TCP ACK (Socket Aberto no SO)
+
+                            Note over C,S: Camada de Aplicação (HTTP/1.1)
+                            C->>S: GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
+                            S-->>C: HTTP/1.1 200 OK (Payload + Headers)
+
+                            Note over C,S: Encerramento do Socket
+                            S->>C: TCP FIN (Connection: close)
+                            C-->>S: TCP ACK
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-5">
+                        <h4 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-network-wired text-emerald-400"></i> Abstração do Socket no SO
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            No nível do sistema operacional, o socket é tratado como um descritor de arquivo (*File Descriptor*). Operações de rede realizam escrita e leitura em buffers de memória:
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-slate-300 space-y-1">
+                            <div><span class="text-purple-400">int</span> sockfd = <span class="text-emerald-400">socket</span>(AF_INET, SOCK_STREAM, 0);</div>
+                            <div><span class="text-emerald-400">connect</span>(sockfd, &serv_addr, <span class="text-purple-400">sizeof</span>(serv_addr));</div>
+                            <div><span class="text-emerald-400">write</span>(sockfd, <span class="text-amber-300">"GET / HTTP/1.1\r\n..."</span>, len);</div>
+                            <div><span class="text-emerald-400">read</span>(sockfd, buffer, sizeof_buffer);</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-5">
+                        <h4 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-stopwatch text-emerald-400"></i> Métricas da Camada de Transporte
+                        </h4>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-400 font-bold font-mono">DNS Lookup:</span> Tempo para converter hostname em endereço IP.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-400 font-bold font-mono">Initial Connection:</span> Latência do RTT (*Round Trip Time*) para concluir o SYN $\rightarrow$ SYN-ACK $\rightarrow$ ACK.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-400 font-bold font-mono">TTFB (Time to First Byte):</span> Intervalo entre o envio do último byte do cabeçalho de requisição e a chegada do primeiro byte da resposta do servidor.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: RFC 7230 & ASCII Bytes -->
+            <section id="rfc-7230" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 2</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">2. A RFC 7230 & Anatomia da Mensagem HTTP/1.1</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed">
+                    O protocolo HTTP/1.1 é estritamente baseado em texto ASCII. Por ser uma transmissão sobre stream de dados TCP (onde não há delimitação nativa de mensagens), o parser do servidor necessita de marcadores exatos de término de linha.
+                </p>
+
+                <!-- CRLF Deep Dive Box -->
+                <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-5 text-amber-200">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-triangle-exclamation text-xl text-amber-400"></i>
+                        <h4 class="font-bold text-white text-base">O Delimitador Obrigatório: CRLF (\r\n)</h4>
+                    </div>
+                    <p class="text-xs text-amber-200/90 leading-relaxed mb-3">
+                        Na RFC 7230, cada linha do cabeçalho <strong>MANDATORIAMENTE</strong> deve ser finalizada pela sequência de dois bytes:
+                    </p>
+                    <div class="flex flex-wrap items-center gap-4 text-xs font-mono bg-slate-950/80 p-3 rounded-lg border border-slate-800">
+                        <div>
+                            <span class="text-slate-400">Carriage Return (\r):</span> 
+                            <span class="text-emerald-400 font-bold">ASCII 13 / Hex 0x0D</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400">Line Feed (\n):</span> 
+                            <span class="text-emerald-400 font-bold">ASCII 10 / Hex 0x0A</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400">Fim dos Headers:</span> 
+                            <span class="text-red-400 font-bold">\r\n\r\n (CRLF duplo)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTTP Request/Response Anatomy -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Request Anatomy -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-white text-sm">Estrutura da Requisição HTTP</h4>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/20 text-blue-400 border border-blue-500/30">CLIENT &rarr; SERVER</span>
+                            </div>
+
+                            <div class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-300 border border-slate-800 leading-relaxed overflow-x-auto">
+                                <div class="text-emerald-400 font-bold flex items-center justify-between">
+                                    <span>GET /index.html HTTP/1.1</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-emerald-500/30">&uarr; Start Line: &lt;Método&gt; &lt;URI&gt; &lt;Versão&gt;</div>
+
+                                <div class="flex items-center justify-between">
+                                    <span>Host: example.com</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>User-Agent: BareMetalClient/1.0</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Accept: text/html</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-slate-700">&uarr; Headers (Pares Chave: Valor)</div>
+
+                                <div class="flex items-center justify-between py-1 bg-red-500/10 rounded px-1">
+                                    <span class="text-red-400 text-[10px] font-sans italic">[Linha em Branco Obrigatória]</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] pl-2 border-l border-red-500/30">&uarr; CRLF Duplo sinaliza o fim do cabeçalho</div>
+
+                                <div class="text-amber-300 mt-2">[Corpo/Payload Opcional]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Response Anatomy -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-white text-sm">Estrutura da Resposta HTTP</h4>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-500/20 text-purple-400 border border-purple-500/30">SERVER &rarr; CLIENT</span>
+                            </div>
+
+                            <div class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-300 border border-slate-800 leading-relaxed overflow-x-auto">
+                                <div class="text-purple-400 font-bold flex items-center justify-between">
+                                    <span>HTTP/1.1 200 OK</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-purple-500/30">&uarr; Status Line: &lt;Versão&gt; &lt;Código&gt; &lt;Frase&gt;</div>
+
+                                <div class="flex items-center justify-between">
+                                    <span>Content-Type: text/html</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Content-Length: 48</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Connection: close</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-slate-700">&uarr; Headers de Resposta</div>
+
+                                <div class="flex items-center justify-between py-1 bg-red-500/10 rounded px-1">
+                                    <span class="text-red-400 text-[10px] font-sans italic">[Linha em Branco Obrigatória]</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+
+                                <div class="text-sky-300 mt-2 break-all">&lt;html&gt;&lt;body&gt;&lt;h1&gt;OK&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</div>
+                                <div class="text-slate-400 text-[10px] pl-2 border-l border-sky-500/30">&uarr; Body / Payload HTML</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Interactive Socket & CRLF Inspector -->
+            <section id="simulador" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 3</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">3. Inspector Interativo de Bytes & Socket</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Utilize a ferramenta interativa abaixo para digitar uma requisição HTTP bruta. Observe a validação em tempo real da linha inicial, a conversão para visualização de bytes Hex e a detecção do CRLF duplo obrigatório.
+                </p>
+
+                <!-- Interactive Tool Widget -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-vial-circle-check text-emerald-400"></i> Simulação de Buffer do Socket
+                            </h4>
+                            <p class="text-xs text-slate-400">Edite o texto abaixo para simular os bytes enviados na chamada de sistema write().</p>
+                        </div>
+                        <button onclick="loadTemplate('valid')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-mono transition-colors">
+                            <i class="fa-solid fa-rotate-left"></i> Carregar Exemplo Válido
+                        </button>
+                    </div>
+
+                    <!-- Input Editor -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-slate-300">Buffer do Cliente (Texto Bruto Enviado ao Socket):</label>
+                        <textarea id="rawInput" rows="7" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors leading-relaxed" spellcheck="false">GET / HTTP/1.1
+Host: example.com
+User-Agent: NetcatAcademic/1.0
+Connection: close
+
+</textarea>
+                    </div>
+
+                    <!-- Analysis Dashboard -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- CRLF Validator Status -->
+                        <div id="crlfStatusCard" class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Status do Delimitador</span>
+                            <div id="crlfStatusText" class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                                <i class="fa-solid fa-check-circle"></i> CRLF Duplo Detectado
+                            </div>
+                            <p id="crlfDesc" class="text-[11px] text-slate-400 mt-1">O parser do servidor conseguirá identificar o fim do cabeçalho.</p>
+                        </div>
+
+                        <!-- Parsed Verb -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Start-Line Identificada</span>
+                            <div id="startLineText" class="text-xs font-mono text-white truncate">
+                                GET / HTTP/1.1
+                            </div>
+                            <div id="startLineStatus" class="text-[10px] text-emerald-400 mt-1">Sintaxe RFC 7230 Válida</div>
+                        </div>
+
+                        <!-- Byte Counter -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Tamanho do Payload</span>
+                            <div id="byteCountText" class="text-base font-extrabold text-white font-mono">
+                                78 bytes
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-1">Estimativa de envio em 1 Segmento TCP</div>
+                        </div>
+                    </div>
+
+                    <!-- Hex Stream Visualizer -->
+                    <div class="space-y-2">
+                        <span class="block text-xs font-semibold text-slate-300">Representação em Hexadecimal (Visão da Placa de Rede / Wireshark):</span>
+                        <div id="hexViewer" class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-400 border border-slate-800 break-all leading-loose">
+                            <!-- Populated via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Laboratory Guide -->
+            <section id="laboratorio" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 4</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">4. Roteiro Prático de Laboratório (100 min)</h3>
+                </div>
+
+                <!-- Exp 1 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-sm">1</span>
+                        <h4 class="text-lg font-bold text-white">Injeção Manual via Netcat (Socket Nu)</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Abra o terminal do seu sistema operacional (Linux, macOS ou WSL/PowerShell no Windows) e conecte-se diretamente na porta 80 do servidor remoto utilizando o utilitário <code class="text-emerald-400">netcat</code> (ou <code class="text-emerald-400">nc</code>).
+                    </p>
+
+                    <div class="relative group">
+                        <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code><span class="text-slate-500"># 1. Estabelecer a conexão TCP transparente com a porta 80</span>
+nc -C example.com 80
+
+<span class="text-slate-500"># 2. Digite exatamente o bloco abaixo e pressione Enter 2 vezes ao final:</span>
+GET / HTTP/1.1
+Host: example.com
+User-Agent: TerminalCC/1.0
+Connection: close</code></pre>
+                        <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-950/80 p-4 rounded-lg border border-slate-800/80 text-xs text-slate-300 space-y-2">
+                        <span class="font-bold text-emerald-400 block"><i class="fa-solid fa-magnifying-glass"></i> O que você deve observar:</span>
+                        <ul class="list-disc list-inside space-y-1 text-slate-400">
+                            <li>O servidor retorna imediatamente a linha de status <code class="text-slate-200">HTTP/1.1 200 OK</code>.</li>
+                            <li>Em seguida, os cabeçalhos de resposta são impressos na tela.</li>
+                            <li>Após uma linha em branco (<code class="text-slate-200">\r\n\r\n</code>), o servidor cospe o código HTML bruto.</li>
+                            <li>A conexão é encerrada imediatamente pela instrução <code class="text-slate-200">Connection: close</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Exp 2 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-sm">2</span>
+                        <h4 class="text-lg font-bold text-white">Rastreamento do Handshake com Curl Verboso</h4>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Execute o utilitário <code class="text-emerald-400">curl</code> com a flag de verbosidade ativada para inspecionar os detalhes de transporte que o navegador normalmente esconde.
+                    </p>
+
+                    <div class="relative group">
+                        <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code>curl -v -H "User-Agent: LabComputacao/1.0" http://example.com</code></pre>
+                        <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="text-blue-400 font-bold block mb-1">&gt; Linhas com o prefixo "&gt;"</span>
+                            <p class="text-slate-400">Representam os dados de saída enviadas pelo seu cliente (Request Headers) para a rede.</p>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="text-purple-400 font-bold block mb-1">&lt; Linhas com o prefixo "&lt;"</span>
+                            <p class="text-slate-400">Representam os dados de entrada retornados pelo servidor (Response Headers).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Deliverable Guidelines -->
+            <section id="entregavel" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 5</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">5. Especificação do Entregável (Memória de Dev)</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Cada aluno deve registrar os resultados das análises de laboratório em seu repositório individual do GitHub no arquivo <code class="text-emerald-400">docs/semana-01.md</code>.
+                </p>
+
+                <!-- Template Box -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-emerald-400"></i> Template Obrigatório: docs/semana-01.md
+                        </h4>
+                        <button onclick="copyTemplate()" class="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 rounded-lg text-xs font-mono transition-colors">
+                            <i class="fa-regular fa-copy"></i> Copiar Template Markdown
+                        </button>
+                    </div>
+
+                    <pre id="templateMarkdown" class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-300 border border-slate-800 overflow-x-auto leading-relaxed"><code># Memória de Desenvolvimento — Semana 01
+**Aluno:** [Seu Nome Completo]  
+**Matrícula:** [Seu Número de Matrícula]  
+**Curso:** Ciência / Engenharia da Computação  
+
+---
+
+## 1. Mapeamento da Camada de Transporte
+Diagrama Mermaid demonstrando o ciclo de vida da requisição executada no laboratório:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Cliente (Netcat)
+    participant S as Servidor (example.com)
+
+    C->>S: TCP SYN
+    S-->>C: TCP SYN-ACK
+    C->>S: TCP ACK
+    C->>S: GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
+    S-->>C: HTTP/1.1 200 OK
+    S->>C: TCP FIN
+```
+
+---
+
+## 2. Captura Bruta e Análise do Protocolo
+* **Comando Utilizado:** `nc -C example.com 80`
+* **Status Line Retornada:** `HTTP/1.1 200 OK`
+
+### Análise dos Headers Recebidos:
+1. **`Content-Type`:** [Explique qual o MIME type retornado e a importância para o parser]
+2. **`Content-Length`:** [Explique como este cabeçalho delimita o tamanho do payload sobre a stream TCP]
+3. **`Connection: close`:** [Explique a diferença entre fechar o socket imediatamente vs keep-alive]
+
+---
+
+## 3. Conclusão Técnica
+[Descreva em 1 parágrafo a importância de compreender o HTTP como uma transmissão de bytes ASCII delimitada por CRLF em vez de um arquivo estático local.]
+</code></pre>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Sistemas Web &bull; Material Didático Integrado &bull; Abordagem Systems-First / Bare-Metal</p>
+            <p class="mt-1">Curso de Bacharelado em Ciência e Engenharia da Computação &bull; 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'dark',
+                themeVariables: {
+                    darkMode: true,
+                    background: '#020617',
+                    primaryColor: '#1e293b',
+                    primaryTextColor: '#f8fafc',
+                    primaryBorderColor: '#334155',
+                    lineColor: '#22c55e',
+                    fontFamily: 'Inter'
+                }
+            });
+            updateAnalysis();
+        });
+
+        const rawInput = document.getElementById('rawInput');
+        rawInput.addEventListener('input', updateAnalysis);
+
+        function updateAnalysis() {
+            const val = rawInput.value;
+            const bytes = new TextEncoder().encode(val);
+            document.getElementById('byteCountText').innerText = `${bytes.length} bytes`;
+
+            // Hex Visualizer
+            const hexArr = Array.from(bytes).map(b => {
+                const hex = b.toString(16).padStart(2, '0').toUpperCase();
+                if (b === 13) return `<span class="text-red-400 font-bold" title="Carriage Return (\\r)">0D</span>`;
+                if (b === 10) return `<span class="text-red-400 font-bold" title="Line Feed (\\n)">0A</span>`;
+                return `<span class="text-slate-400">${hex}</span>`;
+            });
+            document.getElementById('hexViewer').innerHTML = hexArr.join(' ');
+
+            // CRLF Double Checker (\r\n\r\n or \n\n)
+            const hasDoubleCRLF = val.includes('\r\n\r\n') || val.includes('\n\n');
+            const crlfCard = document.getElementById('crlfStatusCard');
+            const crlfText = document.getElementById('crlfStatusText');
+            const crlfDesc = document.getElementById('crlfDesc');
+
+            if (hasDoubleCRLF) {
+                crlfCard.className = "bg-slate-950 p-4 rounded-xl border border-emerald-500/40";
+                crlfText.className = "text-sm font-bold text-emerald-400 flex items-center gap-2";
+                crlfText.innerHTML = `<i class="fa-solid fa-check-circle"></i> CRLF Duplo Detectado`;
+                crlfDesc.innerText = "O parser do servidor identificará corretamente o fim dos cabeçalhos.";
+            } else {
+                crlfCard.className = "bg-slate-950 p-4 rounded-xl border border-red-500/40";
+                crlfText.className = "text-sm font-bold text-red-400 flex items-center gap-2";
+                crlfText.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Fim de Header Ausente`;
+                crlfDesc.innerText = "O servidor continuará aguardando infinitamente (Hang/Timeout) por um CRLF duplo.";
+            }
+
+            // Start line check
+            const lines = val.split('\n');
+            const firstLine = lines[0].trim();
+            const startLineText = document.getElementById('startLineText');
+            const startLineStatus = document.getElementById('startLineStatus');
+
+            if (firstLine.match(/^(GET|POST|PUT|DELETE|HEAD|OPTIONS)\s+\S+\s+HTTP\/1\.[01]$/)) {
+                startLineText.innerText = firstLine;
+                startLineStatus.className = "text-[10px] text-emerald-400 mt-1";
+                startLineStatus.innerText = "Sintaxe RFC 7230 Válida";
+            } else {
+                startLineText.innerText = firstLine || "[Vazio]";
+                startLineStatus.className = "text-[10px] text-amber-400 mt-1";
+                startLineStatus.innerText = "Aviso: Verifique a sintaxe <Método> <URI> <Versão>";
+            }
+        }
+
+        function loadTemplate(type) {
+            if (type === 'valid') {
+                rawInput.value = "GET / HTTP/1.1\r\nHost: example.com\r\nUser-Agent: NetcatAcademic/1.0\r\nConnection: close\r\n\r\n";
+            }
+            updateAnalysis();
+        }
+
+        function copyCode(btn) {
+            const code = btn.previousElementSibling.innerText;
+            executeCopy(code, btn);
+        }
+
+        function copyTemplate() {
+            const tmpl = document.getElementById('templateMarkdown').innerText;
+            const btn = event.currentTarget;
+            executeCopy(tmpl, btn);
+        }
+
+        function executeCopy(text, btn) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Copiado!`;
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            } catch (err) {
+                console.error("Falha ao copiar:", err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
