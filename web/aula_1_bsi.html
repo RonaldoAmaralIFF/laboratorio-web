@@ -1248,8 +1248,10 @@ sequenceDiagram
 * **Header Content-Length:** Como o tamanho do payload afeta a leitura no buffer do socket?
 
 ### Experimento 3: URL, Query Strings & Percent-Encoding
-* **URL Testada:** `https://httpbin.org/get?curso=Engenharia%20da%20Computa%C3%A7%C3%A3o`
-* **Mapeamento Hex:** Qual o código Hex de `%20` (espaço) e `%C3%A7` (ç)?
+* **URL Testada: (Passo 1)** curl -v http://httpbin.org/get?curso=Engenharia da Computacao
+* **URL Testada: (Passo 2)** curl -v https://httpbin.org/get?curso=Engenharia%20da%20Computa%C3%A7%C3%A3o
+* **O erro no Passo 1:** O que o terminal retornou ao tentar rodar a URL com espaços reais?
+* **A função do `%20`:** Explique de forma simples por que somos obrigados a substituir espaços e caracteres especiais (como acentos) por códigos com `%` nas URLs.
 
 ### Experimento 4: Negociação de Conteúdo & User-Agent
 * **Análise:** Como o servidor reage ao receber diferentes cabeçalhos `Accept` e `User-Agent`?
