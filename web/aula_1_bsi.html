@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engenharia da Computação - Semana 01: Protocolo HTTP & Sockets Bare-Metal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Mermaid JS for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                            dark: '#0f172a',
+                            panel: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .crlf-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            font-size: 0.7rem;
+            padding: 1px 4px;
+            border-radius: 3px;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-slate-950">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="p-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-lg">
+                    <i class="fa-solid fa-terminal text-lg"></i>
+                </span>
+                <div>
+                    <h1 class="text-sm font-bold text-slate-100 uppercase tracking-wider">Trilha CC/EC &bull; Semana 01</h1>
+                    <p class="text-xs text-slate-400">Sistemas Web &bull; Abordagem Systems-First Bare-Metal</p>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-400">
+                <a href="#teoria-redes" class="hover:text-emerald-400 transition-colors">1. Camada de Rede</a>
+                <a href="#rfc-7230" class="hover:text-emerald-400 transition-colors">2. RFC 7230 & ASCII</a>
+                <a href="#anatomia-url" class="hover:text-emerald-400 transition-colors">3. URL & URI</a>
+                <a href="#metodos-http" class="hover:text-emerald-400 transition-colors">4. Métodos</a>
+                <a href="#cabecalhos-http" class="hover:text-emerald-400 transition-colors">5. Cabeçalhos</a>
+                <a href="#codigos-status" class="hover:text-emerald-400 transition-colors">6. Status</a>
+                <a href="#simulador" class="hover:text-emerald-400 transition-colors">7. Inspector</a>
+                <a href="#laboratorio" class="hover:text-emerald-400 transition-colors">8. Lab</a>
+                <a href="#entregavel" class="hover:text-emerald-400 transition-colors">9. Git Doc</a>
+                <a href="#referencias" class="hover:text-emerald-400 transition-colors">10. Links</a>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    200 min (4h/a)
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="lg:col-span-3 space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 sticky top-24">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 px-2">Conteúdo da Aula</h2>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li>
+                        <a href="#objetivos" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-bullseye w-4 text-emerald-500"></i> Objetivos Pedagógicos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#teoria-redes" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-network-wired w-4 text-emerald-500"></i> Sockets & TCP/IP
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#rfc-7230" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-file-code w-4 text-emerald-500"></i> RFC 7230 & Bytes ASCII
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#anatomia-url" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-link w-4 text-emerald-500"></i> Anatomia de URL & RFC 3986
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#metodos-http" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-sliders w-4 text-emerald-500"></i> Métodos & Semântica
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#cabecalhos-http" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-list-check w-4 text-emerald-500"></i> Análise de Cabeçalhos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#codigos-status" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-triangle-exclamation w-4 text-emerald-500"></i> Códigos de Retorno
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#simulador" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-microchip w-4 text-emerald-500"></i> Inspector de Bytes & CRLF
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#laboratorio" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-vial w-4 text-emerald-500"></i> Lab Netcat & Curl
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#entregavel" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-book-bookmark w-4 text-emerald-500"></i> Entregável no Git
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#referencias" class="flex items-center gap-2 px-3 py-2 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-emerald-400 transition-all">
+                            <i class="fa-solid fa-bookmark w-4 text-emerald-500"></i> Leitura Complementar
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="mt-6 pt-6 border-t border-slate-800 px-2">
+                    <span class="text-xs text-slate-500 block mb-2">Comando rápido do dia:</span>
+                    <code class="block bg-slate-950 p-2 rounded text-xs font-mono text-emerald-400 border border-slate-800 break-all select-all">
+                        nc -C example.com 80
+                    </code>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="lg:col-span-9 space-y-12">
+
+            <!-- Hero / Objectives -->
+            <section id="objetivos" class="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold mb-2">
+                    <i class="fa-solid fa-graduation-cap"></i> Ciência e Engenharia da Computação
+                </div>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight mb-4">
+                    Semana 1: Arquitetura de Redes para Web & Injeção HTTP Bare-Metal
+                </h2>
+                <p class="text-slate-300 leading-relaxed mb-6 text-base">
+                    Nesta primeira semana, desconstruímos a abstração do navegador. A Web não é uma coleção de arquivos abertos localmente, mas um ecossistema de requisições de rede enviadas por canais TCP em formato de bytes brutos padronizados pela RFC 7230.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-4">
+                        <div class="text-emerald-400 font-semibold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> 1. Socket & Rede
+                        </div>
+                        <p class="text-xs text-slate-400">Rastrear o encapsulamento desde o Handshake TCP até a abertura do socket no SO.</p>
+                    </div>
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-4">
+                        <div class="text-emerald-400 font-semibold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-code"></i> 2. Sintaxe CRLF
+                        </div>
+                        <p class="text-xs text-slate-400">Compreender a necessidade física dos bytes <code class="text-emerald-300">0x0D 0x0A</code> na RFC 7230.</p>
+                    </div>
+                    <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-4">
+                        <div class="text-emerald-400 font-semibold mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-terminal"></i> 3. Injeção Manual
+                        </div>
+                        <p class="text-xs text-slate-400">Injetar payloads brutos via <code class="text-emerald-300">netcat</code> e diagnosticar respostas via <code class="text-emerald-300">curl -v</code>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 1: Network Layer and TCP Sockets -->
+            <section id="teoria-redes" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 1</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">1. Da Física ao Socket TCP</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed">
+                    A comunicação web na camada de aplicação depende da infraestrutura subjacente de transporte. Antes que qualquer caractere do protocolo HTTP possa ser interpretado pelo servidor, o sistema operacional do cliente precisa resolver o endereço do destino e fechar um contrato de conexão bidirecional confiável.
+                </p>
+
+                <!-- Flow Diagram -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                    <h4 class="text-sm font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project text-emerald-400"></i> Sequência de Estabelecimento de Conexão Web
+                    </h4>
+                    
+                    <div class="mermaid bg-slate-950 p-4 rounded-lg border border-slate-800">
+                        sequenceDiagram
+                            autonumber
+                            participant C as Cliente (Browser / Netcat)
+                            participant D as Servidor DNS
+                            participant S as Servidor HTTP (Porta 80)
+
+                            Note over C,D: Resolução de Nome de Domínio
+                            C->>D: Consulta A Record (example.com)
+                            D-->>C: Retorna IP (93.184.215.14)
+
+                            Note over C,S: Handshake TCP (Três Vias)
+                            C->>S: TCP SYN (Porta Destino: 80)
+                            S-->>C: TCP SYN-ACK
+                            C->>S: TCP ACK (Socket Aberto no SO)
+
+                            Note over C,S: Camada de Aplicação (HTTP/1.1)
+                            C->>S: GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
+                            S-->>C: HTTP/1.1 200 OK (Payload + Headers)
+
+                            Note over C,S: Encerramento do Socket
+                            S->>C: TCP FIN (Connection: close)
+                            C-->>S: TCP ACK
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-5">
+                        <h4 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-network-wired text-emerald-400"></i> Abstração do Socket no SO
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            No nível do sistema operacional, o socket é tratado como um descritor de arquivo (*File Descriptor*). Operações de rede realizam escrita e leitura em buffers de memória:
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-slate-300 space-y-1">
+                            <div><span class="text-purple-400">int</span> sockfd = <span class="text-emerald-400">socket</span>(AF_INET, SOCK_STREAM, 0);</div>
+                            <div><span class="text-emerald-400">connect</span>(sockfd, &serv_addr, <span class="text-purple-400">sizeof</span>(serv_addr));</div>
+                            <div><span class="text-emerald-400">write</span>(sockfd, <span class="text-amber-300">"GET / HTTP/1.1\r\n..."</span>, len);</div>
+                            <div><span class="text-emerald-400">read</span>(sockfd, buffer, sizeof_buffer);</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-5">
+                        <h4 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-stopwatch text-emerald-400"></i> Métricas da Camada de Transporte
+                        </h4>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-400 font-bold font-mono">DNS Lookup:</span> Tempo para converter hostname em endereço IP.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-400 font-bold font-mono">Initial Connection:</span> Latência do RTT (*Round Trip Time*) para concluir o SYN $\rightarrow$ SYN-ACK $\rightarrow$ ACK.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-400 font-bold font-mono">TTFB (Time to First Byte):</span> Intervalo entre o envio do último byte do cabeçalho de requisição e a chegada do primeiro byte da resposta do servidor.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: RFC 7230 & ASCII Bytes -->
+            <section id="rfc-7230" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 2</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">2. A RFC 7230 & Anatomia da Mensagem HTTP/1.1</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed">
+                    O protocolo HTTP/1.1 é estritamente baseado em texto ASCII. Por ser uma transmissão sobre stream de dados TCP (onde não há delimitação nativa de mensagens), o parser do servidor necessita de marcadores exatos de término de linha.
+                </p>
+
+                <!-- CRLF Deep Dive Box -->
+                <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-5 text-amber-200">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-triangle-exclamation text-xl text-amber-400"></i>
+                        <h4 class="font-bold text-white text-base">O Delimitador Obrigatório: CRLF (\r\n)</h4>
+                    </div>
+                    <p class="text-xs text-amber-200/90 leading-relaxed mb-3">
+                        Na RFC 7230, cada linha do cabeçalho <strong>MANDATORIAMENTE</strong> deve ser finalizada pela sequência de dois bytes:
+                    </p>
+                    <div class="flex flex-wrap items-center gap-4 text-xs font-mono bg-slate-950/80 p-3 rounded-lg border border-slate-800">
+                        <div>
+                            <span class="text-slate-400">Carriage Return (\r):</span> 
+                            <span class="text-emerald-400 font-bold">ASCII 13 / Hex 0x0D</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400">Line Feed (\n):</span> 
+                            <span class="text-emerald-400 font-bold">ASCII 10 / Hex 0x0A</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400">Fim dos Headers:</span> 
+                            <span class="text-red-400 font-bold">\r\n\r\n (CRLF duplo)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTTP Request/Response Anatomy -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Request Anatomy -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-white text-sm">Estrutura da Requisição HTTP</h4>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/20 text-blue-400 border border-blue-500/30">CLIENT &rarr; SERVER</span>
+                            </div>
+
+                            <div class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-300 border border-slate-800 leading-relaxed overflow-x-auto">
+                                <div class="text-emerald-400 font-bold flex items-center justify-between">
+                                    <span>GET /index.html HTTP/1.1</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-emerald-500/30">&uarr; Start Line: &lt;Método&gt; &lt;URI&gt; &lt;Versão&gt;</div>
+
+                                <div class="flex items-center justify-between">
+                                    <span>Host: example.com</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>User-Agent: BareMetalClient/1.0</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Accept: text/html</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-slate-700">&uarr; Headers (Pares Chave: Valor)</div>
+
+                                <div class="flex items-center justify-between py-1 bg-red-500/10 rounded px-1">
+                                    <span class="text-red-400 text-[10px] font-sans italic">[Linha em Branco Obrigatória]</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] pl-2 border-l border-red-500/30">&uarr; CRLF Duplo sinaliza o fim do cabeçalho</div>
+
+                                <div class="text-amber-300 mt-2">[Corpo/Payload Opcional]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Response Anatomy -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-white text-sm">Estrutura da Resposta HTTP</h4>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-500/20 text-purple-400 border border-purple-500/30">SERVER &rarr; CLIENT</span>
+                            </div>
+
+                            <div class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-300 border border-slate-800 leading-relaxed overflow-x-auto">
+                                <div class="text-purple-400 font-bold flex items-center justify-between">
+                                    <span>HTTP/1.1 200 OK</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-purple-500/30">&uarr; Status Line: &lt;Versão&gt; &lt;Código&gt; &lt;Frase&gt;</div>
+
+                                <div class="flex items-center justify-between">
+                                    <span>Content-Type: text/html</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Content-Length: 48</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Connection: close</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+                                <div class="text-slate-400 text-[10px] mb-2 pl-2 border-l border-slate-700">&uarr; Headers de Resposta</div>
+
+                                <div class="flex items-center justify-between py-1 bg-red-500/10 rounded px-1">
+                                    <span class="text-red-400 text-[10px] font-sans italic">[Linha em Branco Obrigatória]</span>
+                                    <span class="crlf-badge">\r\n</span>
+                                </div>
+
+                                <div class="text-sky-300 mt-2 break-all">&lt;html&gt;&lt;body&gt;&lt;h1&gt;OK&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</div>
+                                <div class="text-slate-400 text-[10px] pl-2 border-l border-sky-500/30">&uarr; Body / Payload HTML</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Anatomia da URL / URI (RFC 3986) -->
+            <section id="anatomia-url" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 3</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">3. Anatomia da URI / URL & Codificação Percent-Encoding (RFC 3986)</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed">
+                    Toda requisição HTTP começa com a localização do recurso. A **RFC 3986** formaliza a sintaxe genérica do **URI** (<em>Uniform Resource Identifier</em>), do qual a **URL** (<em>Uniform Resource Locator</em>) é o subconjunto mais utilizado no contexto Web.
+                </p>
+
+                <!-- Conceptual Difference: URI vs URL vs URN -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                        <span class="text-xs font-bold text-emerald-400 block mb-1">URI (Identificador Genérico)</span>
+                        <p class="text-xs text-slate-300">Superconjunto que identifica um recurso por nome, localização ou ambos.</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                        <span class="text-xs font-bold text-blue-400 block mb-1">URL (Localizador de Recurso)</span>
+                        <p class="text-xs text-slate-300">Especifica <strong>como</strong> acessar o recurso fornecendo seu protocolo de rede e localização (ex: <code class="text-slate-200">https://...</code>).</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                        <span class="text-xs font-bold text-purple-400 block mb-1">URN (Nome do Recurso)</span>
+                        <p class="text-xs text-slate-300">Identifica o recurso de forma persistente por nome, independente da localização (ex: <code class="text-slate-200">urn:isbn:0451450523</code>).</p>
+                    </div>
+                </div>
+
+                <!-- URL Breakdown Visual Component -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-code text-emerald-400"></i> Desconstrução de uma URL HTTP Completa
+                    </h4>
+
+                    <div class="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs overflow-x-auto">
+                        <div class="flex items-center gap-1 text-slate-200 whitespace-nowrap leading-loose">
+                            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded border border-emerald-500/30" title="Esquema / Scheme">https</span><span class="text-slate-500">://</span><span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded border border-blue-500/30" title="Host / Domínio">api.exemplo.com</span><span class="text-slate-500">:</span><span class="bg-amber-500/20 text-amber-400 px-2 py-1 rounded border border-amber-500/30" title="Porta TCP">443</span><span class="bg-purple-500/20 text-purple-400 px-2 py-1 rounded border border-purple-500/30" title="Caminho / Path">/v1/usuarios/42</span><span class="text-slate-500">?</span><span class="bg-sky-500/20 text-sky-400 px-2 py-1 rounded border border-sky-500/30" title="Query String / Parâmetros">status=ativo&amp;limit=10</span><span class="text-slate-500">#</span><span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded border border-rose-500/30" title="Fragmento / Âncora Client-Side">secao-detalhes</span>
+                        </div>
+                    </div>
+
+                    <!-- Components Grid Breakdown -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="font-mono text-emerald-400 font-bold block">Scheme (Esquema)</span>
+                            <p class="text-slate-400 mt-1">Define o protocolo a ser utilizado pela camada de aplicação (<code class="text-slate-300">http</code>, <code class="text-slate-300">https</code>, <code class="text-slate-300">ftp</code>).</p>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="font-mono text-blue-400 font-bold block">Host / Authority</span>
+                            <p class="text-slate-400 mt-1">Endereço IP público ou nome DNS resolvido para conectar o socket TCP.</p>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="font-mono text-amber-400 font-bold block">Port (Porta TCP)</span>
+                            <p class="text-slate-400 mt-1">Porta de destino no servidor. Padrão: <code class="text-slate-300">80</code> para HTTP e <code class="text-slate-300">443</code> para HTTPS.</p>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="font-mono text-purple-400 font-bold block">Path (Caminho)</span>
+                            <p class="text-slate-400 mt-1">Hierarquia do recurso no servidor. É a URI enviada na linha inicial do HTTP (<code class="text-slate-300">GET /path...</code>).</p>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="font-mono text-sky-400 font-bold block">Query String (Consulta)</span>
+                            <p class="text-slate-400 mt-1">Pares chave-valor (<code class="text-slate-300">?k1=v1&amp;k2=v2</code>) para filtrar/parametrizar a requisição sem alterar a rota base.</p>
+                        </div>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                            <span class="font-mono text-rose-400 font-bold block">Fragment (Âncora)</span>
+                            <p class="text-slate-400 mt-1"><strong>Processado apenas pelo cliente (Navegador)!</strong> NUNCA é transmitido na linha de requisição ao servidor TCP.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Percent-Encoding Box -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-percent text-emerald-400"></i> Percent-Encoding (URL Encoding)
+                    </h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        URIs só podem conter um conjunto restrito de caracteres ASCII imprimíveis (caracteres não reservados e reservados). Caracteres especiais, espaços ou caracteres Unicode (como acentos e emojis) devem ser convertidos para a notação <code class="text-emerald-400">%HEXHEX</code> do byte equivalente em UTF-8:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+                        <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <span class="text-slate-400">Espaço (&nbsp;):</span>
+                            <span class="text-emerald-400 font-bold ml-2">%20</span> ou <span class="text-emerald-400 font-bold">+</span>
+                        </div>
+                        <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <span class="text-slate-400">Caractere "ç":</span>
+                            <span class="text-emerald-400 font-bold ml-2">%C3%A7</span>
+                        </div>
+                        <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <span class="text-slate-400">Caractere "&amp;":</span>
+                            <span class="text-emerald-400 font-bold ml-2">%26</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: HTTP Methods & Semantics -->
+            <section id="metodos-http" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 4</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">4. Métodos HTTP: Semântica, Idempotência e Segurança</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Na especificação HTTP, os métodos (verbos) indicam a ação pretendida sobre o recurso identificado pela URI. Em Engenharia de Software e Redes, é vital diferenciar métodos por suas propriedades formais: **Segurança (Safe)** e **Idempotência (Idempotent)**.
+                </p>
+
+                <!-- Matrix Box -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-2">
+                            <i class="fa-solid fa-shield-halved"></i> Métodos Seguros (Safe)
+                        </div>
+                        <p class="text-xs text-slate-300">
+                            Não alteram o estado do servidor (operações de consulta/leitura pura). Podem ser chamados sem causar efeitos colaterais na base de dados.
+                        </p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 text-blue-400 font-bold text-sm mb-2">
+                            <i class="fa-solid fa-repeat"></i> Idempotência
+                        </div>
+                        <p class="text-xs text-slate-300">
+                            Executar a requisição $N$ vezes produz exatamente o mesmo resultado no estado do sistema que executá-la apenas 1 vez (essencial para mecanismos de retransmissão automática em falhas de rede).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Methods Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- GET -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">GET</span>
+                            <div class="flex gap-1 text-[10px] font-mono">
+                                <span class="bg-emerald-900/60 text-emerald-300 px-1.5 py-0.5 rounded" title="Safe">SAFE</span>
+                                <span class="bg-blue-900/60 text-blue-300 px-1.5 py-0.5 rounded" title="Idempotent">IDEMPOTENT</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300">Solicita a representação de um recurso. Não deve conter payload no corpo da requisição.</p>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950 p-2 rounded border border-slate-800/80">
+                            GET /api/v1/users HTTP/1.1
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">POST</span>
+                            <div class="flex gap-1 text-[10px] font-mono">
+                                <span class="bg-red-900/60 text-red-300 px-1.5 py-0.5 rounded">NON-SAFE</span>
+                                <span class="bg-red-900/60 text-red-300 px-1.5 py-0.5 rounded">NON-IDEMPOTENT</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300">Submete uma entidade ao recurso especificado, frequentemente causando mudança de estado ou criação no servidor.</p>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950 p-2 rounded border border-slate-800/80">
+                            POST /api/v1/users HTTP/1.1
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">PUT</span>
+                            <div class="flex gap-1 text-[10px] font-mono">
+                                <span class="bg-red-900/60 text-red-300 px-1.5 py-0.5 rounded">NON-SAFE</span>
+                                <span class="bg-blue-900/60 text-blue-300 px-1.5 py-0.5 rounded">IDEMPOTENT</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300">Substitui completamente todas as representações atuais do recurso de destino pelos dados enviados.</p>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950 p-2 rounded border border-slate-800/80">
+                            PUT /api/v1/users/42 HTTP/1.1
+                        </div>
+                    </div>
+
+                    <!-- PATCH -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30">PATCH</span>
+                            <div class="flex gap-1 text-[10px] font-mono">
+                                <span class="bg-red-900/60 text-red-300 px-1.5 py-0.5 rounded">NON-SAFE</span>
+                                <span class="bg-red-900/60 text-red-300 px-1.5 py-0.5 rounded">NON-IDEMPOTENT</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300">Aplica modificações parciais a um recurso (diferente do PUT que exige a substituição total).</p>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950 p-2 rounded border border-slate-800/80">
+                            PATCH /api/v1/users/42 HTTP/1.1
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">DELETE</span>
+                            <div class="flex gap-1 text-[10px] font-mono">
+                                <span class="bg-red-900/60 text-red-300 px-1.5 py-0.5 rounded">NON-SAFE</span>
+                                <span class="bg-blue-900/60 text-blue-300 px-1.5 py-0.5 rounded">IDEMPOTENT</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300">Remove o recurso especificado do servidor. Chamadas subsequentes costumam retornar 404.</p>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950 p-2 rounded border border-slate-800/80">
+                            DELETE /api/v1/users/42 HTTP/1.1
+                        </div>
+                    </div>
+
+                    <!-- HEAD & OPTIONS -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30">HEAD / OPTIONS</span>
+                            <div class="flex gap-1 text-[10px] font-mono">
+                                <span class="bg-emerald-900/60 text-emerald-300 px-1.5 py-0.5 rounded">SAFE</span>
+                                <span class="bg-blue-900/60 text-blue-300 px-1.5 py-0.5 rounded">IDEMPOTENT</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300"><strong>HEAD:</strong> Retorna apenas cabeçalhos (sem corpo).<br><strong>OPTIONS:</strong> Descreve as opções de comunicação para o recurso (CORS preflight).</p>
+                        <div class="text-[11px] font-mono text-slate-400 bg-slate-950 p-2 rounded border border-slate-800/80">
+                            OPTIONS /api/v1/data HTTP/1.1
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: HTTP Headers Deep Dive -->
+            <section id="cabecalhos-http" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 5</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">5. Anatomia dos Cabeçalhos HTTP (Headers)</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Os cabeçalhos HTTP transmitem meta-informações cruciais para roteamento, gestão de memória, negociação de conteúdo e controle de conexão TCP. São estruturados no formato <code class="text-emerald-400">Nome: Valor\r\n</code>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Category 1: Control & Routing -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-2">
+                            <i class="fa-solid fa-route text-emerald-400"></i> Roteamento & Controle de Socket
+                        </h4>
+                        
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Host: example.com</span>
+                                <p class="text-slate-400 mt-1"><strong>Obrigatório no HTTP/1.1!</strong> Permite ao Virtual Hosting diferenciar múltiplos domínios servidos pelo mesmo IP/porta no servidor web.</p>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Connection: keep-alive | close</span>
+                                <p class="text-slate-400 mt-1">Define se o socket TCP subjacente deve ser mantido aberto para reutilização ou encerrado imediatamente com TCP FIN após a resposta.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 2: Representation & Entity -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-2">
+                            <i class="fa-solid fa-file-invoice text-emerald-400"></i> Representação do Payload (Entidade)
+                        </h4>
+                        
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Content-Type: application/json</span>
+                                <p class="text-slate-400 mt-1">Informa ao parser do receptor a codificação MIME dos bytes transmitidos no corpo (ex: <code class="text-slate-300">text/html</code>, <code class="text-slate-300">application/json</code>).</p>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Content-Length: 1024</span>
+                                <p class="text-slate-400 mt-1">Indica exatamente quantos bytes o receptor deve ler da stream TCP após o CRLF duplo antes de encerrar o parse do payload.</p>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Transfer-Encoding: chunked</span>
+                                <p class="text-slate-400 mt-1">Alternativa ao Content-Length para envio de dados em fluxo dinâmico (streaming), transmitindo o tamanho em Hex antes de cada bloco.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 3: Content Negotiation & Client Context -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-2">
+                            <i class="fa-solid fa-filter text-emerald-400"></i> Negociação de Conteúdo & Contexto
+                        </h4>
+                        
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Accept: application/json, text/plain</span>
+                                <p class="text-slate-400 mt-1">O cliente declara quais formatos MIME é capaz de processar na resposta do servidor.</p>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">User-Agent: Mozilla/5.0 ...</span>
+                                <p class="text-slate-400 mt-1">Identificação da aplicação/cliente que originou a requisição de rede.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 4: State, Auth & Caching -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-2">
+                            <i class="fa-solid fa-key text-emerald-400"></i> Autenticação, Estado & Cache
+                        </h4>
+                        
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Authorization: Bearer &lt;token&gt;</span>
+                                <p class="text-slate-400 mt-1">Credenciais enviadas para autenticar a requisição (ex: HTTP Basic, JWT Bearer Token).</p>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Cookie / Set-Cookie</span>
+                                <p class="text-slate-400 mt-1">Mecanismo para persistência de estado em protocolo *stateless*. O servidor envia <code class="text-slate-300">Set-Cookie</code> e o cliente devolve <code class="text-slate-300">Cookie</code>.</p>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                                <span class="font-mono text-emerald-400 font-bold">Cache-Control: no-cache / ETag: "xyz"</span>
+                                <p class="text-slate-400 mt-1">Instruções para proxies e navegadores reduzirem tráfego e requisições desnecessárias através de validação condicional.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: HTTP Status Codes -->
+            <section id="codigos-status" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 6</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">6. Códigos de Retorno / Status HTTP</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    A primeira linha da resposta do servidor (<code class="text-emerald-400">Status Line</code>) inicia com o código numérico de três dígitos. Os códigos dividem-se em 5 classes principais segundo a RFC 7231:
+                </p>
+
+                <!-- Status Code Class Banner -->
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+                    <div class="bg-slate-900 border border-blue-500/30 p-3 rounded-xl">
+                        <span class="font-mono font-bold text-blue-400 text-lg block">1xx</span>
+                        <span class="text-[11px] text-slate-400">Informativo</span>
+                    </div>
+                    <div class="bg-slate-900 border border-emerald-500/30 p-3 rounded-xl">
+                        <span class="font-mono font-bold text-emerald-400 text-lg block">2xx</span>
+                        <span class="text-[11px] text-slate-400">Sucesso</span>
+                    </div>
+                    <div class="bg-slate-900 border border-amber-500/30 p-3 rounded-xl">
+                        <span class="font-mono font-bold text-amber-400 text-lg block">3xx</span>
+                        <span class="text-[11px] text-slate-400">Redirecionamento</span>
+                    </div>
+                    <div class="bg-slate-900 border border-orange-500/30 p-3 rounded-xl">
+                        <span class="font-mono font-bold text-orange-400 text-lg block">4xx</span>
+                        <span class="text-[11px] text-slate-400">Erro do Cliente</span>
+                    </div>
+                    <div class="bg-slate-900 border border-red-500/30 p-3 rounded-xl">
+                        <span class="font-mono font-bold text-red-400 text-lg block">5xx</span>
+                        <span class="text-[11px] text-slate-400">Erro do Servidor</span>
+                    </div>
+                </div>
+
+                <!-- Deep Dive Table of Critical Codes -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                    <div class="p-4 border-b border-slate-800 bg-slate-950/50">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-table-list text-emerald-400"></i> Códigos Fundamentais para Engenharia e Diagnóstico
+                        </h4>
+                    </div>
+
+                    <div class="divide-y divide-slate-800/80 text-xs">
+                        <!-- 200 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 w-16 text-center">200 OK</span>
+                                <div>
+                                    <span class="font-bold text-white block">Requisição Bem Sucedida</span>
+                                    <span class="text-slate-400">O recurso solicitado foi processado e retornado no corpo da resposta.</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-emerald-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Padrao GET/POST</span>
+                        </div>
+
+                        <!-- 201 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 w-16 text-center">201</span>
+                                <div>
+                                    <span class="font-bold text-white block">Created (Criado)</span>
+                                    <span class="text-slate-400">Submissão realizada com sucesso resultando na criação de um novo recurso no servidor (usualmente acompanhado do cabeçalho <code class="text-slate-300">Location</code>).</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-emerald-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Comum em POST</span>
+                        </div>
+
+                        <!-- 204 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 w-16 text-center">204</span>
+                                <div>
+                                    <span class="font-bold text-white block">No Content (Sem Conteúdo)</span>
+                                    <span class="text-slate-400">A ação foi executada com sucesso, mas o servidor intencionalmente não retorna payload no corpo (economiza largura de banda).</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-emerald-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Comum em DELETE/PUT</span>
+                        </div>
+
+                        <!-- 301 vs 302 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 w-16 text-center">301 / 302</span>
+                                <div>
+                                    <span class="font-bold text-white block">Moved Permanently / Found (Redirecionamentos)</span>
+                                    <span class="text-slate-400">Instrui o cliente a buscar a URI fornecida no cabeçalho <code class="text-slate-300">Location</code>. 301 encoraja o cliente/proxy a fazer cache permanente da nova URL.</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-amber-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Redirecionamento</span>
+                        </div>
+
+                        <!-- 304 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 w-16 text-center">304</span>
+                                <div>
+                                    <span class="font-bold text-white block">Not Modified (Validação de Cache)</span>
+                                    <span class="text-slate-400">O recurso não mudou desde a última consulta (verificado via ETag/If-Modified-Since). Zero bytes de corpo enviados pelo socket TCP!</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-amber-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Otimizacao de Rede</span>
+                        </div>
+
+                        <!-- 400 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-orange-500/20 text-orange-400 border border-orange-500/30 w-16 text-center">400</span>
+                                <div>
+                                    <span class="font-bold text-white block">Bad Request (Requisição Malformada)</span>
+                                    <span class="text-slate-400">Sintaxe inválida (ex: ausência do header <code class="text-slate-300">Host</code> no HTTP/1.1 ou falta de <code class="text-slate-300">\r\n</code> obrigatório).</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-orange-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Erro de Sintaxe</span>
+                        </div>
+
+                        <!-- 401 & 403 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-orange-500/20 text-orange-400 border border-orange-500/30 w-16 text-center">401 / 403</span>
+                                <div>
+                                    <span class="font-bold text-white block">Unauthorized vs Forbidden</span>
+                                    <span class="text-slate-400"><strong>401:</strong> Exige autenticação prévia (falta de token ou token inválido). <strong>403:</strong> Identidade conhecida, porém sem permissão de acesso ao recurso.</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-orange-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Seguranca</span>
+                        </div>
+
+                        <!-- 404 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-orange-500/20 text-orange-400 border border-orange-500/30 w-16 text-center">404</span>
+                                <div>
+                                    <span class="font-bold text-white block">Not Found (Não Encontrado)</span>
+                                    <span class="text-slate-400">O servidor não localizou qualquer recurso correspondente à URI solicitada na start-line.</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-orange-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Recurso Ausente</span>
+                        </div>
+
+                        <!-- 500 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-red-500/20 text-red-400 border border-red-500/30 w-16 text-center">500</span>
+                                <div>
+                                    <span class="font-bold text-white block">Internal Server Error</span>
+                                    <span class="text-slate-400">Exceção não tratada ou crash no código da aplicação backend (ex: NullPointerException ou Uncaught Error).</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-red-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Falha na Aplicacao</span>
+                        </div>
+
+                        <!-- 502 vs 504 -->
+                        <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:bg-slate-800/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 rounded font-mono font-bold bg-red-500/20 text-red-400 border border-red-500/30 w-16 text-center">502 / 504</span>
+                                <div>
+                                    <span class="font-bold text-white block">Bad Gateway vs Gateway Timeout</span>
+                                    <span class="text-slate-400">Erros típicos de Proxy Reverso (Nginx/HAProxy): <strong>502</strong> significa recusa de conexão pelo servidor interno; <strong>504</strong> indica estouro de tempo (timeout) de resposta do servidor interno.</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-mono text-red-400/80 bg-slate-950 px-2 py-1 rounded border border-slate-800">Infra / Proxy</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: Interactive Socket & CRLF Inspector -->
+            <section id="simulador" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 7</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">7. Inspector Interativo de Bytes & Socket</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Utilize a ferramenta interativa abaixo para digitar uma requisição HTTP bruta. Observe a validação em tempo real da linha inicial, a conversão para visualização de bytes Hex e a detecção do CRLF duplo obrigatório.
+                </p>
+
+                <!-- Interactive Tool Widget -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-vial-circle-check text-emerald-400"></i> Simulação de Buffer do Socket
+                            </h4>
+                            <p class="text-xs text-slate-400">Edite o texto abaixo para simular os bytes enviados na chamada de sistema write().</p>
+                        </div>
+                        <button onclick="loadTemplate('valid')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-mono transition-colors">
+                            <i class="fa-solid fa-rotate-left"></i> Carregar Exemplo Válido
+                        </button>
+                    </div>
+
+                    <!-- Input Editor -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-slate-300">Buffer do Cliente (Texto Bruto Enviado ao Socket):</label>
+                        <textarea id="rawInput" rows="7" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors leading-relaxed" spellcheck="false">GET / HTTP/1.1
+Host: example.com
+User-Agent: NetcatAcademic/1.0
+Connection: close
+
+</textarea>
+                    </div>
+
+                    <!-- Analysis Dashboard -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- CRLF Validator Status -->
+                        <div id="crlfStatusCard" class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Status do Delimitador</span>
+                            <div id="crlfStatusText" class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                                <i class="fa-solid fa-check-circle"></i> CRLF Duplo Detectado
+                            </div>
+                            <p id="crlfDesc" class="text-[11px] text-slate-400 mt-1">O parser do servidor conseguirá identificar o fim do cabeçalho.</p>
+                        </div>
+
+                        <!-- Parsed Verb -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Start-Line Identificada</span>
+                            <div id="startLineText" class="text-xs font-mono text-white truncate">
+                                GET / HTTP/1.1
+                            </div>
+                            <div id="startLineStatus" class="text-[10px] text-emerald-400 mt-1">Sintaxe RFC 7230 Válida</div>
+                        </div>
+
+                        <!-- Byte Counter -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Tamanho do Payload</span>
+                            <div id="byteCountText" class="text-base font-extrabold text-white font-mono">
+                                78 bytes
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-1">Estimativa de envio em 1 Segmento TCP</div>
+                        </div>
+                    </div>
+
+                    <!-- Hex Stream Visualizer -->
+                    <div class="space-y-2">
+                        <span class="block text-xs font-semibold text-slate-300">Representação em Hexadecimal (Visão da Placa de Rede / Wireshark):</span>
+                        <div id="hexViewer" class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-400 border border-slate-800 break-all leading-loose">
+                            <!-- Populated via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: Expanded Laboratory Guide -->
+            <section id="laboratorio" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 8</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">8. Roteiro Prático de Laboratório Avançado (100 min)</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Siga o roteiro de experimentos abaixo utilizando o terminal (Linux, macOS ou WSL/PowerShell no Windows). Os exercícios cobrem desde a injeção em nível de socket nu até a manipulação de verbos HTTP, codificação de URLs e gestão de cache/redirecionamento.
+                </p>
+
+                <!-- Exp 1 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-sm">1</span>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">Injeção Manual via Netcat: Socket Nu & Falhas de Sintaxe</h4>
+                            <span class="text-xs text-slate-400">Objetivo: Injetar bytes HTTP puros e diagnosticar comportamento perante erros de sintaxe e falta de CRLF.</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <span class="text-xs font-semibold text-slate-300 block">Passo 1A: Requisição Válida HTTP/1.1</span>
+                        <div class="relative group">
+                            <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code><span class="text-slate-500"># Conectar via socket TCP transparente na porta 80</span>
+nc -C example.com 80
+
+<span class="text-slate-500"># Digite as linhas a seguir e pressione ENTER duas vezes ao final:</span>
+GET / HTTP/1.1
+Host: example.com
+User-Agent: TerminalCC/1.0
+Connection: close</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copiar
+                            </button>
+                        </div>
+
+                        <span class="text-xs font-semibold text-slate-300 block pt-2">Passo 1B: Teste do Erro 400 Bad Request (Ausência do Header Host)</span>
+                        <div class="relative group">
+                            <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code><span class="text-slate-500"># No HTTP/1.1 o header Host é obrigatório segundo a RFC 7230</span>
+nc -C example.com 80
+GET / HTTP/1.1
+Connection: close</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/80 p-4 rounded-lg border border-slate-800/80 text-xs text-slate-300 space-y-2">
+                        <span class="font-bold text-emerald-400 block"><i class="fa-solid fa-magnifying-glass"></i> O que você deve analisar:</span>
+                        <ul class="list-disc list-inside space-y-1 text-slate-400">
+                            <li>No Passo 1A, verifique o recebimento da linha <code class="text-slate-200">HTTP/1.1 200 OK</code> e o término do socket ao receber <code class="text-slate-200">Connection: close</code>.</li>
+                            <li>No Passo 1B, observe o retorno do código de status <code class="text-amber-400">400 Bad Request</code> devido à violação do Virtual Hosting do HTTP/1.1.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Exp 2 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-sm">2</span>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">Semântica de Métodos HTTP (`GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`)</h4>
+                            <span class="text-xs text-slate-400">Objetivo: Executar chamadas com diferentes verbos e inspecionar transmissão de payload e respostas CORS.</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-emerald-400">A. Envio de Payload com POST (JSON)</span>
+                            <div class="relative group">
+                                <pre class="bg-slate-950 p-3 rounded-lg font-mono text-[11px] text-slate-200 border border-slate-800 overflow-x-auto"><code>curl -v -X POST https://httpbin.org/post \
+  -H "Content-Type: application/json" \
+  -d '{"matricula": "20261001", "nome": "Aluno EC"}'</code></pre>
+                                <button onclick="copyCode(this)" class="absolute top-2 right-2 px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[9px] font-mono">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-blue-400">B. Atualização com PUT</span>
+                            <div class="relative group">
+                                <pre class="bg-slate-950 p-3 rounded-lg font-mono text-[11px] text-slate-200 border border-slate-800 overflow-x-auto"><code>curl -v -X PUT https://httpbin.org/put \
+  -H "Content-Type: application/json" \
+  -d '{"status": "atualizado"}'</code></pre>
+                                <button onclick="copyCode(this)" class="absolute top-2 right-2 px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[9px] font-mono">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-rose-400">C. Remoção com DELETE</span>
+                            <div class="relative group">
+                                <pre class="bg-slate-950 p-3 rounded-lg font-mono text-[11px] text-slate-200 border border-slate-800 overflow-x-auto"><code>curl -v -X DELETE https://httpbin.org/delete</code></pre>
+                                <button onclick="copyCode(this)" class="absolute top-2 right-2 px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[9px] font-mono">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-sky-400">D. Inspecionar Métodos com OPTIONS</span>
+                            <div class="relative group">
+                                <pre class="bg-slate-950 p-3 rounded-lg font-mono text-[11px] text-slate-200 border border-slate-800 overflow-x-auto"><code>curl -i -X OPTIONS https://httpbin.org/get</code></pre>
+                                <button onclick="copyCode(this)" class="absolute top-2 right-2 px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[9px] font-mono">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs text-slate-400">
+                        <span class="font-bold text-white block mb-1"><i class="fa-solid fa-lightbulb text-amber-400"></i> Ponto de Observação:</span>
+                        Verifique como o header <code class="text-emerald-400">Content-Length</code> é gerado automaticamente pelo cURL quando enviamos um corpo (<code class="text-slate-300">-d</code>), e como a resposta do <code class="text-slate-300">OPTIONS</code> inclui o cabeçalho <code class="text-slate-300">Access-Control-Allow-Methods</code>.
+                    </div>
+                </div>
+
+                <!-- Exp 3 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold text-sm">3</span>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">Anatomia da URL, Query Strings & Percent-Encoding (RFC 3986)</h4>
+                            <span class="text-xs text-slate-400">Objetivo: Transmitir parâmetros via URL e analisar a conversão de caracteres especiais para %HEXHEX.</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <span class="text-xs font-semibold text-slate-300 block">Passo 3A: Envio de Query String Codificada Manualmente</span>
+                        <div class="relative group">
+                            <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code><span class="text-slate-500"># Transmitindo espaço (%20), 'ç' (%C3%A7) e '&' (%26) na Query String</span>
+curl -v "https://httpbin.org/get?curso=Engenharia%20da%20Computa%C3%A7%C3%A3o&semana=1&tag=%23baremetal"</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copiar
+                            </button>
+                        </div>
+
+                        <span class="text-xs font-semibold text-slate-300 block pt-1">Passo 3B: Envio de Parâmetros com Encoding Automático do cURL</span>
+                        <div class="relative group">
+                            <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code>curl -G "https://httpbin.org/get" \
+  --data-urlencode "busca=sistemas operacionais & redes" \
+  --data-urlencode "autor=Tanenbaum & Kurose"</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs text-slate-400">
+                        <span class="font-bold text-amber-400">Questão do Lab:</span> Compare o campo <code class="text-slate-200">"args"</code> retornado pelo JSON do servidor no Passo 3A e 3B. O servidor recebeu os caracteres decodificados corretamente após o parsing?
+                    </div>
+                </div>
+
+                <!-- Exp 4 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center font-bold text-sm">4</span>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">Negociação de Conteúdo & Identificação de Cliente</h4>
+                            <span class="text-xs text-slate-400">Objetivo: Alterar o comportamento da resposta modificando cabeçalhos `Accept` e `User-Agent`.</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="relative group">
+                            <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code><span class="text-slate-500"># 1. Simular uma requisição pedindo explicitamente payload JSON</span>
+curl -i -H "Accept: application/json" https://httpbin.org/headers
+
+<span class="text-slate-500"># 2. Alterar o User-Agent para simular um navegador mobile Android</span>
+curl -i -H "User-Agent: Mozilla/5.0 (Linux; Android 14) Chrome/120.0" https://httpbin.org/user-agent</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exp 5 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center font-bold text-sm">5</span>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">Investigação de Redirecionamentos (301/302) e Cache (304 Not Modified)</h4>
+                            <span class="text-xs text-slate-400">Objetivo: Rastrear cadeias de redirecionamento e validar economias de banda usando validação condicional via ETag.</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <span class="text-xs font-semibold text-slate-300 block">Passo 5A: Rastreamento de Redirecionamento HTTP &rarr; HTTPS (301 Moved Permanently)</span>
+                        <div class="relative group">
+                            <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code><span class="text-slate-500"># Sem a flag -L, o cURL apenas recebe a resposta 301 e o header Location</span>
+curl -I http://google.com
+
+<span class="text-slate-500"># Com a flag -L, o cURL segue automaticamente o redirecionamento</span>
+curl -I -L http://google.com</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copiar
+                            </button>
+                        </div>
+
+                        <span class="text-xs font-semibold text-slate-300 block pt-1">Passo 5B: Testando Validação de Cache Condicional (304 Not Modified)</span>
+                        <div class="relative group">
+                            <pre class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-200 border border-slate-800 overflow-x-auto"><code><span class="text-slate-500"># 1. Primeira consulta para obter a ETag do recurso</span>
+curl -i https://httpbin.org/etag/meu-vsn-123
+
+<span class="text-slate-500"># 2. Segunda consulta enviando o header condicional If-None-Match com a ETag recebida</span>
+curl -i -H 'If-None-Match: "meu-vsn-123"' https://httpbin.org/etag/meu-vsn-123</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs text-slate-400">
+                        <span class="font-bold text-rose-400">Análise do Socket:</span> Observe como na resposta <code class="text-slate-200">304 Not Modified</code> o servidor **não envia nenhum byte no corpo**, economizando largura de banda da rede.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Deliverable Guidelines -->
+            <section id="entregavel" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 9</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">9. Especificação do Entregável (Memória de Dev)</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Cada aluno deve registrar os resultados das análises de laboratório em seu repositório individual do GitHub no arquivo <code class="text-emerald-400">docs/semana-01.md</code>.
+                </p>
+
+                <!-- Template Box -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-emerald-400"></i> Template Obrigatório: docs/semana-01.md
+                        </h4>
+                        <button onclick="copyTemplate()" class="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 rounded-lg text-xs font-mono transition-colors">
+                            <i class="fa-regular fa-copy"></i> Copiar Template Markdown
+                        </button>
+                    </div>
+
+                    <pre id="templateMarkdown" class="bg-slate-950 p-4 rounded-lg font-mono text-xs text-slate-300 border border-slate-800 overflow-x-auto leading-relaxed"><code># Memória de Desenvolvimento — Semana 01: Protocolo HTTP & Sockets Bare-Metal
+**Aluno:** [Seu Nome Completo]  
+**Matrícula:** [Seu Número de Matrícula]  
+**Curso:** Ciência / Engenharia da Computação  
+
+---
+
+## 1. Mapeamento da Camada de Transporte
+Diagrama Mermaid demonstrando o ciclo de vida da requisição executada no laboratório:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Cliente (Netcat / cURL)
+    participant S as Servidor HTTP
+
+    C->>S: TCP SYN
+    S-->>C: TCP SYN-ACK
+    C->>S: TCP ACK (Socket Aberto)
+    C->>S: GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
+    S-->>C: HTTP/1.1 200 OK (Payload + Headers)
+    S->>C: TCP FIN
+```
+
+---
+
+## 2. Registro dos Experimentos de Laboratório
+
+### Experimento 1: Netcat Nu & Falha 400 Bad Request
+* **Comando Testado:** `nc -C example.com 80` sem o header `Host:`
+* **Resultado:** [Descreva o código de status retornado e por que o Virtual Hosting exige o campo Host no HTTP/1.1]
+
+### Experimento 2: Semântica dos Métodos HTTP
+* **Análise dos Verbos:** Explique a diferença observada entre chamadas `GET`, `POST` e `OPTIONS`.
+* **Header Content-Length:** Como o tamanho do payload afeta a leitura no buffer do socket?
+
+### Experimento 3: URL, Query Strings & Percent-Encoding
+* **URL Testada:** `https://httpbin.org/get?curso=Engenharia%20da%20Computa%C3%A7%C3%A3o`
+* **Mapeamento Hex:** Qual o código Hex de `%20` (espaço) e `%C3%A7` (ç)?
+
+### Experimento 4: Negociação de Conteúdo & User-Agent
+* **Análise:** Como o servidor reage ao receber diferentes cabeçalhos `Accept` e `User-Agent`?
+
+### Experimento 5: Redirecionamentos & Cache Condicional
+* **Redirecionamento (301):** Qual a diferença ao executar `curl -I` com e sem a flag `-L`?
+* **Validação de Cache (304):** Explique como o header `If-None-Match` e a `ETag` evitam retransmissão de dados na rede.
+
+---
+
+## 3. Conclusão Técnica
+[Descreva em 1-2 parágrafos a importância de compreender a transmissão de bytes ASCII e a sintaxe CRLF na camada de aplicação para desenvolvimento de sistemas distribuídos e de alta performance.]
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 10: Referências & Leitura Complementar -->
+            <section id="referencias" class="space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Módulo 10</span>
+                    <h3 class="text-2xl font-bold text-white mt-1">10. Leituras Complementares & Referências Oficiais</h3>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed text-sm">
+                    Para aprofundamento técnico em nível de engenharia, consulte as especificações originais da IETF (<em>Internet Engineering Task Force</em>) e as documentações canônicas da indústria:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Link 1: RFC 7230 -->
+                    <a href="https://datatracker.ietf.org/doc/html/rfc7230" target="_blank" rel="noopener noreferrer" class="group bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-5 transition-all flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">RFC 7230</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500 group-hover:text-emerald-400 transition-colors"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">HTTP/1.1: Message Syntax and Routing</h4>
+                            <p class="text-xs text-slate-400 mt-2">A especificação oficial e autoritativa do formato de mensagens HTTP, delimitação de linhas via CRLF e regras de parsing de cabeçalhos.</p>
+                        </div>
+                        <div class="text-[10px] text-slate-500 font-mono">IETF Datatracker &bull; Norma Técnica</div>
+                    </a>
+
+                    <!-- Link 2: RFC 3986 -->
+                    <a href="https://datatracker.ietf.org/doc/html/rfc3986" target="_blank" rel="noopener noreferrer" class="group bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-5 transition-all flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-mono text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">RFC 3986</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500 group-hover:text-blue-400 transition-colors"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">Uniform Resource Identifier (URI): Generic Syntax</h4>
+                            <p class="text-xs text-slate-400 mt-2">Definição formal da gramática de URIs/URLs, regras de resolução de caminhos relativos e padrão de codificação percent-encoding.</p>
+                        </div>
+                        <div class="text-[10px] text-slate-500 font-mono">IETF Datatracker &bull; Norma Técnica</div>
+                    </a>
+
+                    <!-- Link 3: MDN HTTP Overview -->
+                    <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Overview" target="_blank" rel="noopener noreferrer" class="group bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-5 transition-all flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-mono text-purple-400 font-bold bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">MDN Web Docs</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500 group-hover:text-purple-400 transition-colors"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white group-hover:text-purple-400 transition-colors">Visão Geral do Protocolo HTTP</h4>
+                            <p class="text-xs text-slate-400 mt-2">Guia prático da Mozilla trazendo diagramas detalhados do fluxo de requisição/resposta, negociação de conteúdo e gerenciamento de estado.</p>
+                        </div>
+                        <div class="text-[10px] text-slate-500 font-mono">Mozilla Developer Network &bull; Tutorial & Referência</div>
+                    </a>
+
+                    <!-- Link 4: Beej's Guide to Network Programming -->
+                    <a href="https://beej.us/guide/bgnet/" target="_blank" rel="noopener noreferrer" class="group bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-5 transition-all flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Beej's Guide</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500 group-hover:text-amber-400 transition-colors"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">Beej's Guide to Network Programming (Sockets C)</h4>
+                            <p class="text-xs text-slate-400 mt-2">O clássico manual bare-metal sobre programação com POSIX Sockets em C. Essencial para entender como o kernel gerencia streams TCP.</p>
+                        </div>
+                        <div class="text-[10px] text-slate-500 font-mono">Livro Aberto &bull; Bare-Metal Systems</div>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Sistemas Web &bull; Material Didático Integrado &bull; Abordagem Systems-First / Bare-Metal</p>
+            <p class="mt-1">Curso de Bacharelado em Ciência e Engenharia da Computação &bull; 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'dark',
+                themeVariables: {
+                    darkMode: true,
+                    background: '#020617',
+                    primaryColor: '#1e293b',
+                    primaryTextColor: '#f8fafc',
+                    primaryBorderColor: '#334155',
+                    lineColor: '#22c55e',
+                    fontFamily: 'Inter'
+                }
+            });
+            updateAnalysis();
+        });
+
+        const rawInput = document.getElementById('rawInput');
+        rawInput.addEventListener('input', updateAnalysis);
+
+        function updateAnalysis() {
+            const val = rawInput.value;
+            const bytes = new TextEncoder().encode(val);
+            document.getElementById('byteCountText').innerText = `${bytes.length} bytes`;
+
+            // Hex Visualizer
+            const hexArr = Array.from(bytes).map(b => {
+                const hex = b.toString(16).padStart(2, '0').toUpperCase();
+                if (b === 13) return `<span class="text-red-400 font-bold" title="Carriage Return (\\r)">0D</span>`;
+                if (b === 10) return `<span class="text-red-400 font-bold" title="Line Feed (\\n)">0A</span>`;
+                return `<span class="text-slate-400">${hex}</span>`;
+            });
+            document.getElementById('hexViewer').innerHTML = hexArr.join(' ');
+
+            // CRLF Double Checker (\r\n\r\n or \n\n)
+            const hasDoubleCRLF = val.includes('\r\n\r\n') || val.includes('\n\n');
+            const crlfCard = document.getElementById('crlfStatusCard');
+            const crlfText = document.getElementById('crlfStatusText');
+            const crlfDesc = document.getElementById('crlfDesc');
+
+            if (hasDoubleCRLF) {
+                crlfCard.className = "bg-slate-950 p-4 rounded-xl border border-emerald-500/40";
+                crlfText.className = "text-sm font-bold text-emerald-400 flex items-center gap-2";
+                crlfText.innerHTML = `<i class="fa-solid fa-check-circle"></i> CRLF Duplo Detectado`;
+                crlfDesc.innerText = "O parser do servidor identificará corretamente o fim dos cabeçalhos.";
+            } else {
+                crlfCard.className = "bg-slate-950 p-4 rounded-xl border border-red-500/40";
+                crlfText.className = "text-sm font-bold text-red-400 flex items-center gap-2";
+                crlfText.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Fim de Header Ausente`;
+                crlfDesc.innerText = "O servidor continuará aguardando infinitamente (Hang/Timeout) por um CRLF duplo.";
+            }
+
+            // Start line check
+            const lines = val.split('\n');
+            const firstLine = lines[0].trim();
+            const startLineText = document.getElementById('startLineText');
+            const startLineStatus = document.getElementById('startLineStatus');
+
+            if (firstLine.match(/^(GET|POST|PUT|DELETE|HEAD|OPTIONS)\s+\S+\s+HTTP\/1\.[01]$/)) {
+                startLineText.innerText = firstLine;
+                startLineStatus.className = "text-[10px] text-emerald-400 mt-1";
+                startLineStatus.innerText = "Sintaxe RFC 7230 Válida";
+            } else {
+                startLineText.innerText = firstLine || "[Vazio]";
+                startLineStatus.className = "text-[10px] text-amber-400 mt-1";
+                startLineStatus.innerText = "Aviso: Verifique a sintaxe <Método> <URI> <Versão>";
+            }
+        }
+
+        function loadTemplate(type) {
+            if (type === 'valid') {
+                rawInput.value = "GET / HTTP/1.1\r\nHost: example.com\r\nUser-Agent: NetcatAcademic/1.0\r\nConnection: close\r\n\r\n";
+            }
+            updateAnalysis();
+        }
+
+        function copyCode(btn) {
+            const code = btn.previousElementSibling.innerText;
+            executeCopy(code, btn);
+        }
+
+        function copyTemplate() {
+            const tmpl = document.getElementById('templateMarkdown').innerText;
+            const btn = event.currentTarget;
+            executeCopy(tmpl, btn);
+        }
+
+        function executeCopy(text, btn) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Copiado!`;
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            } catch (err) {
+                console.error("Falha ao copiar:", err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
