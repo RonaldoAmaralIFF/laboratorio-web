@@ -1034,7 +1034,7 @@
             // Teste 7: Semântica estrutural (Não abusar de divs)
             const structuralTags = ['header', 'nav', 'main', 'article', 'footer'];
             const allStructsPresent = structuralTags.every(tag => !!doc.querySelector(tag));
-            logTest(allStructsPresent, "Tags Estruturais HTML5", "Substituição de divs aninhadas por <header>, <nav>, <main>, <article> e <footer>.");
+            logTest(allStructsPresent, "Tags Estruturais HTML5", "Substituição de divs aninhadas por "<header>", "<nav>", "<main>", "<article>" e "<footer>".");
 
             // Teste 8: Validação Acessibilidade Labels
             const inputs = Array.from(doc.querySelectorAll('input:not([type="button"]):not([type="submit"]), textarea'));
