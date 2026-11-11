@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engenharia de Software: Formulários HTML e HTTP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Styles for Form Validation Feedback */
+        input:invalid, textarea:invalid {
+            border-left: 4px solid #ef4444; /* Tailwind red-500 */
+        }
+        input:valid, textarea:valid {
+            border-left: 4px solid #22c55e; /* Tailwind green-500 */
+        }
+        input:placeholder-shown {
+            border-left: 1px solid #d1d5db; /* Default border when empty */
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Syntax highlighting mock */
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .tag { color: #e06c75; }
+        .attr { color: #d19a66; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans leading-relaxed flex h-screen overflow-hidden">
+
+    <!-- Sidebar / Navigation -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-xl z-10 hidden md:flex">
+        <div class="p-6 bg-slate-950">
+            <h1 class="text-xl font-bold text-blue-400">WebDev Forms</h1>
+            <p class="text-xs text-slate-400 mt-2">Engenharia da Computação & SI</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <button onclick="openTab('sec-anatomia')" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:bg-slate-800 border-l-4 border-transparent hover:border-blue-500 transition-colors">1. Anatomia e HTTP</button>
+            <button onclick="openTab('sec-semantica')" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:bg-slate-800 border-l-4 border-transparent hover:border-blue-500 transition-colors">2. Semântica e a11y</button>
+            <button onclick="openTab('sec-validacao')" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:bg-slate-800 border-l-4 border-transparent hover:border-blue-500 transition-colors">3. Validação Client-Side</button>
+            <button onclick="openTab('sec-laboratorio')" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:bg-slate-800 border-l-4 border-transparent hover:border-blue-500 transition-colors">4. Laboratório (Intercept)</button>
+            <button onclick="openTab('sec-exercicio-google')" class="nav-btn w-full text-left px-6 py-3 hover:bg-slate-800 focus:bg-slate-800 border-l-4 border-transparent hover:border-blue-500 transition-colors">5. Exercício: Google</button>
+        </nav>
+        <div class="p-4 text-xs text-slate-500 text-center border-t border-slate-800">
+            Prof. Interactive Module
+        </div>
+    </aside>
+
+    <!-- Mobile Menu Button -->
+    <div class="md:hidden fixed bottom-4 right-4 z-50">
+        <select onchange="openTab(this.value)" class="bg-slate-900 text-white p-3 rounded-lg shadow-lg border-2 border-blue-500 focus:outline-none" id="mobile-nav">
+            <option value="sec-anatomia">1. Anatomia e HTTP</option>
+            <option value="sec-semantica">2. Semântica e a11y</option>
+            <option value="sec-validacao">3. Validação Client-Side</option>
+            <option value="sec-laboratorio">4. Laboratório Prático</option>
+            <option value="sec-exercicio-google">5. Exercício: Google</option>
+        </select>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 relative p-6 md:p-10">
+        
+        <!-- Section 1: Anatomia -->
+        <section id="sec-anatomia" class="tab-content max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-2">1. A Anatomia do Formulário e o Protocolo HTTP</h2>
+            
+            <p class="mb-4">O elemento <code class="bg-gray-200 px-1 rounded text-red-600">&lt;form&gt;</code> é o principal mecanismo para coletar informações do usuário e enviá-las para um servidor. O seu comportamento é ditado por três atributos fundamentais:</p>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <ul class="space-y-4">
+                    <li><strong class="text-blue-600 font-mono">action</strong>: A URL (endpoint) que processará os dados da requisição. Se omitido, o navegador enviará os dados para a URL atual.</li>
+                    <li><strong class="text-blue-600 font-mono">method</strong>: O verbo HTTP utilizado. Os mais comuns em formulários nativos são:
+                        <ul class="list-disc ml-8 mt-2 text-sm text-gray-700">
+                            <li><strong class="text-slate-900">GET</strong>: Os dados são anexados à URL (Query String). Inseguro para dados sensíveis, limitado em tamanho e ideal para operações idempotentes (ex: buscas).</li>
+                            <li><strong class="text-slate-900">POST</strong>: Os dados são enviados no corpo (Body) da requisição HTTP. Usado para mutações de estado e envio de grandes volumes (ex: cadastro, upload).</li>
+                        </ul>
+                    </li>
+                    <li><strong class="text-blue-600 font-mono">enctype</strong>: Define como os dados serão codificados se o método for POST.
+                        <ul class="list-disc ml-8 mt-2 text-sm text-gray-700">
+                            <li><code>application/x-www-form-urlencoded</code>: O padrão. Converte dados em pares chave=valor separados por <code>&amp;</code>.</li>
+                            <li><code>multipart/form-data</code>: Fundamental para envio de arquivos. Quebra o payload em partes utilizando um <em>boundary</em> (delimitador).</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 text-slate-300 p-4 rounded-lg font-mono text-sm overflow-x-auto shadow-inner">
+<span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="string">"/api/users"</span> <span class="attr">method</span>=<span class="string">"POST"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span><span class="tag">&gt;</span>
+    <span class="text-slate-500">&lt;!-- Inputs e botões aqui --&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+            </div>
+        </section>
+
+        <!-- Section 2: Semântica -->
+        <section id="sec-semantica" class="tab-content max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-2">2. Semântica e Acessibilidade (a11y)</h2>
+            <p class="mb-4">Um formulário não deve apenas ser visualmente agradável, mas compreensível para tecnologias assistivas (leitores de tela) e fácil de interagir em dispositivos móveis.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-slate-700">O Poder do <code>&lt;label&gt;</code></h3>
+                    <p class="text-sm text-gray-600 mb-4">A tag label conecta textualmente uma descrição a um campo. Ao clicar no label abaixo, observe que o foco é imediatamente transferido para o input. Isso é essencial para usabilidade (aumenta a área de clique, especialmente em checkboxes e rádios).</p>
+                    
+                    <div class="bg-white p-4 border rounded-lg shadow-sm">
+                        <!-- Associação Explícita -->
+                        <label for="demo-email" class="block text-sm font-medium text-gray-700 mb-1 cursor-pointer hover:text-blue-600 transition-colors">
+                            Endereço de E-mail (Clique em mim)
+                        </label>
+                        <input type="email" id="demo-email" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="usuario@exemplo.com">
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-slate-700">Agrupamento com <code>&lt;fieldset&gt;</code></h3>
+                    <p class="text-sm text-gray-600 mb-4">Para perguntas com múltiplas escolhas ou seções complexas, use `fieldset` e `legend`. Isso instrui os leitores de tela a anunciar o contexto antes das opções.</p>
+                    
+                    <form class="bg-white p-4 border rounded-lg shadow-sm">
+                        <fieldset class="border border-gray-300 p-3 rounded-md">
+                            <legend class="text-sm font-semibold text-gray-700 px-2">Preferência de Notificação</legend>
+                            <div class="mt-2 space-y-2">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="notif" value="email" class="w-4 h-4 text-blue-600">
+                                    <span>Via E-mail</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="notif" value="sms" class="w-4 h-4 text-blue-600">
+                                    <span>Via SMS</span>
+                                </label>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Validação -->
+        <section id="sec-validacao" class="tab-content max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-2">3. Validação Client-Side</h2>
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-700">
+                            <strong>Aviso de Engenharia de Software (Security-by-Design):</strong> Validações client-side (no navegador) existem estritamente para <em>User Experience (UX)</em>. Elas reduzem requisições desnecessárias, mas <strong>nunca garantem segurança</strong>. Atacantes podem usar ferramentas como cURL ou DevTools para burlar o HTML. Todo dado deve ser validado novamente no Backend.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="mb-4">O HTML5 introduziu atributos poderosos para validação sem necessidade de JavaScript inicial. Experimente o formulário abaixo; observe o comportamento das bordas (usando as pseudoclasses CSS <code>:valid</code> e <code>:invalid</code>).</p>
+
+            <form class="bg-white p-6 rounded-lg shadow-md border max-w-lg mx-auto" onsubmit="event.preventDefault(); showMessage('Formulário Validado com Sucesso!');">
+                <div class="mb-4">
+                    <label for="val-nome" class="block text-sm font-medium text-gray-700 mb-1">Matrícula (Exatamente 9 dígitos)</label>
+                    <input type="text" id="val-nome" name="matricula" required pattern="\d{9}" placeholder="Ex: 202310045" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Requerido, uso de regex (pattern="\d{9}").</p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="val-idade" class="block text-sm font-medium text-gray-700 mb-1">Idade (18 a 120)</label>
+                    <input type="number" id="val-idade" name="idade" required min="18" max="120" placeholder="18" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Requerido, atributos min e max.</p>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                    Testar Validação HTML5
+                </button>
+                <div id="validation-msg" class="mt-3 text-center text-sm font-semibold text-green-600 hidden"></div>
+            </form>
+        </section>
+
+        <!-- Section 4: Laboratório -->
+        <section id="sec-laboratorio" class="tab-content active max-w-5xl mx-auto h-full flex flex-col">
+            <h2 class="text-3xl font-bold text-slate-800 mb-2 border-b pb-2">4. Laboratório: Interceptação HTTP</h2>
+            <p class="mb-6 text-gray-600 text-sm">Configure os parâmetros do formulário e submeta. O JavaScript interceptará o envio simulando o comportamento da aba "Network" do DevTools. Observe como o protocolo empacota os dados.</p>
+            
+            <div class="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
+                <!-- Formulário de Laboratório -->
+                <div class="w-full lg:w-1/2 bg-white p-6 rounded-lg shadow-md border overflow-y-auto">
+                    <form id="lab-form" action="/simulador-backend" method="GET">
+                        
+                        <!-- Controles de Configuração -->
+                        <fieldset class="mb-6 p-4 border border-blue-200 bg-blue-50 rounded-lg">
+                            <legend class="text-sm font-bold text-blue-800 px-2">Configurações da Requisição (O Atacante)</legend>
+                            <div class="grid grid-cols-2 gap-4 mt-2">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-700 mb-1">Método HTTP (method)</label>
+                                    <select id="lab-method" name="_http_method" class="w-full text-sm border-gray-300 rounded px-2 py-1" onchange="updateFormConfig()">
+                                        <option value="GET">GET (Na URL)</option>
+                                        <option value="POST">POST (No Body)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-700 mb-1">Codificação (enctype)</label>
+                                    <select id="lab-enctype" name="_http_enctype" class="w-full text-sm border-gray-300 rounded px-2 py-1" onchange="updateFormConfig()">
+                                        <option value="application/x-www-form-urlencoded">x-www-form-urlencoded</option>
+                                        <option value="multipart/form-data">multipart/form-data</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Campos de Dados -->
+                        <div class="space-y-4">
+                            <div>
+                                <label for="lab-nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                                <input type="text" id="lab-nome" name="nome" value="Ada Lovelace" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+                            
+                            <div>
+                                <label for="lab-email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                                <input type="email" id="lab-email" name="email" value="ada@computacao.br" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            </div>
+
+                            <div>
+                                <label for="lab-file" class="block text-sm font-medium text-gray-700 mb-1">Anexo (Simulação)</label>
+                                <input type="file" id="lab-file" name="arquivo_perfil" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                <p class="text-xs text-gray-500 mt-1">Tente enviar com GET. Depois mude para POST e Multipart.</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="mt-6 w-full bg-slate-900 text-white font-bold py-3 px-4 rounded-md hover:bg-slate-800 transition-colors shadow-lg flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span>Submeter Requisição Simulada</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Painel de Interceptação (DevTools Mock) -->
+                <div class="w-full lg:w-1/2 flex flex-col bg-slate-900 rounded-lg shadow-xl overflow-hidden border border-slate-700">
+                    <div class="bg-slate-950 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                        <span class="text-sm font-mono text-slate-300 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                            Inspector de Rede (Mock DevTools)
+                        </span>
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 flex-1 overflow-y-auto font-mono text-xs text-slate-300 leading-relaxed bg-slate-900" id="http-output">
+                        <span class="text-slate-500">Aguardando submissão do formulário...<br>Configure os dados à esquerda e clique em Enviar.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Exercício Buscador do Google -->
+        <section id="sec-exercicio-google" class="tab-content max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-2">5. Exercício Prático: Clone do Buscador</h2>
+            
+            <p class="mb-4 text-gray-700">O Google Search, na sua essência original, nada mais é do que um formulário HTML apontando para o servidor deles usando o método <strong>GET</strong>. Neste exercício, você criará um formulário funcional que pesquisa no Google.</p>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                <h3 class="font-bold text-blue-800 mb-2">Requisitos da Engenharia Reversa:</h3>
+                <ul class="list-disc ml-5 text-sm text-blue-900 space-y-1">
+                    <li>O <code>action</code> deve apontar para <strong>https://www.google.com/search</strong></li>
+                    <li>O <code>method</code> deve ser <strong>GET</strong> (para que a pesquisa vá para a URL).</li>
+                    <li>O <code>input</code> de texto <strong>deve</strong> obrigatoriamente ter o atributo <code>name="q"</code> (é a variável que o servidor do Google espera receber: <em>query</em>).</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg shadow-md border max-w-2xl mx-auto text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google Logo" class="h-16 mx-auto mb-6">
+                
+                <!-- O Formulário de Busca -->
+                <form action="https://www.google.com/search" method="GET" target="_blank" class="w-full">
+                    <div class="relative flex items-center w-full max-w-xl mx-auto mb-6">
+                        <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="absolute left-4 w-5 h-5 text-gray-400">
+                            <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                        </svg>
+                        
+                        <!-- Input com name="q" essencial para o Google -->
+                        <input type="text" name="q" required 
+                               class="w-full px-12 py-3 border border-gray-300 rounded-full hover:shadow-md focus:shadow-md focus:outline-none transition-shadow text-lg"
+                               placeholder="Pesquise no Google ou digite uma URL"
+                               aria-label="Pesquisar">
+                    </div>
+                    
+                    <div class="space-x-2">
+                        <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded text-sm transition-colors border border-transparent hover:border-gray-300">
+                            Pesquisa Google
+                        </button>
+                        <button type="button" onclick="alert('Estou com sorte: O Google redirecionaria direto para o primeiro resultado (btnI).')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded text-sm transition-colors border border-transparent hover:border-gray-300">
+                            Estou com sorte
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <p class="mt-6 text-sm text-gray-500 italic text-center">Teste o formulário acima. Como usamos o target="_blank", sua pesquisa será aberta em uma nova aba e você poderá ver a query string (/?q=sua+pesquisa) na URL do Google.</p>
+        </section>
+
+    </main>
+
+    <script>
+        // Navigation Logic
+        function openTab(tabId) {
+            // Esconder todas as abas
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Resetar estilos de botões (desktop)
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'border-blue-500');
+            });
+            
+            // Mostrar a aba selecionada
+            document.getElementById(tabId).classList.add('active');
+            
+            // Ativar botão no desktop
+            const buttons = document.querySelectorAll('.nav-btn');
+            for(let btn of buttons) {
+                if(btn.getAttribute('onclick').includes(tabId)) {
+                    btn.classList.add('bg-slate-800', 'border-blue-500');
+                }
+            }
+
+            // Sincronizar o dropdown mobile
+            const mobileSelect = document.getElementById('mobile-nav');
+            if(mobileSelect && mobileSelect.value !== tabId) {
+                mobileSelect.value = tabId;
+            }
+        }
+
+        // Section 3: Simple validation message
+        function showMessage(msg) {
+            const el = document.getElementById('validation-msg');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 3000);
+        }
+
+        // Section 4: Form & Lab Logic
+        const labForm = document.getElementById('lab-form');
+        const labMethod = document.getElementById('lab-method');
+        const labEnctype = document.getElementById('lab-enctype');
+        const outConsole = document.getElementById('http-output');
+
+        function updateFormConfig() {
+            labForm.method = labMethod.value;
+            labForm.enctype = labEnctype.value;
+        }
+
+        // Initialize form attributes
+        updateFormConfig();
+
+        labForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Impede o envio real
+            
+            const formData = new FormData(this);
+            const method = this.method.toUpperCase();
+            const enctype = this.enctype;
+            const action = this.action;
+            
+            let outputHTML = "";
+            const boundary = "----WebKitFormBoundary" + Math.random().toString(36).substring(2, 10);
+
+            // Mock HTTP Headers
+            outputHTML += `<span class="text-blue-400 font-bold">${method}</span> /simulador-backend HTTP/1.1\n`;
+            outputHTML += `Host: app.universidade.edu\n`;
+            
+            // Build body / Query string
+            let bodyString = "";
+            let queryString = "";
+
+            if (method === 'GET') {
+                const params = new URLSearchParams();
+                for (let [key, value] of formData.entries()) {
+                    if(!key.startsWith('_http')) { // ignora os campos de configuração internos
+                        if (value instanceof File) {
+                            params.append(key, value.name); // GET só manda o nome do arquivo
+                        } else {
+                            params.append(key, value);
+                        }
+                    }
+                }
+                queryString = "?" + params.toString();
+                outputHTML = `<span class="text-blue-400 font-bold">GET</span> /simulador-backend<span class="text-yellow-400">${queryString}</span> HTTP/1.1\nHost: app.universidade.edu\n`;
+                
+                outputHTML += `\n<span class="text-slate-500">/* Note que não há corpo (Body) no método GET. 
+Os dados foram serializados na URL limitando tamanho e expondo informações. 
+Arquivos não são enviados no GET (apenas seus nomes foram). */</span>`;
+            
+            } else {
+                // POST
+                if (enctype === 'application/x-www-form-urlencoded') {
+                    outputHTML += `Content-Type: <span class="text-green-400">application/x-www-form-urlencoded</span>\n\n`;
+                    const params = new URLSearchParams();
+                    for (let [key, value] of formData.entries()) {
+                        if(!key.startsWith('_http')) {
+                            if (value instanceof File) params.append(key, value.name);
+                            else params.append(key, value);
+                        }
+                    }
+                    bodyString = params.toString();
+                    
+                    outputHTML += `<span class="text-slate-500">/* Corpo da Requisição Serializado (Arquivos falham neste formato): */</span>\n`;
+                    outputHTML += `<span class="text-yellow-400">${bodyString}</span>`;
+
+                } else if (enctype === 'multipart/form-data') {
+                    outputHTML += `Content-Type: <span class="text-green-400">multipart/form-data; boundary=${boundary}</span>\n\n`;
+                    
+                    outputHTML += `<span class="text-slate-500">/* Corpo da Requisição quebrado em blocos multi-part (Ideal para Arquivos): */</span>\n`;
+                    for (let [key, value] of formData.entries()) {
+                        if(!key.startsWith('_http')) {
+                            outputHTML += `<span class="text-slate-400">--${boundary}</span>\n`;
+                            if (value instanceof File && value.size > 0) {
+                                outputHTML += `Content-Disposition: form-data; name="${key}"; filename="<span class="text-red-300">${value.name}</span>"\n`;
+                                outputHTML += `Content-Type: ${value.type || 'application/octet-stream'}\n\n`;
+                                outputHTML += `<span class="text-slate-600">[... CONTEÚDO BINÁRIO DO ARQUIVO ...]</span>\n`;
+                            } else if (value instanceof File && value.size === 0) {
+                                outputHTML += `Content-Disposition: form-data; name="${key}"; filename=""\n`;
+                                outputHTML += `Content-Type: application/octet-stream\n\n\n`;
+                            } else {
+                                outputHTML += `Content-Disposition: form-data; name="${key}"\n\n`;
+                                outputHTML += `<span class="text-white">${value}</span>\n`;
+                            }
+                        }
+                    }
+                    outputHTML += `<span class="text-slate-400">--${boundary}--</span>\n`;
+                }
+            }
+
+            outConsole.innerHTML = outputHTML;
+            outConsole.style.animation = 'none';
+            outConsole.offsetHeight; /* trigger reflow */
+            outConsole.style.animation = 'fadeIn 0.5s';
+        });
+        
+        // Open the default tab (Começar pela Anatomia faz mais sentido didaticamente)
+        openTab('sec-anatomia');
+    </script>
+</body>
+</html>
