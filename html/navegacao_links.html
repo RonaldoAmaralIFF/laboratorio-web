@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engenharia de Navegação Web e Estrutura de Links</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar para os blocos de código */
+        pre::-webkit-scrollbar { height: 8px; }
+        pre::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
+        pre::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        pre::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased selection:bg-blue-200 selection:text-blue-900">
+
+    <!-- Cabeçalho Principal -->
+    <header class="bg-indigo-700 text-white py-12 px-4 sm:px-6 lg:px-8 mb-8 shadow-md">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 leading-tight">Navegação Web e Estrutura de Links</h1>
+            <p class="text-indigo-100 text-lg md:text-xl">Fundamentos de Hipertexto, URIs e Segurança em Navegação (Tag <code>&lt;a&gt;</code>)</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        
+        <!-- Cartão de Metadados -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-10 border-l-4 border-l-indigo-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <span class="block text-sm font-semibold text-gray-500 uppercase tracking-wider">Disciplina</span>
+                    <span class="text-lg font-medium text-gray-900">Programação Web</span>
+                </div>
+            </div>
+            <div>
+                <span class="block text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Objetivo de Aprendizagem</span>
+                <p class="text-gray-700 leading-relaxed">
+                    Compreender a anatomia dos links HTML não apenas como elementos visuais, mas como transições de estado no protocolo HTTP, compreendendo caminhos de diretório, fragmentos de cliente e implicações de segurança (Security-by-Design).
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção 1 -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">1. A Anatomia da Tag Âncora (<code>&lt;a&gt;</code>)</h2>
+            <p class="mb-4 leading-relaxed">
+                A tag <code>&lt;a&gt;</code> (Anchor) é a base estrutural da World Wide Web. Ela cria um hiperlink para páginas da web, arquivos, endereços de e-mail, locais na mesma página ou qualquer outra URL.
+            </p>
+            
+            <h3 class="text-lg font-semibold mt-6 mb-3 text-gray-800">Atributos Fundamentais:</h3>
+            <ul class="list-disc pl-6 mb-6 space-y-2 text-gray-700">
+                <li><strong class="text-indigo-600">href</strong> (Hypertext Reference): O destino do link. Sem este atributo, a tag não é um link, mas sim um elemento de placeholder.</li>
+                <li><strong class="text-indigo-600">target</strong>: Define o contexto de navegação onde o recurso será carregado.
+                    <ul class="list-circle pl-6 mt-1 space-y-1 text-sm">
+                        <li><code>_self</code>: Padrão. Abre na mesma janela/aba.</li>
+                        <li><code>_blank</code>: Abre em uma nova aba ou janela.</li>
+                        <li><code>_parent</code> e <code>_top</code>: Usados para manipulação de frames (iframes).</li>
+                    </ul>
+                </li>
+                <li><strong class="text-indigo-600">title</strong>: Fornece informações consultivas textuais (tooltip) ao passar o mouse.</li>
+            </ul>
+
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- Exemplo Completo --&gt;
+&lt;a href="https://gsuite.iff.edu.br" target="_blank" title="Acessar o Google Workspace da instituição"&gt;
+    Acessar Portal Acadêmico
+&lt;/a&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Seção 2 -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">2. Dissecando URIs: Links Absolutos vs. Relativos</h2>
+            <p class="mb-4 leading-relaxed">
+                Para futuros engenheiros de software, é crucial entender que o navegador resolve links (URLs) com base no conceito de URI (Uniform Resource Identifier - RFC 3986).
+            </p>
+
+            <h3 class="text-xl font-semibold mt-6 mb-2 text-indigo-700">A. Links Absolutos</h3>
+            <p class="mb-3 text-gray-700">Contêm a rota completa para o recurso, incluindo o esquema (protocolo) e o domínio (autoridade). São obrigatórios para navegação externa.</p>
+            <p class="mb-3 text-sm bg-gray-100 p-2 rounded text-gray-600 font-mono">Estrutura: esquema://dominio:porta/caminho?query#fragmento</p>
+            
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto mb-6">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- Navegação Externa (Absoluta) --&gt;
+&lt;a href="https://github.com/torvalds/linux"&gt;Repositório do Linux&lt;/a&gt;</code></pre>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-6 mb-2 text-indigo-700">B. Links Relativos (Document & Root relative)</h3>
+            <p class="mb-4 text-gray-700">Dependem da URL do documento atual para serem resolvidos pelo navegador. Exigem compreensão da árvore de diretórios do servidor.</p>
+            
+            <h4 class="font-semibold text-gray-800 mb-2">1. Relativo ao Documento:</h4>
+            <p class="mb-2 text-sm text-gray-600">O caminho começa a partir do diretório onde o arquivo HTML atual está sendo executado (<code>./</code> para pasta atual, <code>../</code> para subir um nível).</p>
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto mb-6">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- Estando em /app/views/sobre.html e indo para /app/views/contato.html --&gt;
+&lt;a href="contato.html"&gt;Contato (Mesmo nível)&lt;/a&gt;
+&lt;a href="./contato.html"&gt;Contato (Sintaxe explícita)&lt;/a&gt;
+
+&lt;!-- Estando em /app/views/sobre.html e indo para /app/assets/img/logo.png --&gt;
+&lt;a href="../assets/img/logo.png"&gt;Sobe um nível e desce para assets&lt;/a&gt;</code></pre>
+            </div>
+
+            <h4 class="font-semibold text-gray-800 mb-2">2. Relativo à Raiz:</h4>
+            <p class="mb-2 text-sm text-gray-600">Inicia com uma barra <code>/</code>. Ignora a pasta atual e aponta diretamente para a raiz do servidor web.</p>
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- Buscará a partir do domínio raiz, ex: http://localhost:8080/css/style.css --&gt;
+&lt;a href="/css/style.css"&gt;Estilo Global&lt;/a&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Seção 3 -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">3. Navegação de Fragmento (Client-Side Routing)</h2>
+            <p class="mb-4 leading-relaxed text-gray-700">
+                O uso da cerquilha (<code>#</code>) no <code>href</code> aponta para o atributo <code>id</code> de um elemento na mesma página.
+            </p>
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                <p class="text-yellow-800 text-sm">
+                    <strong>Conceito Arquitetural:</strong> O fragmento <em>nunca</em> é enviado ao servidor web na requisição HTTP. Ele é processado exclusivamente pelo navegador (Client-Side), sendo a base de funcionamento de Single Page Applications (SPAs) e roteadores de frontend.
+                </p>
+            </div>
+            
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- Menu de Navegação Interna --&gt;
+&lt;nav&gt;
+    &lt;a href="#arquitetura"&gt;Arquitetura Clean&lt;/a&gt;
+    &lt;a href="#seguranca"&gt;Segurança de Redes&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;!-- Conteúdo Alvo (deve possuir o ID exato) --&gt;
+&lt;section id="arquitetura"&gt;
+    &lt;h2&gt;Arquitetura Clean&lt;/h2&gt;
+    &lt;p&gt;Detalhes sobre separação de camadas e DTOs...&lt;/p&gt;
+    &lt;a href="#"&gt;Voltar ao topo&lt;/a&gt;
+&lt;/section&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Seção 4 -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">4. Protocolos Específicos (Custom Schemes)</h2>
+            <p class="mb-4 leading-relaxed text-gray-700">
+                O atributo <code>href</code> não se limita a HTTP/HTTPS. O sistema operacional pode interceptar outros protocolos.
+            </p>
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- Abre o cliente de e-mail padrão já preenchido --&gt;
+&lt;a href="mailto:suporte@exemplo.com.br?subject=Dúvida%20sobre%20o%20projeto"&gt;
+    Enviar E-mail ao Suporte
+&lt;/a&gt;
+
+&lt;!-- Aciona o discador do smartphone ou software de VoIP no desktop --&gt;
+&lt;a href="tel:+5522999999999"&gt;Ligar para a Secretaria&lt;/a&gt;
+
+&lt;!-- Aciona o WhatsApp diretamente (via API web) --&gt;
+&lt;a href="https://wa.me/5522999999999"&gt;Chamar no WhatsApp&lt;/a&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Seção 5 -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">5. Segurança-by-Design e Acessibilidade</h2>
+            
+            <h3 class="text-xl font-semibold mt-4 mb-2 text-red-600 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                A. O Risco do target="_blank" (Reverse Tabnabbing)
+            </h3>
+            <p class="mb-3 text-gray-700">Quando um link abre em uma nova aba, a página de destino ganha acesso parcial à página de origem através do objeto JavaScript <code>window.opener</code>. Uma página maliciosa pode redirecionar a aba original do usuário para um site de phishing.</p>
+            
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4">
+                <p class="text-green-800 text-sm">
+                    <strong>Mitigação:</strong> Sempre utilize o atributo <code>rel="noopener noreferrer"</code>. <br>
+                    - <em>noopener</em>: Corta o acesso ao window.opener.<br>
+                    - <em>noreferrer</em>: Impede que o cabeçalho HTTP Referer seja enviado, protegendo a privacidade.
+                </p>
+            </div>
+
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto mb-8">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- Implementação Segura --&gt;
+&lt;a href="https://site-externo-desconhecido.com" target="_blank" rel="noopener noreferrer"&gt;
+    Acessar Site Externo Seguro
+&lt;/a&gt;</code></pre>
+            </div>
+
+            <h3 class="text-xl font-semibold mb-2 text-indigo-700">B. Acessibilidade (A11y)</h3>
+            <p class="mb-3 text-gray-700">Evite textos de link genéricos como "Clique aqui". O texto do link deve descrever claramente o destino, pois leitores de tela costumam listar todos os links da página fora de contexto.</p>
+            
+            <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+<pre><code class="text-green-400 text-sm font-mono">&lt;!-- RUIM (Anti-pattern) --&gt;
+&lt;p&gt;Para ler a documentação, &lt;a href="/docs"&gt;clique aqui&lt;/a&gt;.&lt;/p&gt;
+
+&lt;!-- BOM (Clean Code e Acessibilidade) --&gt;
+&lt;p&gt;Consulte a &lt;a href="/docs"&gt;documentação oficial do projeto&lt;/a&gt; para mais detalhes.&lt;/p&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Seção 6 -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">6. Referências Bibliográficas</h2>
+            <p class="mb-4 text-gray-700">Para aprofundamento técnico e desenvolvimento autônomo, consulte as especificações primárias:</p>
+            
+            <ul class="space-y-3">
+                <li>
+                    <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/a" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium underline flex items-center">
+                        MDN Web Docs: O Elemento âncora &lt;a&gt;
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1">Guia definitivo sobre os atributos permitidos e comportamento de renderização.</p>
+                </li>
+                <li>
+                    <a href="https://html.spec.whatwg.org/multipage/links.html" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium underline flex items-center">
+                        W3C/WHATWG: HTML5 Specification - Links
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1">Especificação oficial viva (Living Standard) do HTML moderno.</p>
+                </li>
+                <li>
+                    <a href="https://datatracker.ietf.org/doc/html/rfc3986" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium underline flex items-center">
+                        IETF RFC 3986: Uniform Resource Identifier (URI)
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1">Para compreensão aprofundada da sintaxe e estrutura de roteamento web.</p>
+                </li>
+                <li>
+                    <a href="https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-medium underline flex items-center">
+                        OWASP: HTML5 Security Cheat Sheet
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1">Detalhamento sobre vulnerabilidades de Tabnabbing e injeção de links.</p>
+                </li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
+        <p>Desenvolvido para fins educacionais - Disciplina de Programação Web</p>
+    </footer>
+
+</body>
+</html>
