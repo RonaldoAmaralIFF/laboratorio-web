@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula de CSS — Evolução para CSS Grid</title>
+  <style>
+    :root {
+      --ui-bg: #0f172a;
+      --ui-surface: #1e293b;
+      --ui-border: #334155;
+      --ui-text: #f8fafc;
+      --ui-muted: #94a3b8;
+      --ui-accent: #3b82f6;
+      --ui-accent-hover: #2563eb;
+      --ui-success: #10b981;
+      --ui-warn: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #020617;
+      color: var(--ui-text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Barra de Controle do Professor */
+    .toolbar {
+      background-color: var(--ui-bg);
+      border-bottom: 1px solid var(--ui-border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-badge {
+      background: var(--ui-accent);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stage-group,
+    .tools-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn {
+      background-color: var(--ui-surface);
+      color: var(--ui-text);
+      border: 1px solid var(--ui-border);
+      border-radius: 6px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn:hover:not(:disabled) {
+      background-color: #334155;
+      border-color: #475569;
+    }
+
+    .btn.active {
+      background-color: var(--ui-accent);
+      border-color: var(--ui-accent);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .btn.toggle-on {
+      background-color: rgba(16, 185, 129, 0.2);
+      border-color: var(--ui-success);
+      color: #6ee7b7;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      width: 1px;
+      height: 22px;
+      background-color: var(--ui-border);
+      margin: 0 0.25rem;
+    }
+
+    /* Barra de Objetivo Pedagógico */
+    .info-bar {
+      background-color: var(--ui-surface);
+      border-bottom: 1px solid var(--ui-border);
+      padding: 0.55rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .info-text strong {
+      color: #93c5fd;
+    }
+
+    .viewport-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .viewport-label {
+      font-size: 0.78rem;
+      color: var(--ui-muted);
+      margin-right: 0.25rem;
+    }
+
+    .btn-sm {
+      padding: 0.25rem 0.55rem;
+      font-size: 0.75rem;
+    }
+
+    /* Área Principal: Preview + Painel de Código */
+    .workspace {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      background-color: #0b1120;
+    }
+
+    .preview-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem;
+      overflow: auto;
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .viewport-frame-wrapper {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      transition: width 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--ui-border);
+    }
+
+    .browser-bar {
+      background: #e2e8f0;
+      color: #475569;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #cbd5e1;
+      user-select: none;
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .browser-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .browser-dots span:nth-child(1) { background: #ef4444; }
+    .browser-dots span:nth-child(2) { background: #f59e0b; }
+    .browser-dots span:nth-child(3) { background: #22c55e; }
+
+    iframe#previewFrame {
+      width: 100%;
+      flex: 1;
+      border: none;
+      background: #ffffff;
+    }
+
+    /* Painel Lateral de Código */
+    .code-panel {
+      width: 440px;
+      max-width: 45vw;
+      background-color: var(--ui-bg);
+      border-left: 1px solid var(--ui-border);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .code-panel.hidden {
+      display: none;
+    }
+
+    .code-header {
+      padding: 0.65rem 1rem;
+      background-color: var(--ui-surface);
+      border-bottom: 1px solid var(--ui-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .code-tabs {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .code-content {
+      flex: 1;
+      overflow: auto;
+      padding: 1rem;
+      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      color: #e2e8f0;
+      white-space: pre;
+      tab-size: 2;
+    }
+
+    .code-comment { color: #64748b; }
+    .code-selector { color: #93c5fd; }
+    .code-prop { color: #c4b5fd; }
+    .code-val { color: #6ee7b7; }
+
+    .kbd-hint {
+      font-size: 0.72rem;
+      color: var(--ui-muted);
+      padding: 0.4rem 1rem;
+      border-top: 1px solid var(--ui-border);
+      background: #0b1120;
+    }
+
+    @media (max-width: 900px) {
+      .workspace {
+        flex-direction: column;
+      }
+      .code-panel {
+        width: 100%;
+        max-width: 100%;
+        height: 40%;
+        border-left: none;
+        border-top: 1px solid var(--ui-border);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra Superior de Controle -->
+  <header class="toolbar">
+    <div class="brand">
+      <span class="brand-badge">Aula CSS</span>
+      <span>Do Básico ao Grid Layout</span>
+    </div>
+
+    <div class="stage-group" role="tablist" aria-label="Etapas da aula">
+      <button class="btn active" data-stage="0">0. HTML Puro</button>
+      <button class="btn" data-stage="1">1. Básicos</button>
+      <button class="btn" data-stage="2">2. Box Model</button>
+      <button class="btn" data-stage="3">3. Grid Macro</button>
+      <button class="btn" data-stage="4">4. Grid Responsivo</button>
+    </div>
+
+    <div class="tools-group">
+      <button class="btn" id="btnGridOverlay" disabled title="Destaca as áreas nomeadas do Grid">
+        Ver Áreas Grid
+      </button>
+      <button class="btn" id="btnInvertAside" disabled title="Desafio em sala: mover barra lateral para a esquerda sem tocar no HTML">
+        Inverter Aside
+      </button>
+      <div class="divider"></div>
+      <button class="btn toggle-on" id="btnToggleCode">Código CSS</button>
+    </div>
+  </header>
+
+  <!-- Barra de Objetivo Pedagógico + Simulador de Tela -->
+  <div class="info-bar">
+    <div class="info-text" id="stageDescription"></div>
+    <div class="viewport-controls">
+      <span class="viewport-label">Largura da Tela:</span>
+      <button class="btn btn-sm active" data-width="100%">Desktop (100%)</button>
+      <button class="btn btn-sm" data-width="740px">Tablet (740px)</button>
+      <button class="btn btn-sm" data-width="390px">Mobile (390px)</button>
+    </div>
+  </div>
+
+  <!-- Área de Trabalho -->
+  <main class="workspace">
+    <section class="preview-container">
+      <div class="viewport-frame-wrapper" id="frameWrapper">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <span id="viewportStatus">portal-tech.html — Desktop (100%)</span>
+          <span id="stageBadge">Etapa 0/4</span>
+        </div>
+        <iframe id="previewFrame" title="Visualização da página de exemplo"></iframe>
+      </div>
+    </section>
+
+    <aside class="code-panel" id="codePanel">
+      <div class="code-header">
+        <span id="codeTitle">style.css — Etapa 0</span>
+        <div class="code-tabs">
+          <button class="btn btn-sm active" id="tabStepCss">CSS da Etapa</button>
+          <button class="btn btn-sm" id="tabFullCss">CSS Acumulado</button>
+          <button class="btn btn-sm" id="tabHtml">HTML Base</button>
+        </div>
+      </div>
+      <pre class="code-content" id="codeDisplay"></pre>
+      <div class="kbd-hint">
+        Atalhos: teclas <strong>0</strong> a <strong>4</strong> mudam a etapa • <strong>C</strong> abre/fecha o código • <strong>G</strong> ativa áreas do Grid
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const baseHtmlBody = `<div class="pagina">
+  <header class="cabecalho">
+    <h1>Portal Tech</h1>
+    <nav class="menu">
+      <a href="#">Início</a>
+      <a href="#">Artigos</a>
+      <a href="#">Projetos</a>
+      <a href="#">Contato</a>
+    </nav>
+  </header>
+
+  <main class="conteudo">
+    <h2>Últimas Publicações</h2>
+    <section class="grade-cards">
+      <article class="card">
+        <h3>Fundamentos da Web</h3>
+        <p>Como o navegador interpreta HTML e aplica regras de estilo em cascata.</p>
+      </article>
+      <article class="card">
+        <h3>Dominando o Box Model</h3>
+        <p>Entendendo a relação entre conteúdo, padding, borda e margem.</p>
+      </article>
+      <article class="card">
+        <h3>Layouts com CSS Grid</h3>
+        <p>Construindo grades bidimensionais flexíveis e responsivas.</p>
+      </article>
+      <article class="card">
+        <h3>Boas Práticas</h3>
+        <p>Uso de variáveis CSS, unidades relativas e design responsivo.</p>
+      </article>
+    </section>
+  </main>
+
+  <aside class="barra-lateral">
+    <h2>Avisos</h2>
+    <p>Entrega do laboratório prático na próxima semana.</p>
+    <ul>
+      <li>HTML Semântico</li>
+      <li>CSS Box Model</li>
+      <li>CSS Grid Layout</li>
+    </ul>
+  </aside>
+
+  <footer class="rodape">
+    <p>&copy; 2026 Portal Tech — Exemplo Didático de CSS</p>
+  </footer>
+</div>`;
+
+    const stages = [
+      {
+        title: "Etapa 0: HTML Puro (Normal Flow)",
+        desc: "<strong>Foco:</strong> Sem nenhum CSS aplicado. O navegador usa apenas o <em>User Agent Stylesheet</em> e empilha os blocos verticalmente na ordem do DOM.",
+        css: `/* Nenhum CSS aplicado nesta etapa.\n   Observe o fluxo normal (Normal Flow) do navegador\n   e os estilos padrão (User Agent Stylesheet). */`
+      },
+      {
+        title: "Etapa 1: Princípios Básicos",
+        desc: "<strong>Foco:</strong> Variáveis CSS (<code>:root</code>), herança de tipografia no <code>body</code>, seletores de classe/descendentes e pseudo-classe <code>:hover</code>.",
+        css: `/* ETAPA 1: Variáveis, Herança e Seletores */
+:root {
+  --cor-primaria: #1e3a8a;
+  --cor-fundo: #f1f5f9;
+  --cor-superficie: #ffffff;
+  --cor-texto: #1e293b;
+  --cor-borda: #cbd5e1;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cabecalho {
+  background-color: var(--cor-primaria);
+  color: #ffffff;
+}
+
+.menu a {
+  color: #e2e8f0;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.card, .barra-lateral {
+  background-color: var(--cor-superficie);
+}
+
+.rodape {
+  background-color: #0f172a;
+  color: #cbd5e1;
+  text-align: center;
+}`
+      },
+      {
+        title: "Etapa 2: Box Model",
+        desc: "<strong>Foco:</strong> Todo elemento é uma caixa (<code>content</code>, <code>padding</code>, <code>border</code>, <code>margin</code>). Uso de <code>box-sizing: border-box</code> para previsibilidade de dimensões.",
+        css: `/* ETAPA 2: Box Model e Espaçamentos */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.cabecalho,
+.conteudo,
+.barra-lateral,
+.rodape {
+  padding: 1.5rem;
+}
+
+.card {
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.barra-lateral {
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+}`
+      },
+      {
+        title: "Etapa 3: Layout Macro com CSS Grid",
+        desc: "<strong>Foco:</strong> Grade bidimensional com <code>grid-template-areas</code> e unidades <code>fr</code>. Flexbox aplicado apenas para alinhamento 1D no cabeçalho.",
+        css: `/* ETAPA 3: Layout Macro com CSS Grid */
+.pagina {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 1.5rem;
+
+  grid-template-areas:
+    "header  header"
+    "main    aside"
+    "footer  footer";
+}
+
+.cabecalho     { grid-area: header; }
+.conteudo      { grid-area: main; }
+.barra-lateral { grid-area: aside; }
+.rodape        { grid-area: footer; }
+
+/* Flexbox 1D para alinhar itens do cabeçalho */
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu {
+  display: flex;
+  gap: 1rem;
+}`
+      },
+      {
+        title: "Etapa 4: Grid Aninhado e Responsividade",
+        desc: "<strong>Foco:</strong> Cards responsivos automáticos com <code>repeat(auto-fit, minmax(220px, 1fr))</code> e reorganização das áreas via <code>@media (max-width: 768px)</code>. Teste os botões de largura!",
+        css: `/* ETAPA 4: Grid Aninhado e Responsividade */
+.card {
+  margin-bottom: 0;
+}
+
+.grade-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .pagina {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "header"
+      "main"
+      "aside"
+      "footer";
+  }
+
+  .cabecalho {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}`
+      }
+    ];
+
+    const invertAsideCss = `
+/* DESAFIO: Barra lateral à esquerda sem alterar o HTML */
+.pagina {
+  grid-template-columns: 1fr 3fr;
+  grid-template-areas:
+    "header  header"
+    "aside   main"
+    "footer  footer";
+}
+@media (max-width: 768px) {
+  .pagina {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "aside"
+      "footer";
+  }
+}`;
+
+    const gridOverlayCss = `
+/* Sobreposição didática das áreas do CSS Grid */
+.cabecalho, .conteudo, .barra-lateral, .rodape {
+  position: relative;
+  outline: 2px dashed #ef4444 !important;
+  outline-offset: -2px;
+}
+.cabecalho::after, .conteudo::after, .barra-lateral::after, .rodape::after {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: #ef4444;
+  color: #fff;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 99;
+}
+.cabecalho::after     { content: 'grid-area: header'; }
+.conteudo::after      { content: 'grid-area: main'; }
+.barra-lateral::after { content: 'grid-area: aside'; }
+.rodape::after        { content: 'grid-area: footer'; }
+`;
+
+    // Estado da aplicação
+    let currentStage = 0;
+    let showGridOverlay = false;
+    let invertAside = false;
+    let codeViewMode = 'step'; // 'step' | 'full' | 'html'
+
+    // Elementos DOM
+    const stageButtons = document.querySelectorAll('[data-stage]');
+    const widthButtons = document.querySelectorAll('[data-width]');
+    const btnGridOverlay = document.getElementById('btnGridOverlay');
+    const btnInvertAside = document.getElementById('btnInvertAside');
+    const btnToggleCode = document.getElementById('btnToggleCode');
+    const codePanel = document.getElementById('codePanel');
+    const codeDisplay = document.getElementById('codeDisplay');
+    const codeTitle = document.getElementById('codeTitle');
+    const stageDescription = document.getElementById('stageDescription');
+    const stageBadge = document.getElementById('stageBadge');
+    const viewportStatus = document.getElementById('viewportStatus');
+    const frameWrapper = document.getElementById('frameWrapper');
+    const previewFrame = document.getElementById('previewFrame');
+    const tabStepCss = document.getElementById('tabStepCss');
+    const tabFullCss = document.getElementById('tabFullCss');
+    const tabHtml = document.getElementById('tabHtml');
+
+    function getCumulativeCss(stageIndex, includeDemoExtras = true) {
+      if (stageIndex === 0) return stages[0].css;
+      let css = '';
+      for (let i = 1; i <= stageIndex; i++) {
+        css += stages[i].css + '\n\n';
+      }
+      if (includeDemoExtras && stageIndex >= 3 && invertAside) {
+        css += invertAsideCss + '\n';
+      }
+      return css.trim();
+    }
+
+    function render() {
+      // Atualiza botões de etapa
+      stageButtons.forEach(btn => {
+        btn.classList.toggle('active', Number(btn.dataset.stage) === currentStage);
+      });
+
+      // Habilita/desabilita ferramentas de Grid
+      const gridEnabled = currentStage >= 3;
+      btnGridOverlay.disabled = !gridEnabled;
+      btnInvertAside.disabled = !gridEnabled;
+      if (!gridEnabled) {
+        showGridOverlay = false;
+        invertAside = false;
+      }
+      btnGridOverlay.classList.toggle('toggle-on', showGridOverlay);
+      btnInvertAside.classList.toggle('toggle-on', invertAside);
+
+      // Atualiza textos de apoio
+      stageDescription.innerHTML = stages[currentStage].desc;
+      stageBadge.textContent = `Etapa ${currentStage}/4`;
+
+      // Monta o documento isolado do iframe
+      const appliedCss = currentStage === 0
+        ? ''
+        : getCumulativeCss(currentStage, true) + (showGridOverlay ? gridOverlayCss : '');
+
+      const iframeDoc = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${appliedCss}</style>
+</head>
+<body>
+${baseHtmlBody}
+</body>
+</html>`;
+
+      previewFrame.srcdoc = iframeDoc;
+
+      // Atualiza painel de código
+      updateCodePanel();
+    }
+
+    function updateCodePanel() {
+      tabStepCss.classList.toggle('active', codeViewMode === 'step');
+      tabFullCss.classList.toggle('active', codeViewMode === 'full');
+      tabHtml.classList.toggle('active', codeViewMode === 'html');
+
+      if (codeViewMode === 'html') {
+        codeTitle.textContent = 'index.html (Inalterado em todas as etapas)';
+        codeDisplay.textContent = baseHtmlBody;
+      } else if (codeViewMode === 'full') {
+        codeTitle.textContent = `style.css — Acumulado (0 a ${currentStage})`;
+        codeDisplay.textContent = getCumulativeCss(currentStage, true);
+      } else {
+        codeTitle.textContent = `style.css — ${stages[currentStage].title}`;
+        let stepCode = stages[currentStage].css;
+        if (currentStage >= 3 && invertAside) {
+          stepCode += '\n' + invertAsideCss;
+        }
+        codeDisplay.textContent = stepCode;
+      }
+    }
+
+    // Eventos das etapas
+    stageButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentStage = Number(btn.dataset.stage);
+        render();
+      });
+    });
+
+    // Eventos de largura de viewport
+    widthButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        widthButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const w = btn.dataset.width;
+        frameWrapper.style.width = w;
+        viewportStatus.textContent = `portal-tech.html — ${btn.textContent}`;
+      });
+    });
+
+    // Ferramentas didáticas
+    btnGridOverlay.addEventListener('click', () => {
+      showGridOverlay = !showGridOverlay;
+      render();
+    });
+
+    btnInvertAside.addEventListener('click', () => {
+      invertAside = !invertAside;
+      render();
+    });
+
+    btnToggleCode.addEventListener('click', () => {
+      const isHidden = codePanel.classList.toggle('hidden');
+      btnToggleCode.classList.toggle('toggle-on', !isHidden);
+    });
+
+    tabStepCss.addEventListener('click', () => { codeViewMode = 'step'; updateCodePanel(); });
+    tabFullCss.addEventListener('click', () => { codeViewMode = 'full'; updateCodePanel(); });
+    tabHtml.addEventListener('click', () => { codeViewMode = 'html'; updateCodePanel(); });
+
+    // Atalhos de teclado para apresentação fluida
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key >= '0' && e.key <= '4') {
+        currentStage = Number(e.key);
+        render();
+      } else if (e.key.toLowerCase() === 'c') {
+        btnToggleCode.click();
+      } else if (e.key.toLowerCase() === 'g' && !btnGridOverlay.disabled) {
+        btnGridOverlay.click();
+      }
+    });
+
+    // Inicializa
+    render();
+  </script>
+</body>
+</html>
