@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guia de Referência — Primeiro Contato com JavaScript</title>
+  <title>Guia Interativo — JavaScript Incremental</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Fontes Inter e JetBrains Mono -->
@@ -25,19 +25,19 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- Container de Notificações (Substitui alert/confirm) -->
+  <!-- Toast de Notificações (Substitui alert/confirm) -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- Cabeçalho Fixo -->
+  <!-- Cabeçalho Principal -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 min-w-0">
-        <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-mono font-bold text-sm shadow-sm shrink-0">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-mono font-bold text-sm shadow-sm shrink-0">
           JS
         </div>
         <div class="truncate">
-          <h1 class="text-base sm:text-lg font-bold text-slate-900 truncate">Guia de Referência — JavaScript</h1>
-          <p class="text-xs text-slate-500 hidden sm:block">Primeiro Contato • Projeto: Lista de Compras (Orçamento R$ 100,00)</p>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 truncate">JavaScript Incremental</h1>
+          <p class="text-xs text-slate-500 hidden sm:block">Projeto Base: Gerenciador de Demandas (4 Tempos)</p>
         </div>
       </div>
 
@@ -45,31 +45,31 @@
       <div class="flex items-center gap-3 shrink-0">
         <div class="text-right hidden md:block">
           <p class="text-xs font-medium text-slate-600">Seu Progresso</p>
-          <p id="progress-label" class="text-xs font-bold text-blue-600">0% concluído</p>
+          <p id="progress-label" class="text-xs font-bold text-indigo-600">0% concluído</p>
         </div>
-        <div class="w-24 sm:w-32 h-2.5 bg-slate-200 rounded-full overflow-hidden" aria-label="Progresso dos exercícios">
-          <div id="progress-bar" class="h-full bg-blue-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+        <div class="w-24 sm:w-32 h-2.5 bg-slate-200 rounded-full overflow-hidden" aria-label="Progresso da aula">
+          <div id="progress-bar" class="h-full bg-indigo-600 rounded-full transition-all duration-300" style="width: 0%"></div>
         </div>
       </div>
     </div>
 
-    <!-- Navegação por Abas -->
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-100 overflow-x-auto" aria-label="Seções do guia">
+    <!-- Navegação por Abas (Responsiva) -->
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-100 overflow-x-auto" aria-label="Etapas da aula">
       <div id="nav-tabs" class="flex gap-1 sm:gap-2 py-2 min-w-max">
-        <button type="button" data-tab="resumo" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors bg-blue-50 text-blue-700">
-          1. Resumo &amp; Ciclo JS
+        <button type="button" data-tab="visao-geral" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors bg-indigo-50 text-indigo-700">
+          1. Visão Geral
         </button>
-        <button type="button" data-tab="fundamentos" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
-          2. Fundamentos (Tempo 1)
+        <button type="button" data-tab="tempo-1" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          2. Tempo 1: Lógica & Arrays
         </button>
-        <button type="button" data-tab="dom-vivo" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
-          3. DOM &amp; Projeto Vivo (Tempo 2)
+        <button type="button" data-tab="tempo-2" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          3. Tempo 2: DOM & Persistência
         </button>
-        <button type="button" data-tab="exercicios" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
-          4. Exercícios (Tempos 3 e 4)
+        <button type="button" data-tab="laboratorio" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          4. Tempos 3 e 4: Exercícios
         </button>
-        <button type="button" data-tab="cola" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
-          5. Cola Rápida &amp; Erros Comuns
+        <button type="button" data-tab="cheatsheet" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          5. Cola Rápida
         </button>
       </div>
     </nav>
@@ -79,190 +79,211 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
     <!-- ========================================================= -->
-    <!-- ABA 1: RESUMO & CICLO DO JAVASCRIPT NA PÁGINA             -->
+    <!-- ABA 1: VISÃO GERAL & ARQUITETURA                          -->
     <!-- ========================================================= -->
-    <section id="tab-resumo" class="tab-panel space-y-6">
+    <section id="tab-visao-geral" class="tab-panel space-y-6">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 mb-3">
-          Material de Apoio ao Aluno • Consulta Livre
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 mb-3">
+          Roteiro de 4 Horas • Execução Direta no Navegador
         </span>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">
-          Como o JavaScript dá vida à sua página HTML
+          Como vamos evoluir o projeto passo a passo
         </h2>
         <p class="text-slate-600 leading-relaxed max-w-3xl">
-          Use este guia para relembrar o que vimos nos Tempos 1 e 2 e consultar a sintaxe enquanto resolve os exercícios dos Tempos 3 e 4.
-          Lembre-se da analogia da casa: o <strong class="text-slate-800">HTML</strong> são as paredes (estrutura), o <strong class="text-slate-800">CSS</strong> é a pintura (estilo) e o <strong class="text-slate-800">JavaScript</strong> é a parte elétrica (comportamento quando você clica em um botão).
+          Em vez de misturar HTML, eventos e regras de negócio desde a primeira linha, vamos construir um
+          <strong class="text-slate-800">Gerenciador de Demandas</strong> em camadas. Primeiro validamos a lógica pura no Console,
+          depois conectamos à tela e, por fim, salvamos os dados no navegador e organizamos o código em arquivos separados.
         </p>
 
-        <!-- Trio HTML / CSS / JS -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-          <div class="p-4 rounded-xl bg-orange-50/70 border border-orange-200">
-            <div class="text-xs font-bold uppercase text-orange-700 mb-1">index.html</div>
-            <div class="font-bold text-slate-900">Estrutura</div>
-            <p class="text-xs text-slate-600 mt-1">Cria os campos <code class="font-mono bg-white px-1 rounded">&lt;input&gt;</code>, os botões e a lista <code class="font-mono bg-white px-1 rounded">&lt;ul&gt;</code> com seus <code class="font-mono bg-white px-1 rounded">id</code>s.</p>
-          </div>
-          <div class="p-4 rounded-xl bg-sky-50/70 border border-sky-200">
-            <div class="text-xs font-bold uppercase text-sky-700 mb-1">style.css</div>
-            <div class="font-bold text-slate-900">Visual</div>
-            <p class="text-xs text-slate-600 mt-1">Define cores, espaçamentos e a classe <code class="font-mono bg-white px-1 rounded">.alerta</code> (vermelho) que o JS ativa ou desativa.</p>
-          </div>
-          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200">
-            <div class="text-xs font-bold uppercase text-amber-800 mb-1">app.js</div>
-            <div class="font-bold text-slate-900">Comportamento</div>
-            <p class="text-xs text-slate-600 mt-1">Lê o que o usuário digitou, guarda no array, soma os preços e atualiza o que aparece na tela.</p>
-          </div>
-        </div>
-
-        <!-- Diagrama Interativo do Ciclo de 4 Passos -->
+        <!-- Diagrama Interativo do Fluxo Unidirecional -->
         <div class="mt-8">
           <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4">
-            O Ciclo do Nosso Projeto (Clique em cada passo para revisar o código)
+            Fluxo Unidirecional de Dados (Clique em cada etapa para explorar)
           </h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="cycle-steps">
-            <button type="button" data-step="clique" class="cycle-card text-left p-4 rounded-xl border-2 border-blue-600 bg-blue-50/60 transition-all">
-              <div class="text-xs font-bold text-blue-600 uppercase mb-1">Passo 1</div>
-              <div class="font-bold text-slate-900">Ouvir o Clique</div>
-              <div class="text-xs text-slate-600 mt-1">addEventListener("click")</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="arch-steps">
+            <button type="button" data-arch="evento" class="arch-card text-left p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50/60 transition-all">
+              <div class="text-xs font-bold text-indigo-600 uppercase mb-1">Passo 1</div>
+              <div class="font-bold text-slate-900">Evento do Usuário</div>
+              <div class="text-xs text-slate-600 mt-1">Submit, clique ou digitação</div>
             </button>
-            <button type="button" data-step="ler" class="cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
+            <button type="button" data-arch="estado" class="arch-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
               <div class="text-xs font-bold text-slate-500 uppercase mb-1">Passo 2</div>
-              <div class="font-bold text-slate-900">Ler e Converter</div>
-              <div class="text-xs text-slate-600 mt-1">.value e Number()</div>
+              <div class="font-bold text-slate-900">Regra de Negócio</div>
+              <div class="text-xs text-slate-600 mt-1">Novo array de estado</div>
             </button>
-            <button type="button" data-step="array" class="cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
+            <button type="button" data-arch="persistencia" class="arch-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
               <div class="text-xs font-bold text-slate-500 uppercase mb-1">Passo 3</div>
-              <div class="font-bold text-slate-900">Guardar no Array</div>
-              <div class="text-xs text-slate-600 mt-1">itens.push({ nome, preco })</div>
+              <div class="font-bold text-slate-900">Persistência</div>
+              <div class="text-xs text-slate-600 mt-1">Grava no localStorage</div>
             </button>
-            <button type="button" data-step="tela" class="cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
+            <button type="button" data-arch="render" class="arch-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
               <div class="text-xs font-bold text-slate-500 uppercase mb-1">Passo 4</div>
-              <div class="font-bold text-slate-900">Atualizar a Tela</div>
-              <div class="text-xs text-slate-600 mt-1">Laço for + createElement</div>
+              <div class="font-bold text-slate-900">Renderização DOM</div>
+              <div class="text-xs text-slate-600 mt-1">Tela reflete o estado</div>
             </button>
           </div>
 
-          <div class="mt-4 p-5 rounded-xl bg-slate-900 text-slate-100">
+          <!-- Painel de Detalhe do Fluxo -->
+          <div id="arch-detail" class="mt-4 p-5 rounded-xl bg-slate-900 text-slate-100">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div class="space-y-1.5">
-                <h4 id="cycle-title" class="text-base font-bold text-blue-300">1. Ouvir o Clique do Botão</h4>
-                <p id="cycle-desc" class="text-sm text-slate-300 leading-relaxed">
-                  Primeiro selecionamos o botão no HTML com <code class="text-amber-300">document.querySelector("#btn-adicionar")</code> e dizemos ao navegador qual função deve rodar quando o usuário clicar nele.
+              <div>
+                <h4 id="arch-detail-title" class="text-base font-bold text-indigo-300">1. Evento do Usuário (main.js)</h4>
+                <p id="arch-detail-desc" class="text-sm text-slate-300 mt-1 leading-relaxed">
+                  Tudo começa quando o usuário envia o formulário, digita na busca ou clica em um item. Usamos <code class="text-amber-300">addEventListener</code> e <code class="text-amber-300">event.preventDefault()</code> para assumir o controle sem recarregar a página.
                 </p>
               </div>
-              <pre id="cycle-code" class="text-xs font-mono bg-slate-950 text-emerald-300 p-3.5 rounded-lg overflow-x-auto shrink-0 border border-slate-800">const btnAdicionar = document.querySelector("#btn-adicionar");
-
-btnAdicionar.addEventListener("click", function () {
-  // O código daqui de dentro só roda no clique!
+              <pre id="arch-detail-code" class="text-xs font-mono bg-slate-950 text-emerald-300 p-3.5 rounded-lg overflow-x-auto shrink-0 border border-slate-800">form.addEventListener("submit", (e) =&gt; {
+  e.preventDefault();
+  // dispara atualização de estado
 });</pre>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Mapa dos 4 Tempos -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Tempo 1 • 55 min</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Apresentação</span>
+          </div>
+          <h3 class="font-bold text-slate-900 text-lg">Lógica Pura & Métodos de Array</h3>
+          <p class="text-sm text-slate-600 mt-1">Modelo da tarefa, imutabilidade, CRUD em memória e consultas com <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">map</code>, <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">filter</code> e <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">reduce</code>.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Tempo 2 • 55 min</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Apresentação</span>
+          </div>
+          <h3 class="font-bold text-slate-900 text-lg">DOM, Eventos & Persistência</h3>
+          <p class="text-sm text-slate-600 mt-1">Renderização segura contra XSS (<code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">textContent</code>), Delegação de Eventos, <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">localStorage</code> e organização em 3 scripts.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Tempo 3 • 55 min</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">Prática</span>
+          </div>
+          <h3 class="font-bold text-slate-900 text-lg">Consolidação & Novas Regras</h3>
+          <p class="text-sm text-slate-600 mt-1">Validar o núcleo base no navegador, bloquear tarefas duplicadas e adicionar contador de alta prioridade pendente.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Tempo 4 • 55 min</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">Prática</span>
+          </div>
+          <h3 class="font-bold text-slate-900 text-lg">Refatoração & Desafios Extras</h3>
+          <p class="text-sm text-slate-600 mt-1">Separar o código em <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">storage.js</code>, <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">tasks.js</code> e <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">main.js</code> com <code class="font-mono text-xs bg-slate-100 px-1 py-0.5 rounded">defer</code> + desafios de ordenação e edição inline.</p>
+        </div>
+      </div>
     </section>
 
     <!-- ========================================================= -->
-    <!-- ABA 2: FUNDAMENTOS (TEMPO 1)                              -->
+    <!-- ABA 2: TEMPO 1 - SIMULADOR DE LÓGICA PURA & ARRAYS        -->
     <!-- ========================================================= -->
-    <section id="tab-fundamentos" class="tab-panel hidden space-y-6">
-      <!-- Laboratório 1: Texto vs Número -->
+    <section id="tab-tempo-1" class="tab-panel hidden space-y-6">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Revisão Crítica • Tempo 1</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">Por que precisamos usar <code class="font-mono text-blue-700">Number()</code>?</h2>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Laboratório Interativo: Lógica Pura & Arrays</h2>
         <p class="text-sm text-slate-600 mt-1">
-          Tudo o que o usuário digita em um <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">&lt;input&gt;</code> chega ao JavaScript como <strong>texto (string)</strong>. Teste dois valores abaixo e compare o resultado com e sem conversão:
+          Execute as funções abaixo para observar como <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">spread (...)</code>,
+          <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">map()</code>,
+          <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">filter()</code> e
+          <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">reduce()</code> operam sobre os dados sem tocar no HTML.
         </p>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-5">
-          <div class="lg:col-span-5 p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label for="calc-a" class="block text-xs font-semibold text-slate-600 mb-1">Valor A (input 1)</label>
-                <input id="calc-a" type="text" value="10" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+          <!-- Controles do Simulador -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">1. Operações de Escrita (CRUD)</h3>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input id="sim-titulo" type="text" placeholder="Ex: Revisar Pull Request" class="flex-1 px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <select id="sim-prioridade" class="px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg">
+                  <option value="baixa">Baixa</option>
+                  <option value="media" selected>Média</option>
+                  <option value="alta">Alta</option>
+                </select>
               </div>
-              <div>
-                <label for="calc-b" class="block text-xs font-semibold text-slate-600 mb-1">Valor B (input 2)</label>
-                <input id="calc-b" type="text" value="25.5" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <button type="button" id="sim-btn-add" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                + adicionarTarefa(titulo, prioridade)
+              </button>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" id="sim-btn-toggle" class="py-2 px-3 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg transition-colors">
+                  alternarStatus(1ª)
+                </button>
+                <button type="button" id="sim-btn-remove" class="py-2 px-3 bg-white hover:bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-lg transition-colors">
+                  removerTarefa(última)
+                </button>
               </div>
             </div>
-            <p class="text-xs text-slate-500">
-              Dica: tente também digitar <code class="font-mono bg-white px-1 rounded border">10,50</code> com vírgula para ver por que aparece <code class="font-mono text-red-600">NaN</code> (Not a Number).
-            </p>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">2. Consultas Puras (Sem mutar o original)</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button type="button" id="sim-btn-pendentes" class="py-2 px-3 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-semibold rounded-lg transition-colors">
+                  filter("pendentes")
+                </button>
+                <button type="button" id="sim-btn-concluidas" class="py-2 px-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-lg transition-colors">
+                  filter("concluidas")
+                </button>
+                <button type="button" id="sim-btn-resumo" class="sm:col-span-2 py-2 px-3 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-lg transition-colors">
+                  obterResumo(tarefas) com reduce()
+                </button>
+              </div>
+            </div>
+
+            <button type="button" id="sim-btn-reset" class="w-full py-2 text-xs font-medium text-slate-500 hover:text-slate-800 underline">
+              Restaurar dados iniciais do simulador
+            </button>
           </div>
 
-          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div class="p-4 rounded-xl bg-red-50/70 border border-red-200">
-              <div class="text-xs font-bold text-red-700 uppercase mb-1">Sem Number() — Concatenação</div>
-              <pre id="calc-code-str" class="text-xs font-mono text-slate-700 bg-white p-2.5 rounded-lg border border-red-100 mb-2">"10" + "25.5"</pre>
-              <div class="text-xs text-slate-600">Resultado: <strong id="calc-res-str" class="font-mono text-base text-red-700">"1025.5"</strong></div>
+          <!-- Saída do Simulador (Código + Estado Atual) -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="rounded-xl bg-slate-900 text-slate-100 overflow-hidden border border-slate-800">
+              <div class="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                <span class="text-xs font-mono text-indigo-400">Última função executada</span>
+                <span id="sim-badge-op" class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">inicialização</span>
+              </div>
+              <pre id="sim-code-view" class="p-4 text-xs font-mono text-emerald-300 overflow-x-auto leading-relaxed">// Clique em qualquer botão à esquerda para ver o código executado</pre>
             </div>
 
-            <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
-              <div class="text-xs font-bold text-emerald-700 uppercase mb-1">Com Number() — Soma Real</div>
-              <pre id="calc-code-num" class="text-xs font-mono text-slate-700 bg-white p-2.5 rounded-lg border border-emerald-100 mb-2">Number("10") + Number("25.5")</pre>
-              <div class="text-xs text-slate-600">Resultado: <strong id="calc-res-num" class="font-mono text-base text-emerald-700">35.5</strong></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="rounded-xl bg-slate-900 text-slate-100 overflow-hidden border border-slate-800">
+                <div class="px-4 py-2 bg-slate-950 border-b border-slate-800 text-xs font-mono text-amber-300">
+                  Estado Original: tarefas (<span id="sim-count">2</span> itens)
+                </div>
+                <pre id="sim-state-view" class="p-3.5 text-xs font-mono text-slate-200 overflow-auto max-h-64"></pre>
+              </div>
+
+              <div class="rounded-xl bg-slate-900 text-slate-100 overflow-hidden border border-slate-800">
+                <div class="px-4 py-2 bg-slate-950 border-b border-slate-800 text-xs font-mono text-sky-300">
+                  Saída do Console (Retorno)
+                </div>
+                <pre id="sim-console-view" class="p-3.5 text-xs font-mono text-sky-200 overflow-auto max-h-64"></pre>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Laboratório 2: Simulador de if / else -->
+      <!-- Quiz de Fixação - Tempo 1 -->
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Decisões e Funções • Tempo 1</span>
-        <h2 class="text-xl font-bold text-slate-900 mt-1">Simulador de <code class="font-mono text-blue-700">if / else</code> (Regra do Orçamento)</h2>
-        <p class="text-sm text-slate-600 mt-1">
-          Arraste o controle deslizante para mudar o valor da variável <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">total</code> e veja qual caminho do <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">if / else</code> o JavaScript escolhe:
-        </p>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-5 items-center">
-          <div class="lg:col-span-5 space-y-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
-            <div class="flex items-center justify-between text-sm font-semibold">
-              <span>Valor de <code class="font-mono text-blue-700">total</code>:</span>
-              <span id="if-total-label" class="font-mono text-lg text-slate-900">R$ 80.00</span>
-            </div>
-            <input id="if-slider" type="range" min="0" max="160" step="5" value="80" class="w-full accent-blue-600 cursor-pointer" />
-            <div class="flex justify-between text-xs text-slate-500 font-mono">
-              <span>R$ 0</span>
-              <span class="text-blue-700 font-bold">LIMITE = 100</span>
-              <span>R$ 160</span>
-            </div>
-            <div id="if-status-box" class="p-3 rounded-xl text-center text-sm font-bold bg-emerald-100 text-emerald-800 transition-colors">
-              Dentro do orçamento (Saldo: R$ 20.00)
-            </div>
-          </div>
-
-          <div class="lg:col-span-7 rounded-xl bg-slate-900 p-4 font-mono text-xs text-slate-300 space-y-1 border border-slate-800 overflow-x-auto">
-            <div class="text-slate-400">const LIMITE = 100;</div>
-            <div class="text-sky-300">let total = <span id="if-code-val">80</span>;</div>
-            <div class="pt-1">if (total &gt; LIMITE) { <span id="if-cond-badge" class="ml-2 px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">// false</span></div>
-            <div id="if-branch-true" class="pl-4 py-1 rounded transition-colors text-slate-500">
-              statusEl.textContent = "Orçamento estourado!";<br />
-              statusEl.classList.add("alerta");
-            </div>
-            <div>} else {</div>
-            <div id="if-branch-false" class="pl-4 py-1 rounded transition-colors bg-emerald-950/80 text-emerald-300 border-l-2 border-emerald-400">
-              statusEl.textContent = "Dentro do orçamento";<br />
-              statusEl.classList.remove("alerta");
-            </div>
-            <div>}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quiz 1 -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h3 class="text-lg font-bold text-slate-900 mb-1">Checagem Rápida — Fundamentos</h3>
-        <p class="text-sm text-slate-600 mb-4">
-          No nosso projeto, por que declaramos <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">const LIMITE = 100</code> e <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">let total = 0</code>?
-        </p>
+        <h3 class="text-lg font-bold text-slate-900 mb-1">Checagem Rápida — Tempo 1</h3>
+        <p class="text-sm text-slate-600 mb-4">Por que o código abaixo falha com <code class="font-mono text-xs bg-red-50 text-red-700 px-1.5 py-0.5 rounded">TypeError: Assignment to constant variable</code>?</p>
+        <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl text-xs font-mono mb-4 overflow-x-auto">const tarefas = [{ id: "1", titulo: "Estudar JS" }];
+tarefas = tarefas.filter(t =&gt; t.id !== "1");</pre>
         <div class="space-y-2" data-quiz="q1">
-          <button type="button" data-correct="true" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
-            A) Porque <code class="font-mono text-xs">LIMITE</code> é um valor fixo que não muda, enquanto <code class="font-mono text-xs">total</code> vai sendo somado e reatribuído dentro do laço <code class="font-mono text-xs">for</code>.
+          <button type="button" data-option="a" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            A) Porque o método <code class="font-mono text-xs">filter()</code> não funciona em arrays declarados com <code class="font-mono text-xs">const</code>.
           </button>
-          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
-            B) Porque <code class="font-mono text-xs">const</code> só serve para números maiores que 50 e <code class="font-mono text-xs">let</code> só serve para começar em zero.
+          <button type="button" data-option="b" data-correct="true" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            B) Porque <code class="font-mono text-xs">filter()</code> retorna um novo array e tentamos reatribuir a variável <code class="font-mono text-xs">tarefas</code> declarada como <code class="font-mono text-xs">const</code> (deveria ser <code class="font-mono text-xs">let</code>).
           </button>
-          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
-            C) Não há diferença prática entre <code class="font-mono text-xs">const</code> e <code class="font-mono text-xs">let</code> no JavaScript.
+          <button type="button" data-option="c" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            C) Porque objetos dentro de arrays em JavaScript são sempre imutáveis.
           </button>
         </div>
         <div id="feedback-q1" class="hidden mt-3 p-3.5 rounded-xl text-sm"></div>
@@ -270,104 +291,100 @@ btnAdicionar.addEventListener("click", function () {
     </section>
 
     <!-- ========================================================= -->
-    <!-- ABA 3: DOM & PROJETO VIVO (TEMPO 2)                       -->
+    <!-- ABA 3: TEMPO 2 - APP AO VIVO + INSPETOR DE DOM/STORAGE    -->
     <!-- ========================================================= -->
-    <section id="tab-dom-vivo" class="tab-panel hidden space-y-6">
+    <section id="tab-tempo-2" class="tab-panel hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Coluna Esquerda: Projeto Lista de Compras Funcionando -->
+        <!-- Coluna Esquerda: Projeto Base Funcionando -->
         <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-          <div class="mb-4">
-            <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Projeto Final de Referência</span>
-            <h2 class="text-xl font-bold text-slate-900">Lista de Compras</h2>
-            <p class="text-xs text-slate-500">Orçamento disponível: <strong>R$ 100,00</strong> (teste adicionar itens para ultrapassar o limite!)</p>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Aplicação em Execução</span>
+              <h2 class="text-xl font-bold text-slate-900">Gerenciador de Demandas</h2>
+            </div>
+            <div class="flex gap-3 text-xs font-medium bg-slate-100 px-3 py-1.5 rounded-lg">
+              <span>Total: <strong id="live-total" class="text-slate-900">0</strong></span>
+              <span>Pendentes: <strong id="live-pendentes" class="text-amber-700">0</strong></span>
+              <span>Concluídas: <strong id="live-concluidas" class="text-emerald-700">0</strong></span>
+            </div>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-2 mb-2">
-            <input id="demo-nome" type="text" placeholder="Nome do item (ex: Café)" autocomplete="off" class="flex-1 px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <!-- Formulário -->
+          <form id="live-form" class="flex flex-col sm:flex-row gap-2 mb-4">
+            <input id="live-input-titulo" type="text" required autocomplete="off" placeholder="Descreva a demanda (tente até digitar HTML!)..." class="flex-1 px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             <div class="flex gap-2">
-              <input id="demo-preco" type="number" step="0.01" placeholder="Preço" class="w-28 sm:w-32 px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              <button type="button" id="demo-btn-add" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors shrink-0">
+              <select id="live-select-prioridade" class="px-3 py-2.5 text-sm border border-slate-300 rounded-xl bg-white">
+                <option value="baixa">Baixa</option>
+                <option value="media" selected>Média</option>
+                <option value="alta">Alta</option>
+              </select>
+              <button type="submit" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shrink-0">
                 Adicionar
               </button>
             </div>
-          </div>
+          </form>
 
-          <p id="demo-mensagem" class="min-h-[1.25rem] text-xs font-medium text-red-600 mb-3"></p>
-
-          <!-- Resumo -->
-          <div class="grid grid-cols-3 gap-2 bg-slate-50 border border-slate-200 p-3 rounded-xl text-center mb-3">
-            <div>
-              <div class="text-[11px] text-slate-500 uppercase font-semibold">Itens</div>
-              <div id="demo-qtd" class="text-base font-bold text-slate-900">0</div>
-            </div>
-            <div>
-              <div class="text-[11px] text-slate-500 uppercase font-semibold">Total</div>
-              <div id="demo-total" class="text-base font-bold text-slate-900">R$ 0.00</div>
-            </div>
-            <div>
-              <div class="text-[11px] text-slate-500 uppercase font-semibold">Saldo</div>
-              <div id="demo-saldo" class="text-base font-bold text-slate-900">R$ 100.00</div>
+          <!-- Busca e Filtros -->
+          <div class="flex flex-col sm:flex-row gap-2 mb-4">
+            <input id="live-input-busca" type="search" placeholder="Buscar por título..." class="flex-1 px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <div id="live-filtros" class="flex gap-1 bg-slate-100 p-1 rounded-xl shrink-0">
+              <button type="button" data-filtro="todas" class="live-filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-700 shadow-sm">Todas</button>
+              <button type="button" data-filtro="pendentes" class="live-filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Pendentes</button>
+              <button type="button" data-filtro="concluidas" class="live-filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900">Concluídas</button>
             </div>
           </div>
 
-          <!-- Status do Orçamento -->
-          <div id="demo-status" class="text-center text-sm font-bold py-2 px-3 rounded-xl bg-emerald-100 text-emerald-800 mb-4 transition-colors">
-            Dentro do orçamento
-          </div>
-
-          <!-- Lista -->
-          <ul id="demo-lista" class="space-y-2 min-h-[110px] mb-4"></ul>
-
-          <div class="flex justify-end">
-            <button type="button" id="demo-btn-limpar" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 transition-colors">
-              Limpar tudo
-            </button>
-          </div>
+          <!-- Lista (Alvo da Delegação de Eventos) -->
+          <ul id="live-lista" class="space-y-2 min-h-[160px]"></ul>
         </div>
 
-        <!-- Coluna Direita: Raio-X da Memória (Array + Laço for) -->
+        <!-- Coluna Direita: Raio-X (DevTools Didático) -->
         <div class="lg:col-span-5 space-y-4">
           <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 shadow-sm">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400">
-                Raio-X da Memória: Array <code class="text-amber-300">itens</code>
-              </h3>
-              <span id="xray-len" class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">itens.length = 0</span>
-            </div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-3">
+              Raio-X de Delegação de Eventos
+            </h3>
             <p class="text-xs text-slate-400 mb-3">
-              Cada clique em "Adicionar" executa <code class="text-emerald-300">itens.push({ nome, preco })</code>. Veja o conteúdo real na memória:
+              Interaja com a lista ao lado (marque um checkbox ou exclua um item) para ver o que o listener único na <code class="text-amber-300">&lt;ul&gt;</code> captura:
             </p>
-            <pre id="xray-array" class="font-mono text-xs bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-emerald-300 overflow-auto max-h-52">[]</pre>
+            <div id="event-xray" class="font-mono text-xs bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5 text-slate-300">
+              <div><span class="text-slate-500">evento:</span> <span class="text-emerald-400">aguardando interação...</span></div>
+              <div><span class="text-slate-500">event.target:</span> <span class="text-sky-300">-</span></div>
+              <div><span class="text-slate-500">dataset.acao:</span> <span class="text-amber-300">-</span></div>
+              <div><span class="text-slate-500">closest("li").dataset.id:</span> <span class="text-purple-300">-</span></div>
+            </div>
           </div>
 
           <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 shadow-sm">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
-              O que <code class="text-sky-300">atualizarTela()</code> acabou de fazer
-            </h3>
-            <ul id="xray-log" class="font-mono text-xs bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-slate-300 space-y-1.5">
-              <li>1. Limpou a &lt;ul&gt; com innerHTML = ""</li>
-              <li>2. Rodou o laço for 0 vez(es)</li>
-              <li>3. Calculou total = 0.00 e saldo = 100.00</li>
-            </ul>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                Application &gt; localStorage
+              </h3>
+              <span class="text-[11px] font-mono text-slate-400">chave: guia_demandas_v1</span>
+            </div>
+            <p class="text-xs text-slate-400 mb-3">
+              Todo array é convertido em texto com <code class="text-emerald-300">JSON.stringify()</code>. Recarregue a página (F5) e veja seus itens permanecerem!
+            </p>
+            <pre id="storage-xray" class="font-mono text-[11px] bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-emerald-300 overflow-auto max-h-48 whitespace-pre-wrap break-all"></pre>
           </div>
         </div>
       </div>
 
-      <!-- Quiz 2 -->
+      <!-- Quiz de Fixação - Tempo 2 -->
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h3 class="text-lg font-bold text-slate-900 mb-1">Checagem Rápida — DOM e Eventos</h3>
+        <h3 class="text-lg font-bold text-slate-900 mb-1">Checagem Rápida — Tempo 2</h3>
         <p class="text-sm text-slate-600 mb-4">
-          Por que colocamos <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">listaEl.innerHTML = ""</code> na primeira linha da função <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">atualizarTela()</code>?
+          Por que usamos <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">titulo.textContent = tarefa.titulo</code> em vez de montar a string com <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">innerHTML</code>?
         </p>
         <div class="space-y-2" data-quiz="q2">
-          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
-            A) Para apagar os dados de dentro do array <code class="font-mono text-xs">itens</code>.
+          <button type="button" data-option="a" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            A) Porque <code class="font-mono text-xs">innerHTML</code> foi removido dos navegadores modernos.
           </button>
-          <button type="button" data-correct="true" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
-            B) Para limpar os <code class="font-mono text-xs">&lt;li&gt;</code> antigos da tela antes de o laço <code class="font-mono text-xs">for</code> desenhar o array completo novamente, evitando itens duplicados.
+          <button type="button" data-option="b" data-correct="true" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            B) Para evitar ataques de XSS (Cross-Site Scripting): <code class="font-mono text-xs">textContent</code> trata qualquer tag HTML digitada pelo usuário como texto puro, sem executá-la.
           </button>
-          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
-            C) Porque o navegador exige apagar o HTML inteiro antes de usar <code class="font-mono text-xs">Number()</code>.
+          <button type="button" data-option="c" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            C) Porque <code class="font-mono text-xs">textContent</code> salva automaticamente o valor no <code class="font-mono text-xs">localStorage</code>.
           </button>
         </div>
         <div id="feedback-q2" class="hidden mt-3 p-3.5 rounded-xl text-sm"></div>
@@ -375,125 +392,78 @@ btnAdicionar.addEventListener("click", function () {
     </section>
 
     <!-- ========================================================= -->
-    <!-- ABA 4: EXERCÍCIOS PRÁTICOS (TEMPOS 3 E 4)                 -->
+    <!-- ABA 4: TEMPOS 3 E 4 - LABORATÓRIO PRÁTICO (EXERCÍCIOS)    -->
     <!-- ========================================================= -->
-    <section id="tab-exercicios" class="tab-panel hidden space-y-6">
+    <section id="tab-laboratorio" class="tab-panel hidden space-y-6">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Roteiro de Exercícios (Tempos 3 e 4)</h2>
             <p class="text-sm text-slate-600 mt-1">
-              Trabalhe no seu arquivo <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">app.js</code> e marque cada etapa concluída. Tente resolver sozinho primeiro; se travar, abra a <strong>Dica</strong> antes de consultar o exemplo de código.
+              Marque cada entrega conforme concluir no seu código local. Use as dicas antes de abrir a solução de referência.
             </p>
           </div>
-          <span id="lab-counter" class="inline-flex items-center px-3.5 py-1.5 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold shrink-0">
-            0 / 5 concluídos
+          <span id="lab-counter" class="inline-flex items-center px-3.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 text-xs font-bold shrink-0">
+            0 / 6 concluídos
           </span>
         </div>
       </div>
 
-      <!-- Cards dos Exercícios 1 a 5 -->
+      <!-- Lista de Exercícios gerada dinamicamente para manter o código limpo -->
       <div id="exercises-container" class="space-y-4"></div>
-
-      <!-- Desafios Extras -->
-      <div class="bg-amber-50/70 rounded-2xl border border-amber-200 p-6">
-        <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Terminou antes do tempo?</span>
-        <h3 class="text-lg font-bold text-slate-900 mt-1 mb-3">Desafios Extras (Bônus)</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-white p-4 rounded-xl border border-amber-200">
-            <div class="font-bold text-slate-900 text-sm mb-1">1. Desfazer último item</div>
-            <p class="text-xs text-slate-600 leading-relaxed">Crie um botão no HTML (<code class="font-mono bg-slate-100 px-1 rounded">id="btn-desfazer"</code>) que chama <code class="font-mono bg-slate-100 px-1 rounded">itens.pop()</code> e depois <code class="font-mono bg-slate-100 px-1 rounded">atualizarTela()</code>.</p>
-          </div>
-          <div class="bg-white p-4 rounded-xl border border-amber-200">
-            <div class="font-bold text-slate-900 text-sm mb-1">2. Desconto progressivo</div>
-            <p class="text-xs text-slate-600 leading-relaxed">Se <code class="font-mono bg-slate-100 px-1 rounded">total &gt; 150</code>, calcule 10% de desconto (<code class="font-mono bg-slate-100 px-1 rounded">total * 0.9</code>) e mostre o valor promocional na tela.</p>
-          </div>
-          <div class="bg-white p-4 rounded-xl border border-amber-200">
-            <div class="font-bold text-slate-900 text-sm mb-1">3. Campo de quantidade</div>
-            <p class="text-xs text-slate-600 leading-relaxed">Adicione um <code class="font-mono bg-slate-100 px-1 rounded">&lt;input type="number" value="1"&gt;</code> no HTML e multiplique <code class="font-mono bg-slate-100 px-1 rounded">item.preco * item.quantidade</code> na soma.</p>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- ========================================================= -->
-    <!-- ABA 5: COLA RÁPIDA & ERROS COMUNS                         -->
+    <!-- ABA 5: COLA RÁPIDA (CHEATSHEET)                           -->
     <!-- ========================================================= -->
-    <section id="tab-cola" class="tab-panel hidden space-y-6">
+    <section id="tab-cheatsheet" class="tab-panel hidden space-y-6">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mb-1">Cola Rápida de Sintaxe</h2>
-        <p class="text-sm text-slate-600 mb-6">Os comandos essenciais do seu primeiro contato com JavaScript em um só lugar.</p>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mb-1">Cola Rápida de JavaScript</h2>
+        <p class="text-sm text-slate-600 mb-6">Referência direta dos recursos usados na construção do Gerenciador de Demandas.</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
-            <h3 class="font-bold text-slate-900 text-sm mb-2">1. Variáveis e Conversão</h3>
-            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">const LIMITE = 100;       // Valor fixo
-let total = 0;            // Valor que muda
+            <h3 class="font-bold text-slate-900 text-sm mb-2">Spread Operator (Imutabilidade)</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">// Adicionar sem mutar
+tarefas = [...tarefas, novaTarefa];
 
-const nome = inputNome.value.trim();
-const preco = Number(inputPreco.value);</pre>
+// Clonar objeto alterando 1 campo
+{ ...tarefa, concluida: !tarefa.concluida }</pre>
           </div>
 
           <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
-            <h3 class="font-bold text-slate-900 text-sm mb-2">2. Arrays e Laço for</h3>
-            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">let itens = [];
-itens.push({ nome: "Arroz", preco: 25.5 });
+            <h3 class="font-bold text-slate-900 text-sm mb-2">map, filter e reduce</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">// Transforma cada item (mesmo tamanho)
+lista.map(t =&gt; t.id === id ? { ...t, concluida: true } : t);
 
-for (let i = 0; i &lt; itens.length; i++) {
-  const item = itens[i];
-  total = total + item.preco;
-}</pre>
+// Mantém apenas quem retorna true
+lista.filter(t =&gt; !t.concluida);
+
+// Consolida em um único valor/objeto
+lista.reduce((acc, t) =&gt; acc + 1, 0);</pre>
           </div>
 
           <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
-            <h3 class="font-bold text-slate-900 text-sm mb-2">3. Selecionar, Ouvir e Criar no DOM</h3>
-            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">const btn = document.querySelector("#btn-adicionar");
+            <h3 class="font-bold text-slate-900 text-sm mb-2">Delegação de Eventos + dataset</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">listaEl.addEventListener("click", (e) =&gt; {
+  const acao = e.target.dataset.acao;
+  if (!acao) return;
 
-btn.addEventListener("click", function () {
-  const li = document.createElement("li");
-  li.textContent = "Arroz - R$ 25.50";
-  listaEl.appendChild(li);
+  const id = e.target.closest(".tarefa-item")?.dataset.id;
+  if (acao === "remover") removerTarefa(id);
 });</pre>
           </div>
 
           <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
-            <h3 class="font-bold text-slate-900 text-sm mb-2">4. Condicionais e Classes CSS</h3>
-            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">if (total &gt; LIMITE) {
-  statusEl.textContent = "Orçamento estourado!";
-  statusEl.classList.add("alerta");
-} else {
-  statusEl.textContent = "Dentro do orçamento";
-  statusEl.classList.remove("alerta");
-}</pre>
-          </div>
-        </div>
-      </div>
+            <h3 class="font-bold text-slate-900 text-sm mb-2">localStorage + JSON + defer</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">// Salvar e carregar com segurança
+localStorage.setItem("chave", JSON.stringify(tarefas));
+const dados = JSON.parse(localStorage.getItem("chave") || "[]");
 
-      <!-- Guia de Erros Comuns -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <h2 class="text-xl font-bold text-slate-900 mb-1">Socorro! Meu código não funcionou</h2>
-        <p class="text-sm text-slate-600 mb-4">Antes de travar, abra o Console (<kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-xs">F12</kbd>) e confira se o seu problema é um destes:</p>
-
-        <div class="space-y-3">
-          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <div class="font-bold text-sm text-red-700">1. O total apareceu como "01025" em vez de "35.00"</div>
-            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Faltou converter o preço com <code class="font-mono bg-white px-1 rounded border">Number(inputPreco.value)</code>. Sem isso, o JS junta textos em vez de somar.</p>
-          </div>
-          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <div class="font-bold text-sm text-red-700">2. Erro "Cannot read properties of null" no Console</div>
-            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> O <code class="font-mono bg-white px-1 rounded border">querySelector</code> não achou o elemento. Confira se você colocou o <code class="font-mono bg-white px-1 rounded border">#</code> antes do id e se o nome está idêntico ao <code class="font-mono bg-white px-1 rounded border">index.html</code>.</p>
-          </div>
-          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <div class="font-bold text-sm text-red-700">3. Os itens antigos se repetem toda vez que adiciono um novo</div>
-            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Faltou limpar a lista com <code class="font-mono bg-white px-1 rounded border">listaEl.innerHTML = "";</code> no início da função <code class="font-mono bg-white px-1 rounded border">atualizarTela()</code>.</p>
-          </div>
-          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <div class="font-bold text-sm text-red-700">4. O alerta vermelho não some quando clico em "Limpar tudo"</div>
-            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Você colocou <code class="font-mono bg-white px-1 rounded border">classList.add("alerta")</code> no <code class="font-mono bg-white px-1 rounded border">if</code>, mas esqueceu <code class="font-mono bg-white px-1 rounded border">classList.remove("alerta")</code> no <code class="font-mono bg-white px-1 rounded border">else</code>.</p>
-          </div>
-          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
-            <div class="font-bold text-sm text-red-700">5. Alterei o código e nada mudou na tela</div>
-            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Verifique se você salvou o arquivo no editor (<kbd class="px-1 bg-white border rounded font-mono">Ctrl+S</kbd>) e recarregou a página no navegador (<kbd class="px-1 bg-white border rounded font-mono">F5</kbd>).</p>
+// No HTML (ordem importa com file://)
+&lt;script defer src="js/storage.js"&gt;&lt;/script&gt;
+&lt;script defer src="js/tasks.js"&gt;&lt;/script&gt;
+&lt;script defer src="js/main.js"&gt;&lt;/script&gt;</pre>
           </div>
         </div>
       </div>
@@ -503,16 +473,22 @@ btn.addEventListener("click", function () {
 
   <footer class="border-t border-slate-200 bg-white py-4 mt-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
-      <span>Guia de Referência do Aluno — Primeiro Contato com JavaScript</span>
-      <span>Atalho amigo: <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-slate-700">F12</kbd> abre o Console do navegador</span>
+      <span>Material Didático Interativo — Aula de JavaScript Incremental (4h)</span>
+      <span>Dica: Pressione <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-slate-700">F12</kbd> para explorar o DevTools</span>
     </div>
   </footer>
 
   <script>
     /* =====================================================================
-       UTILITÁRIOS (Notificações Toast e Cópia segura com execCommand)
+       UTILITÁRIOS GERAIS (Toast, Clipboard seguro, ID com fallback)
        ===================================================================== */
-    function mostrarToast(mensagem, tipo) {
+    function gerarId() {
+      return window.crypto && window.crypto.randomUUID
+        ? window.crypto.randomUUID().slice(0, 8)
+        : String(Date.now()).slice(-6) + "-" + Math.random().toString(16).slice(2, 5);
+    }
+
+    function mostrarToast(mensagem, tipo = "info") {
       const container = document.getElementById("toast-container");
       const toast = document.createElement("div");
       const cores = {
@@ -520,14 +496,14 @@ btn.addEventListener("click", function () {
         sucesso: "bg-emerald-600 text-white",
         aviso: "bg-amber-600 text-white",
       };
-      toast.className = "pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 " + (cores[tipo] || cores.info);
+      toast.className = `pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 ${cores[tipo] || cores.info}`;
       toast.textContent = mensagem;
       container.appendChild(toast);
 
-      setTimeout(function () {
+      setTimeout(() => {
         toast.classList.add("opacity-0", "translate-y-2");
-        setTimeout(function () { toast.remove(); }, 300);
-      }, 2500);
+        setTimeout(() => toast.remove(), 300);
+      }, 2600);
     }
 
     function copiarTexto(texto) {
@@ -540,72 +516,21 @@ btn.addEventListener("click", function () {
         textarea.select();
         document.execCommand("copy");
         textarea.remove();
-        mostrarToast("Código copiado!", "sucesso");
-      } catch (erro) {
+        mostrarToast("Código copiado para a área de transferência!", "sucesso");
+      } catch (err) {
         mostrarToast("Não foi possível copiar automaticamente.", "aviso");
       }
     }
 
     /* =====================================================================
-       DADOS DOS EXERCÍCIOS (TEMPOS 3 E 4)
+       SISTEMA DE PROGRESSO DO ALUNO (Persistido no localStorage)
        ===================================================================== */
-    const EXERCICIOS = [
-      {
-        id: "ex1",
-        bloco: "Tempo 3 • Exercício 1",
-        corBadge: "bg-blue-50 text-blue-700",
-        titulo: "1. Base Funcional na Tela",
-        descricao: "Faça o botão 'Adicionar' ler o nome (#nome) e o preço (#preco), guardar o objeto no array itens, desenhar cada <li> na <ul id='lista'>, somar o #total e limpar os campos após o clique.",
-        dica: "Lembre-se de usar Number(inputPreco.value) para somar como número e listaEl.innerHTML = '' no início de atualizarTela() para não duplicar a lista.",
-        solucao: `function atualizarTela() {\n  listaEl.innerHTML = "";\n  let total = 0;\n\n  for (let i = 0; i < itens.length; i++) {\n    const item = itens[i];\n    total = total + item.preco;\n\n    const li = document.createElement("li");\n    li.textContent = item.nome + " - R$ " + item.preco.toFixed(2);\n    listaEl.appendChild(li);\n  }\n\n  totalEl.textContent = "R$ " + total.toFixed(2);\n}`,
-      },
-      {
-        id: "ex2",
-        bloco: "Tempo 3 • Exercício 2",
-        corBadge: "bg-blue-50 text-blue-700",
-        titulo: "2. Validação de Entrada com if",
-        descricao: "Impeça o cadastro se o nome estiver vazio ('') ou se o preço for menor ou igual a zero (<= 0). Mostre um aviso no <p id='mensagem'> e não adicione o item. Quando um item válido for salvo, limpe o aviso.",
-        dica: "Coloque um if logo após ler nome e preco. Dentro do if, escreva a mensagem e use return; para parar a função antes do itens.push().",
-        solucao: `if (nome === "" || preco <= 0 || isNaN(preco)) {\n  mensagemEl.textContent = "Informe um nome válido e um preço maior que zero.";\n  return;\n}\n\nmensagemEl.textContent = "";`,
-      },
-      {
-        id: "ex3",
-        bloco: "Tempo 3 • Exercício 3",
-        corBadge: "bg-blue-50 text-blue-700",
-        titulo: "3. Alerta Visual de Orçamento",
-        descricao: "Dentro de atualizarTela(), verifique se total > LIMITE (100). Se estourar, mude #status-orcamento para 'Orçamento estourado!' e adicione a classe 'alerta'. Caso contrário, volte o texto normal e remova a classe.",
-        dica: "Use statusEl.classList.add('alerta') no if e não esqueça do statusEl.classList.remove('alerta') no else.",
-        solucao: `if (total > LIMITE) {\n  statusEl.textContent = "Orçamento estourado!";\n  statusEl.classList.add("alerta");\n} else {\n  statusEl.textContent = "Dentro do orçamento";\n  statusEl.classList.remove("alerta");\n}`,
-      },
-      {
-        id: "ex4",
-        bloco: "Tempo 4 • Exercício 4",
-        corBadge: "bg-emerald-50 text-emerald-700",
-        titulo: "4. Contador de Itens e Saldo Restante",
-        descricao: "Atualize o elemento #qtd-itens com a quantidade total de itens cadastrados e o elemento #saldo com quanto ainda resta do orçamento de R$ 100,00.",
-        dica: "A quantidade vem de itens.length e o saldo é simplesmente const saldo = LIMITE - total; formatado com saldo.toFixed(2).",
-        solucao: `const saldo = LIMITE - total;\nqtdItensEl.textContent = itens.length;\nsaldoEl.textContent = "R$ " + saldo.toFixed(2);`,
-      },
-      {
-        id: "ex5",
-        bloco: "Tempo 4 • Exercício 5",
-        corBadge: "bg-emerald-50 text-emerald-700",
-        titulo: "5. Botão 'Limpar tudo'",
-        descricao: "Selecione #btn-limpar e ouça o evento de clique. Ao clicar, esvazie o array (itens = []), limpe a mensagem de erro e chame atualizarTela() para zerar a tela e o alerta.",
-        dica: "Como atualizarTela() já recalcula tudo a partir do array itens, basta zerar o array e chamar atualizarTela() novamente!",
-        solucao: `const btnLimpar = document.querySelector("#btn-limpar");\n\nbtnLimpar.addEventListener("click", function () {\n  itens = [];\n  mensagemEl.textContent = "";\n  atualizarTela();\n});`,
-      },
-    ];
-
-    /* =====================================================================
-       PROGRESSO DO ALUNO (Salvo no localStorage com try/catch)
-       ===================================================================== */
-    const STORAGE_KEY = "guia_iniciante_js_progresso_v1";
+    const STORAGE_PROGRESSO = "guia_js_progresso_v1";
     let progresso = { quizzes: {}, exercicios: {} };
 
     function carregarProgresso() {
       try {
-        const salvo = localStorage.getItem(STORAGE_KEY);
+        const salvo = localStorage.getItem(STORAGE_PROGRESSO);
         if (salvo) {
           const parsed = JSON.parse(salvo);
           if (parsed && typeof parsed === "object") {
@@ -622,288 +547,490 @@ btn.addEventListener("click", function () {
 
     function salvarProgresso() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(progresso));
+        localStorage.setItem(STORAGE_PROGRESSO, JSON.stringify(progresso));
       } catch (e) {
-        // Ignora silenciosamente se bloqueado
+        // Ignora silenciosamente se storage estiver indisponível
       }
       atualizarBarraProgresso();
     }
 
     function atualizarBarraProgresso() {
-      const totalItens = 2 + EXERCICIOS.length;
-      const qFeitos = Object.values(progresso.quizzes).filter(Boolean).length;
-      const eFeitos = Object.values(progresso.exercicios).filter(Boolean).length;
-      const pct = Math.round(((qFeitos + eFeitos) / totalItens) * 100);
+      const totalItens = 2 + EXERCICIOS.length; // 2 quizzes + 6 exercícios
+      const quizzesFeitos = Object.values(progresso.quizzes).filter(Boolean).length;
+      const exerciciosFeitos = Object.values(progresso.exercicios).filter(Boolean).length;
+      const pct = Math.round(((quizzesFeitos + exerciciosFeitos) / totalItens) * 100);
 
-      document.getElementById("progress-bar").style.width = pct + "%";
-      document.getElementById("progress-label").textContent = pct + "% concluído";
-      document.getElementById("lab-counter").textContent = eFeitos + " / " + EXERCICIOS.length + " concluídos";
+      document.getElementById("progress-bar").style.width = `${pct}%`;
+      document.getElementById("progress-label").textContent = `${pct}% concluído`;
+      document.getElementById("lab-counter").textContent = `${exerciciosFeitos} / ${EXERCICIOS.length} concluídos`;
     }
 
     /* =====================================================================
        NAVEGAÇÃO POR ABAS
        ===================================================================== */
-    document.getElementById("nav-tabs").addEventListener("click", function (event) {
+    const navTabs = document.getElementById("nav-tabs");
+    navTabs.addEventListener("click", (event) => {
       const btn = event.target.closest(".tab-btn");
       if (!btn) return;
-      const alvo = btn.dataset.tab;
 
-      document.querySelectorAll(".tab-btn").forEach(function (b) {
+      const targetId = btn.dataset.tab;
+
+      document.querySelectorAll(".tab-btn").forEach((b) => {
         const ativo = b === btn;
         b.className = ativo
-          ? "tab-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors bg-blue-50 text-blue-700"
+          ? "tab-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors bg-indigo-50 text-indigo-700"
           : "tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors";
       });
 
-      document.querySelectorAll(".tab-panel").forEach(function (panel) {
-        panel.classList.toggle("hidden", panel.id !== "tab-" + alvo);
+      document.querySelectorAll(".tab-panel").forEach((panel) => {
+        panel.classList.toggle("hidden", panel.id !== `tab-${targetId}`);
       });
     });
 
     /* =====================================================================
-       ABA 1: DIAGRAMA DO CICLO DE 4 PASSOS
+       ABA 1: DIAGRAMA INTERATIVO DE ARQUITETURA
        ===================================================================== */
-    const CYCLE_INFO = {
-      clique: {
-        title: "1. Ouvir o Clique do Botão",
-        desc: "Primeiro selecionamos o botão no HTML com document.querySelector('#btn-adicionar') e dizemos ao navegador qual função deve rodar quando o usuário clicar nele.",
-        code: `const btnAdicionar = document.querySelector("#btn-adicionar");\n\nbtnAdicionar.addEventListener("click", function () {\n  // O código daqui de dentro só roda no clique!\n});`,
+    const ARCH_INFO = {
+      evento: {
+        title: "1. Evento do Usuário (main.js)",
+        desc: "Tudo começa quando o usuário envia o formulário, digita na busca ou clica em um item. Usamos addEventListener e event.preventDefault() para assumir o controle sem recarregar a página.",
+        code: `form.addEventListener("submit", (e) => {\n  e.preventDefault();\n  const nova = criarTarefa(input.value);\n  atualizarEstado([...tarefas, nova]);\n});`,
       },
-      ler: {
-        title: "2. Ler Inputs e Converter para Número",
-        desc: "Dentro do clique, lemos o texto digitado com .value. Para o preço, usamos Number() para transformar texto em número e poder somar corretamente.",
-        code: `const nome = inputNome.value.trim();\nconst preco = Number(inputPreco.value);`,
+      estado: {
+        title: "2. Regra de Negócio e Estado (tasks.js)",
+        desc: "Funções puras recebem a lista atual e devolvem uma nova lista (com spread, map ou filter). Nenhuma referência ao DOM entra aqui, o que facilita testes e manutenção.",
+        code: `function alternarStatusTarefa(lista, id) {\n  return lista.map((t) =>\n    t.id === id ? { ...t, concluida: !t.concluida } : t\n  );\n}`,
       },
-      array: {
-        title: "3. Guardar na Lista (Array) em Memória",
-        desc: "Agrupamos o nome e o preço em um objeto { nome, preco } e colocamos no final do array itens usando o método .push().",
-        code: `let itens = [];\n\nitens.push({ nome: nome, preco: preco });\nconsole.table(itens);`,
+      persistencia: {
+        title: "3. Persistência no Navegador (storage.js)",
+        desc: "Sempre que o estado muda, serializamos o array para texto JSON e salvamos no localStorage dentro de um bloco try/catch para evitar falhas inesperadas.",
+        code: `function salvarTarefas(tarefas) {\n  try {\n    localStorage.setItem("demandas_v1", JSON.stringify(tarefas));\n  } catch (erro) {\n    console.error("Falha ao salvar:", erro);\n  }\n}`,
       },
-      tela: {
-        title: "4. Atualizar a Tela com Laço for",
-        desc: "Limpamos a <ul>, percorremos o array com um laço for somando o total e criamos um <li> para cada item com createElement e textContent.",
-        code: `listaEl.innerHTML = "";\nlet total = 0;\n\nfor (let i = 0; i < itens.length; i++) {\n  total = total + itens[i].preco;\n  const li = document.createElement("li");\n  li.textContent = itens[i].nome;\n  listaEl.appendChild(li);\n}`,
+      render: {
+        title: "4. Renderização Segura no DOM (main.js)",
+        desc: "Por fim, renderizar() lê o estado atualizado, aplica os filtros de visualização e reconstrói a lista usando createElement e textContent (proteção contra XSS).",
+        code: `const titulo = document.createElement("span");\ntitulo.textContent = tarefa.titulo; // Seguro!\nlistaEl.appendChild(li);`,
       },
     };
 
-    document.getElementById("cycle-steps").addEventListener("click", function (event) {
-      const card = event.target.closest(".cycle-card");
+    document.getElementById("arch-steps").addEventListener("click", (event) => {
+      const card = event.target.closest(".arch-card");
       if (!card) return;
-      const info = CYCLE_INFO[card.dataset.step];
+      const chave = card.dataset.arch;
+      const info = ARCH_INFO[chave];
       if (!info) return;
 
-      document.querySelectorAll(".cycle-card").forEach(function (c) {
+      document.querySelectorAll(".arch-card").forEach((c) => {
         const ativo = c === card;
         c.className = ativo
-          ? "cycle-card text-left p-4 rounded-xl border-2 border-blue-600 bg-blue-50/60 transition-all"
-          : "cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all";
+          ? "arch-card text-left p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50/60 transition-all"
+          : "arch-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all";
       });
 
-      document.getElementById("cycle-title").textContent = info.title;
-      document.getElementById("cycle-desc").textContent = info.desc;
-      document.getElementById("cycle-code").textContent = info.code;
+      document.getElementById("arch-detail-title").textContent = info.title;
+      document.getElementById("arch-detail-desc").textContent = info.desc;
+      document.getElementById("arch-detail-code").textContent = info.code;
     });
 
     /* =====================================================================
-       ABA 2: LABORATÓRIOS DO TEMPO 1 (Number() e if/else)
+       ABA 2: SIMULADOR DO TEMPO 1 (LÓGICA PURA & ARRAYS)
        ===================================================================== */
-    function atualizarComparadorNumber() {
-      const a = document.getElementById("calc-a").value;
-      const b = document.getElementById("calc-b").value;
-
-      document.getElementById("calc-code-str").textContent = '"' + a + '" + "' + b + '"';
-      document.getElementById("calc-res-str").textContent = '"' + (a + b) + '"';
-
-      const somaNum = Number(a) + Number(b);
-      document.getElementById("calc-code-num").textContent = 'Number("' + a + '") + Number("' + b + '")';
-      document.getElementById("calc-res-num").textContent = isNaN(somaNum) ? "NaN (use ponto, não vírgula!)" : String(somaNum);
-    }
-
-    document.getElementById("calc-a").addEventListener("input", atualizarComparadorNumber);
-    document.getElementById("calc-b").addEventListener("input", atualizarComparadorNumber);
-
-    function atualizarSimuladorIf() {
-      const total = Number(document.getElementById("if-slider").value);
-      const limite = 100;
-      const estourou = total > limite;
-      const saldo = limite - total;
-
-      document.getElementById("if-total-label").textContent = "R$ " + total.toFixed(2);
-      document.getElementById("if-code-val").textContent = String(total);
-      document.getElementById("if-cond-badge").textContent = estourou ? "// true (entra no if)" : "// false (vai para o else)";
-
-      const box = document.getElementById("if-status-box");
-      const branchTrue = document.getElementById("if-branch-true");
-      const branchFalse = document.getElementById("if-branch-false");
-
-      if (estourou) {
-        box.className = "p-3 rounded-xl text-center text-sm font-bold bg-red-100 text-red-800 transition-colors";
-        box.textContent = "Orçamento estourado! (Saldo: R$ " + saldo.toFixed(2) + ")";
-        branchTrue.className = "pl-4 py-1 rounded transition-colors bg-red-950/80 text-red-300 border-l-2 border-red-400";
-        branchFalse.className = "pl-4 py-1 rounded transition-colors text-slate-500";
-      } else {
-        box.className = "p-3 rounded-xl text-center text-sm font-bold bg-emerald-100 text-emerald-800 transition-colors";
-        box.textContent = "Dentro do orçamento (Saldo: R$ " + saldo.toFixed(2) + ")";
-        branchTrue.className = "pl-4 py-1 rounded transition-colors text-slate-500";
-        branchFalse.className = "pl-4 py-1 rounded transition-colors bg-emerald-950/80 text-emerald-300 border-l-2 border-emerald-400";
-      }
-    }
-
-    document.getElementById("if-slider").addEventListener("input", atualizarSimuladorIf);
-
-    /* =====================================================================
-       ABA 3: PROJETO LISTA DE COMPRAS AO VIVO + RAIO-X
-       ===================================================================== */
-    const DEMO_LIMITE = 100;
-    let demoItens = [
-      { nome: "Arroz 5kg", preco: 28.5 },
-      { nome: "Café 500g", preco: 19.9 },
+    const SIM_INICIAL = () => [
+      { id: "a1b2", titulo: "Configurar ambiente", prioridade: "alta", concluida: false },
+      { id: "c3d4", titulo: "Escrever documentação", prioridade: "baixa", concluida: true },
     ];
 
-    function atualizarDemoLista() {
-      const listaEl = document.getElementById("demo-lista");
-      listaEl.innerHTML = "";
-      let total = 0;
+    let simTarefas = SIM_INICIAL();
 
-      if (demoItens.length === 0) {
-        const vazio = document.createElement("li");
-        vazio.className = "text-center text-xs text-slate-400 py-6 border border-dashed border-slate-200 rounded-xl";
-        vazio.textContent = "Sua lista está vazia. Adicione um item acima!";
-        listaEl.appendChild(vazio);
-      } else {
-        for (let i = 0; i < demoItens.length; i++) {
-          const item = demoItens[i];
-          total = total + item.preco;
-
-          const li = document.createElement("li");
-          li.className = "flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm";
-
-          const spanNome = document.createElement("span");
-          spanNome.className = "font-medium text-slate-800";
-          spanNome.textContent = item.nome;
-
-          const spanPreco = document.createElement("span");
-          spanPreco.className = "font-mono text-xs font-semibold text-slate-600";
-          spanPreco.textContent = "R$ " + item.preco.toFixed(2);
-
-          li.append(spanNome, spanPreco);
-          listaEl.appendChild(li);
-        }
-      }
-
-      const saldo = DEMO_LIMITE - total;
-      document.getElementById("demo-qtd").textContent = demoItens.length;
-      document.getElementById("demo-total").textContent = "R$ " + total.toFixed(2);
-      document.getElementById("demo-saldo").textContent = "R$ " + saldo.toFixed(2);
-
-      const statusEl = document.getElementById("demo-status");
-      if (total > DEMO_LIMITE) {
-        statusEl.textContent = "Orçamento estourado!";
-        statusEl.className = "text-center text-sm font-bold py-2 px-3 rounded-xl bg-red-100 text-red-800 mb-4 transition-colors";
-      } else {
-        statusEl.textContent = "Dentro do orçamento";
-        statusEl.className = "text-center text-sm font-bold py-2 px-3 rounded-xl bg-emerald-100 text-emerald-800 mb-4 transition-colors";
-      }
-
-      // Atualiza o Raio-X da memória
-      document.getElementById("xray-len").textContent = "itens.length = " + demoItens.length;
-      document.getElementById("xray-array").textContent = JSON.stringify(demoItens, null, 2);
-
-      const logEl = document.getElementById("xray-log");
-      logEl.innerHTML = "";
-      const passos = [
-        '1. Limpou a <ul> com listaEl.innerHTML = ""',
-        "2. Rodou o laço for " + demoItens.length + " vez(es) criando <li>",
-        "3. Somou total = " + total.toFixed(2) + " e saldo = " + saldo.toFixed(2),
-        total > DEMO_LIMITE
-          ? '4. total > 100 (true) -> classList.add("alerta")'
-          : '4. total > 100 (false) -> classList.remove("alerta")',
-      ];
-      passos.forEach(function (texto) {
-        const li = document.createElement("li");
-        li.textContent = texto;
-        logEl.appendChild(li);
-      });
+    function atualizarVisorSimulador(operacao, codigo, saidaConsole) {
+      document.getElementById("sim-badge-op").textContent = operacao;
+      document.getElementById("sim-code-view").textContent = codigo;
+      document.getElementById("sim-count").textContent = simTarefas.length;
+      document.getElementById("sim-state-view").textContent = JSON.stringify(simTarefas, null, 2);
+      document.getElementById("sim-console-view").textContent =
+        typeof saidaConsole === "string" ? saidaConsole : JSON.stringify(saidaConsole, null, 2);
     }
 
-    document.getElementById("demo-btn-add").addEventListener("click", function () {
-      const inputNome = document.getElementById("demo-nome");
-      const inputPreco = document.getElementById("demo-preco");
-      const msgEl = document.getElementById("demo-mensagem");
+    document.getElementById("sim-btn-add").addEventListener("click", () => {
+      const input = document.getElementById("sim-titulo");
+      const prioridade = document.getElementById("sim-prioridade").value;
+      const titulo = input.value.trim() || `Nova tarefa #${simTarefas.length + 1}`;
 
-      const nome = inputNome.value.trim();
-      const preco = Number(inputPreco.value);
+      const nova = { id: gerarId(), titulo, prioridade, concluida: false };
+      simTarefas = [...simTarefas, nova];
+      input.value = "";
 
-      if (nome === "" || preco <= 0 || isNaN(preco)) {
-        msgEl.textContent = "Informe um nome válido e um preço maior que zero.";
-        return;
-      }
-
-      msgEl.textContent = "";
-      demoItens.push({ nome: nome, preco: preco });
-      inputNome.value = "";
-      inputPreco.value = "";
-      inputNome.focus();
-      atualizarDemoLista();
+      atualizarVisorSimulador(
+        "adicionarTarefa()",
+        `const nova = { id: "${nova.id}", titulo: "${titulo}", prioridade: "${prioridade}", concluida: false };\ntarefas = [...tarefas, nova]; // Cria novo array sem usar push()`,
+        nova
+      );
     });
 
-    document.getElementById("demo-btn-limpar").addEventListener("click", function () {
-      demoItens = [];
-      document.getElementById("demo-mensagem").textContent = "";
-      atualizarDemoLista();
-      mostrarToast("Lista esvaziada (itens = []).", "info");
+    document.getElementById("sim-btn-toggle").addEventListener("click", () => {
+      if (simTarefas.length === 0) {
+        mostrarToast("Adicione pelo menos uma tarefa primeiro.", "aviso");
+        return;
+      }
+      const alvoId = simTarefas[0].id;
+      simTarefas = simTarefas.map((t) => (t.id === alvoId ? { ...t, concluida: !t.concluida } : t));
+
+      atualizarVisorSimulador(
+        "alternarStatus()",
+        `tarefas = tarefas.map((t) =>\n  t.id === "${alvoId}" ? { ...t, concluida: !t.concluida } : t\n);`,
+        simTarefas[0]
+      );
+    });
+
+    document.getElementById("sim-btn-remove").addEventListener("click", () => {
+      if (simTarefas.length === 0) {
+        mostrarToast("A lista já está vazia.", "aviso");
+        return;
+      }
+      const alvo = simTarefas[simTarefas.length - 1];
+      simTarefas = simTarefas.filter((t) => t.id !== alvo.id);
+
+      atualizarVisorSimulador(
+        "removerTarefa()",
+        `tarefas = tarefas.filter((t) => t.id !== "${alvo.id}");`,
+        `Item "${alvo.titulo}" removido. Restam ${simTarefas.length} item(ns).`
+      );
+    });
+
+    document.getElementById("sim-btn-pendentes").addEventListener("click", () => {
+      const resultado = simTarefas.filter((t) => !t.concluida);
+      atualizarVisorSimulador(
+        "filtrarTarefas({ status: 'pendentes' })",
+        `const pendentes = tarefas.filter((t) => !t.concluida);\n// Repare que o array original à esquerda permanece intacto!`,
+        resultado
+      );
+    });
+
+    document.getElementById("sim-btn-concluidas").addEventListener("click", () => {
+      const resultado = simTarefas.filter((t) => t.concluida);
+      atualizarVisorSimulador(
+        "filtrarTarefas({ status: 'concluidas' })",
+        `const concluidas = tarefas.filter((t) => t.concluida);\n// filter() sempre retorna um novo array.`,
+        resultado
+      );
+    });
+
+    document.getElementById("sim-btn-resumo").addEventListener("click", () => {
+      const resumo = simTarefas.reduce(
+        (acc, t) => {
+          acc.total += 1;
+          t.concluida ? (acc.concluidas += 1) : (acc.pendentes += 1);
+          return acc;
+        },
+        { total: 0, pendentes: 0, concluidas: 0 }
+      );
+      atualizarVisorSimulador(
+        "obterResumo() com reduce()",
+        `const resumo = tarefas.reduce((acc, t) => {\n  acc.total += 1;\n  t.concluida ? acc.concluidas++ : acc.pendentes++;\n  return acc;\n}, { total: 0, pendentes: 0, concluidas: 0 });`,
+        resumo
+      );
+    });
+
+    document.getElementById("sim-btn-reset").addEventListener("click", () => {
+      simTarefas = SIM_INICIAL();
+      atualizarVisorSimulador("reset", "// Estado inicial restaurado", "Pronto para novos testes.");
     });
 
     /* =====================================================================
-       QUIZZES INTERATIVOS
+       ABA 3: APP AO VIVO (TEMPO 2) + RAIO-X DE EVENTOS E LOCALSTORAGE
        ===================================================================== */
-    document.querySelectorAll("[data-quiz]").forEach(function (quizBox) {
+    const STORAGE_DEMO = "guia_demandas_v1";
+    let liveTarefas = [];
+    const liveUI = { filtro: "todas", busca: "" };
+
+    function carregarDemoStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_DEMO);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (e) {
+        // Fallback seguro
+      }
+      return [
+        { id: gerarId(), titulo: "Testar delegação de eventos", prioridade: "alta", concluida: false },
+        { id: gerarId(), titulo: "Inspecionar localStorage no F12", prioridade: "media", concluida: true },
+      ];
+    }
+
+    function salvarDemoStorage() {
+      try {
+        localStorage.setItem(STORAGE_DEMO, JSON.stringify(liveTarefas));
+      } catch (e) {
+        // Ignora erro de quota
+      }
+      document.getElementById("storage-xray").textContent = JSON.stringify(liveTarefas, null, 2);
+    }
+
+    function atualizarRaioXEvento(tipo, targetTag, acao, id) {
+      const xray = document.getElementById("event-xray");
+      xray.innerHTML = "";
+      const linhas = [
+        ["evento:", tipo, "text-emerald-400"],
+        ["event.target:", `<${targetTag.toLowerCase()}>`, "text-sky-300"],
+        ["dataset.acao:", acao || "nenhuma", "text-amber-300"],
+        ['closest("li").dataset.id:', id || "nenhum", "text-purple-300"],
+      ];
+      linhas.forEach(([label, valor, cor]) => {
+        const div = document.createElement("div");
+        const s1 = document.createElement("span");
+        s1.className = "text-slate-500 mr-1.5";
+        s1.textContent = label;
+        const s2 = document.createElement("span");
+        s2.className = cor;
+        s2.textContent = valor;
+        div.append(s1, s2);
+        xray.appendChild(div);
+      });
+    }
+
+    function renderizarLiveApp() {
+      const termo = liveUI.busca.trim().toLowerCase();
+      const filtradas = liveTarefas.filter((t) => {
+        const passaStatus =
+          liveUI.filtro === "todas" ||
+          (liveUI.filtro === "pendentes" && !t.concluida) ||
+          (liveUI.filtro === "concluidas" && t.concluida);
+        const passaBusca = t.titulo.toLowerCase().includes(termo);
+        return passaStatus && passaBusca;
+      });
+
+      const listaEl = document.getElementById("live-lista");
+      listaEl.innerHTML = "";
+
+      if (filtradas.length === 0) {
+        const li = document.createElement("li");
+        li.className = "text-center text-sm text-slate-400 py-8 border border-dashed border-slate-200 rounded-xl";
+        li.textContent = "Nenhuma demanda encontrada.";
+        listaEl.appendChild(li);
+      } else {
+        const badgeClasses = {
+          baixa: "bg-sky-100 text-sky-800",
+          media: "bg-amber-100 text-amber-800",
+          alta: "bg-red-100 text-red-800",
+        };
+
+        filtradas.forEach((tarefa) => {
+          const li = document.createElement("li");
+          li.className = `tarefa-item flex items-center justify-between gap-3 p-3 rounded-xl border transition-colors ${
+            tarefa.concluida ? "bg-slate-50 border-slate-200" : "bg-white border-slate-200 hover:border-indigo-200"
+          }`;
+          li.dataset.id = tarefa.id;
+
+          const info = document.createElement("div");
+          info.className = "flex items-center gap-3 min-w-0 flex-1";
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = tarefa.concluida;
+          checkbox.dataset.acao = "alternar";
+          checkbox.className = "w-4 h-4 rounded accent-indigo-600 cursor-pointer shrink-0";
+
+          const titulo = document.createElement("span");
+          titulo.className = `text-sm truncate ${tarefa.concluida ? "line-through text-slate-400" : "text-slate-800 font-medium"}`;
+          titulo.textContent = tarefa.titulo; // Protegido contra XSS
+
+          const badge = document.createElement("span");
+          badge.className = `text-[11px] font-bold uppercase px-2 py-0.5 rounded-full shrink-0 ${badgeClasses[tarefa.prioridade] || badgeClasses.media}`;
+          badge.textContent = tarefa.prioridade;
+
+          info.append(checkbox, titulo, badge);
+
+          const btnRemover = document.createElement("button");
+          btnRemover.type = "button";
+          btnRemover.dataset.acao = "remover";
+          btnRemover.className = "px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 rounded-lg transition-colors shrink-0";
+          btnRemover.textContent = "Excluir";
+
+          li.append(info, btnRemover);
+          listaEl.appendChild(li);
+        });
+      }
+
+      const resumo = liveTarefas.reduce(
+        (acc, t) => {
+          acc.total += 1;
+          t.concluida ? (acc.concluidas += 1) : (acc.pendentes += 1);
+          return acc;
+        },
+        { total: 0, pendentes: 0, concluidas: 0 }
+      );
+
+      document.getElementById("live-total").textContent = resumo.total;
+      document.getElementById("live-pendentes").textContent = resumo.pendentes;
+      document.getElementById("live-concluidas").textContent = resumo.concluidas;
+      salvarDemoStorage();
+    }
+
+    document.getElementById("live-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = document.getElementById("live-input-titulo");
+      const prioridade = document.getElementById("live-select-prioridade").value;
+      const titulo = input.value.trim();
+      if (!titulo) return;
+
+      const nova = { id: gerarId(), titulo, prioridade, concluida: false };
+      liveTarefas = [...liveTarefas, nova];
+      input.value = "";
+      input.focus();
+
+      atualizarRaioXEvento("submit (preventDefault)", "FORM", "criar", nova.id);
+      renderizarLiveApp();
+    });
+
+    document.getElementById("live-lista").addEventListener("click", (event) => {
+      const acao = event.target.dataset.acao;
+      if (!acao) return;
+
+      const itemEl = event.target.closest(".tarefa-item");
+      const id = itemEl ? itemEl.dataset.id : null;
+      if (!id) return;
+
+      atualizarRaioXEvento("click (delegado na <ul>)", event.target.tagName, acao, id);
+
+      if (acao === "alternar") {
+        liveTarefas = liveTarefas.map((t) => (t.id === id ? { ...t, concluida: !t.concluida } : t));
+      } else if (acao === "remover") {
+        liveTarefas = liveTarefas.filter((t) => t.id !== id);
+      }
+      renderizarLiveApp();
+    });
+
+    document.getElementById("live-input-busca").addEventListener("input", (event) => {
+      liveUI.busca = event.target.value;
+      renderizarLiveApp();
+    });
+
+    document.getElementById("live-filtros").addEventListener("click", (event) => {
+      const btn = event.target.closest(".live-filtro-btn");
+      if (!btn) return;
+      liveUI.filtro = btn.dataset.filtro;
+
+      document.querySelectorAll(".live-filtro-btn").forEach((b) => {
+        b.className =
+          b === btn
+            ? "live-filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-700 shadow-sm"
+            : "live-filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900";
+      });
+      renderizarLiveApp();
+    });
+
+    /* =====================================================================
+       QUIZZES INTERATIVOS (TEMPOS 1 E 2)
+       ===================================================================== */
+    document.querySelectorAll("[data-quiz]").forEach((quizBox) => {
       const quizId = quizBox.dataset.quiz;
-      quizBox.addEventListener("click", function (event) {
+      quizBox.addEventListener("click", (event) => {
         const btn = event.target.closest(".quiz-opt");
         if (!btn) return;
 
         const correta = btn.dataset.correct === "true";
-        const feedback = document.getElementById("feedback-" + quizId);
+        const feedback = document.getElementById(`feedback-${quizId}`);
 
-        quizBox.querySelectorAll(".quiz-opt").forEach(function (opt) {
+        quizBox.querySelectorAll(".quiz-opt").forEach((opt) => {
           opt.classList.remove("border-emerald-500", "bg-emerald-50", "border-red-400", "bg-red-50");
         });
+
         feedback.classList.remove("hidden", "bg-emerald-50", "text-emerald-800", "bg-red-50", "text-red-800");
 
         if (correta) {
           btn.classList.add("border-emerald-500", "bg-emerald-50");
           feedback.classList.add("bg-emerald-50", "text-emerald-800");
-          feedback.textContent = "Exato! Você mandou bem na lógica.";
+          feedback.textContent = "Correto! Excelente compreensão do conceito.";
           progresso.quizzes[quizId] = true;
           salvarProgresso();
         } else {
           btn.classList.add("border-red-400", "bg-red-50");
           feedback.classList.add("bg-red-50", "text-red-800");
-          feedback.textContent = "Quase lá! Releia a explicação acima e tente outra opção.";
+          feedback.textContent = "Ainda não. Releia o comportamento da operação e tente outra alternativa.";
         }
       });
     });
 
     /* =====================================================================
-       ABA 4: RENDERIZAÇÃO DOS EXERCÍCIOS (TEMPOS 3 E 4)
+       ABA 4: EXERCÍCIOS INTERATIVOS (TEMPOS 3 E 4)
        ===================================================================== */
+    const EXERCICIOS = [
+      {
+        id: "ex1",
+        bloco: "Tempo 3 • Bloco A (Obrigatório)",
+        corBadge: "bg-indigo-50 text-indigo-700",
+        titulo: "1. Núcleo Funcional no Navegador",
+        descricao: "Garanta que o CRUD completo, os filtros (Todas, Pendentes, Concluídas), a busca textual e os 3 contadores do cabeçalho funcionem abrindo o index.html diretamente.",
+        dica: "Teste no Console (F12) se há algum erro ao enviar o formulário. Lembre-se do event.preventDefault() no submit.",
+        solucao: `formTarefa.addEventListener("submit", (event) => {\n  event.preventDefault();\n  adicionarTarefa(inputTitulo.value, selectPrioridade.value);\n  formTarefa.reset();\n  renderizar();\n});`,
+      },
+      {
+        id: "ex2",
+        bloco: "Tempo 3 • Bloco B (Nova Regra)",
+        corBadge: "bg-indigo-50 text-indigo-700",
+        titulo: "2. Validação de Duplicidade",
+        descricao: "Impeça o cadastro de uma demanda com o mesmo título de outra já existente (ignorando letras maiúsculas/minúsculas e espaços extras).",
+        dica: "Use o método .some() no array de tarefas comparando t.titulo.toLowerCase() === tituloLimpo.toLowerCase().",
+        solucao: `function existeTituloDuplicado(lista, titulo) {\n  const normalizado = titulo.trim().toLowerCase();\n  return lista.some((t) => t.titulo.toLowerCase() === normalizado);\n}`,
+      },
+      {
+        id: "ex3",
+        bloco: "Tempo 3 • Bloco B (Nova Regra)",
+        corBadge: "bg-indigo-50 text-indigo-700",
+        titulo: "3. Contador de Alta Prioridade Pendente",
+        descricao: "Atualize a função obterResumo() com reduce() para retornar também a propriedade altaPendentes e exiba esse número no cabeçalho.",
+        dica: "Dentro do reduce, verifique: if (!t.concluida && t.prioridade === 'alta') acc.altaPendentes += 1;",
+        solucao: `function obterResumo(lista) {\n  return lista.reduce((acc, t) => {\n    acc.total += 1;\n    if (t.concluida) {\n      acc.concluidas += 1;\n    } else {\n      acc.pendentes += 1;\n      if (t.prioridade === "alta") acc.altaPendentes += 1;\n    }\n    return acc;\n  }, { total: 0, pendentes: 0, concluidas: 0, altaPendentes: 0 });\n}`,
+      },
+      {
+        id: "ex4",
+        bloco: "Tempo 4 • Bloco C (Persistência)",
+        corBadge: "bg-emerald-50 text-emerald-700",
+        titulo: "4. Persistência com localStorage",
+        descricao: "Salve o array tarefas no localStorage a cada criação, conclusão ou remoção, e carregue os dados automaticamente ao abrir a página.",
+        dica: "Centralize em uma função atualizarEstado(novaLista) que atualiza a variável, chama salvarTarefas() e depois renderizar().",
+        solucao: `function atualizarEstado(novaLista) {\n  tarefas = novaLista;\n  salvarTarefas(tarefas);\n  renderizar();\n}`,
+      },
+      {
+        id: "ex5",
+        bloco: "Tempo 4 • Bloco C (Arquitetura)",
+        corBadge: "bg-emerald-50 text-emerald-700",
+        titulo: "5. Separação em 3 Arquivos com <script defer>",
+        descricao: "Divida o app.js em js/storage.js, js/tasks.js e js/main.js carregados nessa ordem no index.html (sem usar type='module' para rodar via file://).",
+        dica: "Verifique se js/tasks.js não possui nenhum document.querySelector. A ordem das tags script no HTML define quem fica disponível primeiro.",
+        solucao: `<!-- No final do body do index.html -->\n<script defer src="js/storage.js"><\/script>\n<script defer src="js/tasks.js"><\/script>\n<script defer src="js/main.js"><\/script>`,
+      },
+      {
+        id: "ex6",
+        bloco: "Tempo 4 • Bloco D (Desafio Extra)",
+        corBadge: "bg-amber-50 text-amber-800",
+        titulo: "6. Ordenação por Prioridade ou Limpar Concluídas",
+        descricao: "Escolha pelo menos um desafio extra: criar botão 'Limpar concluídas' ou ordenar a exibição por peso de prioridade (alta > media > baixa) sem mutar o array original.",
+        dica: "Para ordenar sem mutar o array original, use [...lista].sort(...) ou toSorted() com um mapa de pesos { alta: 3, media: 2, baixa: 1 }.",
+        solucao: `const PESO = { alta: 3, media: 2, baixa: 1 };\n\nfunction ordenarPorPrioridade(lista) {\n  return [...lista].sort((a, b) => PESO[b.prioridade] - PESO[a.prioridade]);\n}\n\nfunction limparConcluidas(lista) {\n  return lista.filter((t) => !t.concluida);\n}`,
+      },
+    ];
+
     function renderizarExercicios() {
       const container = document.getElementById("exercises-container");
       container.innerHTML = "";
 
-      EXERCICIOS.forEach(function (ex) {
+      EXERCICIOS.forEach((ex) => {
         const concluido = Boolean(progresso.exercicios[ex.id]);
 
         const card = document.createElement("article");
-        card.className = "bg-white rounded-2xl border p-5 sm:p-6 shadow-sm transition-colors " + (concluido ? "border-emerald-300 bg-emerald-50/20" : "border-slate-200");
+        card.className = `bg-white rounded-2xl border p-5 sm:p-6 shadow-sm transition-colors ${
+          concluido ? "border-emerald-300 bg-emerald-50/20" : "border-slate-200"
+        }`;
 
         card.innerHTML = `
           <div class="flex items-start gap-3.5">
             <input type="checkbox" data-ex-check="${ex.id}" ${concluido ? "checked" : ""}
               class="mt-1 w-5 h-5 rounded accent-emerald-600 cursor-pointer shrink-0" aria-label="Marcar ${ex.titulo} como concluído" />
             <div class="flex-1 min-w-0">
-              <div class="mb-1.5">
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
                 <span class="text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full ${ex.corBadge}">${ex.bloco}</span>
               </div>
               <h3 class="text-base sm:text-lg font-bold text-slate-900">${ex.titulo}</h3>
@@ -914,7 +1041,7 @@ btn.addEventListener("click", function () {
                   Ver Dica
                 </button>
                 <button type="button" data-toggle-solucao="${ex.id}" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
-                  Ver Exemplo de Código
+                  Ver Solução de Referência
                 </button>
               </div>
 
@@ -924,8 +1051,8 @@ btn.addEventListener("click", function () {
 
               <div id="solucao-${ex.id}" class="hidden mt-3 rounded-xl bg-slate-900 overflow-hidden border border-slate-800">
                 <div class="px-3.5 py-2 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
-                  <span class="text-[11px] font-mono text-slate-400">Exemplo de referência</span>
-                  <button type="button" data-copy-solucao="${ex.id}" class="text-[11px] font-semibold text-blue-400 hover:text-blue-300">
+                  <span class="text-[11px] font-mono text-slate-400">Referência</span>
+                  <button type="button" data-copy-solucao="${ex.id}" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300">
                     Copiar código
                   </button>
                 </div>
@@ -935,48 +1062,57 @@ btn.addEventListener("click", function () {
           </div>
         `;
 
-        card.querySelector("#solucao-" + ex.id + " pre").textContent = ex.solucao;
+        // Preenche o código com textContent para manter segurança e formatação exata
+        card.querySelector(`#solucao-${ex.id} pre`).textContent = ex.solucao;
         container.appendChild(card);
       });
     }
 
-    document.getElementById("exercises-container").addEventListener("click", function (event) {
+    document.getElementById("exercises-container").addEventListener("click", (event) => {
       const check = event.target.closest("[data-ex-check]");
       if (check) {
-        progresso.exercicios[check.dataset.exCheck] = check.checked;
+        const id = check.dataset.exCheck;
+        progresso.exercicios[id] = check.checked;
         salvarProgresso();
         renderizarExercicios();
-        if (check.checked) mostrarToast("Exercício concluído! Bom trabalho.", "sucesso");
+        if (check.checked) mostrarToast("Exercício marcado como concluído!", "sucesso");
         return;
       }
 
       const btnDica = event.target.closest("[data-toggle-dica]");
       if (btnDica) {
-        document.getElementById("dica-" + btnDica.dataset.toggleDica).classList.toggle("hidden");
+        const box = document.getElementById(`dica-${btnDica.dataset.toggleDica}`);
+        box.classList.toggle("hidden");
         return;
       }
 
       const btnSolucao = event.target.closest("[data-toggle-solucao]");
       if (btnSolucao) {
-        document.getElementById("solucao-" + btnSolucao.dataset.toggleSolucao).classList.toggle("hidden");
+        const box = document.getElementById(`solucao-${btnSolucao.dataset.toggleSolucao}`);
+        box.classList.toggle("hidden");
         return;
       }
 
       const btnCopy = event.target.closest("[data-copy-solucao]");
       if (btnCopy) {
-        const ex = EXERCICIOS.find(function (item) { return item.id === btnCopy.dataset.copySolucao; });
+        const ex = EXERCICIOS.find((item) => item.id === btnCopy.dataset.copySolucao);
         if (ex) copiarTexto(ex.solucao);
       }
     });
 
     /* =====================================================================
-       INICIALIZAÇÃO
+       INICIALIZAÇÃO DA PÁGINA
        ===================================================================== */
-    window.addEventListener("DOMContentLoaded", function () {
+    window.addEventListener("DOMContentLoaded", () => {
       carregarProgresso();
-      atualizarComparadorNumber();
-      atualizarSimuladorIf();
-      atualizarDemoLista();
+      atualizarVisorSimulador(
+        "estado inicial",
+        "// Clique nos botões à esquerda para executar funções puras e ver o resultado",
+        "Pronto para testar."
+      );
+
+      liveTarefas = carregarDemoStorage();
+      renderizarLiveApp();
       renderizarExercicios();
       atualizarBarraProgresso();
     });
