@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia de Referência — Primeiro Contato com JavaScript</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fontes Inter e JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Container de Notificações (Substitui alert/confirm) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Cabeçalho Fixo -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-mono font-bold text-sm shadow-sm shrink-0">
+          JS
+        </div>
+        <div class="truncate">
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 truncate">Guia de Referência — JavaScript</h1>
+          <p class="text-xs text-slate-500 hidden sm:block">Primeiro Contato • Projeto: Lista de Compras (Orçamento R$ 100,00)</p>
+        </div>
+      </div>
+
+      <!-- Barra de Progresso do Aluno -->
+      <div class="flex items-center gap-3 shrink-0">
+        <div class="text-right hidden md:block">
+          <p class="text-xs font-medium text-slate-600">Seu Progresso</p>
+          <p id="progress-label" class="text-xs font-bold text-blue-600">0% concluído</p>
+        </div>
+        <div class="w-24 sm:w-32 h-2.5 bg-slate-200 rounded-full overflow-hidden" aria-label="Progresso dos exercícios">
+          <div id="progress-bar" class="h-full bg-blue-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navegação por Abas -->
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-100 overflow-x-auto" aria-label="Seções do guia">
+      <div id="nav-tabs" class="flex gap-1 sm:gap-2 py-2 min-w-max">
+        <button type="button" data-tab="resumo" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors bg-blue-50 text-blue-700">
+          1. Resumo &amp; Ciclo JS
+        </button>
+        <button type="button" data-tab="fundamentos" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          2. Fundamentos (Tempo 1)
+        </button>
+        <button type="button" data-tab="dom-vivo" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          3. DOM &amp; Projeto Vivo (Tempo 2)
+        </button>
+        <button type="button" data-tab="exercicios" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          4. Exercícios (Tempos 3 e 4)
+        </button>
+        <button type="button" data-tab="cola" class="tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+          5. Cola Rápida &amp; Erros Comuns
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- ========================================================= -->
+    <!-- ABA 1: RESUMO & CICLO DO JAVASCRIPT NA PÁGINA             -->
+    <!-- ========================================================= -->
+    <section id="tab-resumo" class="tab-panel space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 mb-3">
+          Material de Apoio ao Aluno • Consulta Livre
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">
+          Como o JavaScript dá vida à sua página HTML
+        </h2>
+        <p class="text-slate-600 leading-relaxed max-w-3xl">
+          Use este guia para relembrar o que vimos nos Tempos 1 e 2 e consultar a sintaxe enquanto resolve os exercícios dos Tempos 3 e 4.
+          Lembre-se da analogia da casa: o <strong class="text-slate-800">HTML</strong> são as paredes (estrutura), o <strong class="text-slate-800">CSS</strong> é a pintura (estilo) e o <strong class="text-slate-800">JavaScript</strong> é a parte elétrica (comportamento quando você clica em um botão).
+        </p>
+
+        <!-- Trio HTML / CSS / JS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <div class="p-4 rounded-xl bg-orange-50/70 border border-orange-200">
+            <div class="text-xs font-bold uppercase text-orange-700 mb-1">index.html</div>
+            <div class="font-bold text-slate-900">Estrutura</div>
+            <p class="text-xs text-slate-600 mt-1">Cria os campos <code class="font-mono bg-white px-1 rounded">&lt;input&gt;</code>, os botões e a lista <code class="font-mono bg-white px-1 rounded">&lt;ul&gt;</code> com seus <code class="font-mono bg-white px-1 rounded">id</code>s.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-sky-50/70 border border-sky-200">
+            <div class="text-xs font-bold uppercase text-sky-700 mb-1">style.css</div>
+            <div class="font-bold text-slate-900">Visual</div>
+            <p class="text-xs text-slate-600 mt-1">Define cores, espaçamentos e a classe <code class="font-mono bg-white px-1 rounded">.alerta</code> (vermelho) que o JS ativa ou desativa.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200">
+            <div class="text-xs font-bold uppercase text-amber-800 mb-1">app.js</div>
+            <div class="font-bold text-slate-900">Comportamento</div>
+            <p class="text-xs text-slate-600 mt-1">Lê o que o usuário digitou, guarda no array, soma os preços e atualiza o que aparece na tela.</p>
+          </div>
+        </div>
+
+        <!-- Diagrama Interativo do Ciclo de 4 Passos -->
+        <div class="mt-8">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4">
+            O Ciclo do Nosso Projeto (Clique em cada passo para revisar o código)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="cycle-steps">
+            <button type="button" data-step="clique" class="cycle-card text-left p-4 rounded-xl border-2 border-blue-600 bg-blue-50/60 transition-all">
+              <div class="text-xs font-bold text-blue-600 uppercase mb-1">Passo 1</div>
+              <div class="font-bold text-slate-900">Ouvir o Clique</div>
+              <div class="text-xs text-slate-600 mt-1">addEventListener("click")</div>
+            </button>
+            <button type="button" data-step="ler" class="cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
+              <div class="text-xs font-bold text-slate-500 uppercase mb-1">Passo 2</div>
+              <div class="font-bold text-slate-900">Ler e Converter</div>
+              <div class="text-xs text-slate-600 mt-1">.value e Number()</div>
+            </button>
+            <button type="button" data-step="array" class="cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
+              <div class="text-xs font-bold text-slate-500 uppercase mb-1">Passo 3</div>
+              <div class="font-bold text-slate-900">Guardar no Array</div>
+              <div class="text-xs text-slate-600 mt-1">itens.push({ nome, preco })</div>
+            </button>
+            <button type="button" data-step="tela" class="cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all">
+              <div class="text-xs font-bold text-slate-500 uppercase mb-1">Passo 4</div>
+              <div class="font-bold text-slate-900">Atualizar a Tela</div>
+              <div class="text-xs text-slate-600 mt-1">Laço for + createElement</div>
+            </button>
+          </div>
+
+          <div class="mt-4 p-5 rounded-xl bg-slate-900 text-slate-100">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="space-y-1.5">
+                <h4 id="cycle-title" class="text-base font-bold text-blue-300">1. Ouvir o Clique do Botão</h4>
+                <p id="cycle-desc" class="text-sm text-slate-300 leading-relaxed">
+                  Primeiro selecionamos o botão no HTML com <code class="text-amber-300">document.querySelector("#btn-adicionar")</code> e dizemos ao navegador qual função deve rodar quando o usuário clicar nele.
+                </p>
+              </div>
+              <pre id="cycle-code" class="text-xs font-mono bg-slate-950 text-emerald-300 p-3.5 rounded-lg overflow-x-auto shrink-0 border border-slate-800">const btnAdicionar = document.querySelector("#btn-adicionar");
+
+btnAdicionar.addEventListener("click", function () {
+  // O código daqui de dentro só roda no clique!
+});</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- ABA 2: FUNDAMENTOS (TEMPO 1)                              -->
+    <!-- ========================================================= -->
+    <section id="tab-fundamentos" class="tab-panel hidden space-y-6">
+      <!-- Laboratório 1: Texto vs Número -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Revisão Crítica • Tempo 1</span>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">Por que precisamos usar <code class="font-mono text-blue-700">Number()</code>?</h2>
+        <p class="text-sm text-slate-600 mt-1">
+          Tudo o que o usuário digita em um <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">&lt;input&gt;</code> chega ao JavaScript como <strong>texto (string)</strong>. Teste dois valores abaixo e compare o resultado com e sem conversão:
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-5">
+          <div class="lg:col-span-5 p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="calc-a" class="block text-xs font-semibold text-slate-600 mb-1">Valor A (input 1)</label>
+                <input id="calc-a" type="text" value="10" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+              <div>
+                <label for="calc-b" class="block text-xs font-semibold text-slate-600 mb-1">Valor B (input 2)</label>
+                <input id="calc-b" type="text" value="25.5" class="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-lg font-mono focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+            </div>
+            <p class="text-xs text-slate-500">
+              Dica: tente também digitar <code class="font-mono bg-white px-1 rounded border">10,50</code> com vírgula para ver por que aparece <code class="font-mono text-red-600">NaN</code> (Not a Number).
+            </p>
+          </div>
+
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-4 rounded-xl bg-red-50/70 border border-red-200">
+              <div class="text-xs font-bold text-red-700 uppercase mb-1">Sem Number() — Concatenação</div>
+              <pre id="calc-code-str" class="text-xs font-mono text-slate-700 bg-white p-2.5 rounded-lg border border-red-100 mb-2">"10" + "25.5"</pre>
+              <div class="text-xs text-slate-600">Resultado: <strong id="calc-res-str" class="font-mono text-base text-red-700">"1025.5"</strong></div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
+              <div class="text-xs font-bold text-emerald-700 uppercase mb-1">Com Number() — Soma Real</div>
+              <pre id="calc-code-num" class="text-xs font-mono text-slate-700 bg-white p-2.5 rounded-lg border border-emerald-100 mb-2">Number("10") + Number("25.5")</pre>
+              <div class="text-xs text-slate-600">Resultado: <strong id="calc-res-num" class="font-mono text-base text-emerald-700">35.5</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Laboratório 2: Simulador de if / else -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Decisões e Funções • Tempo 1</span>
+        <h2 class="text-xl font-bold text-slate-900 mt-1">Simulador de <code class="font-mono text-blue-700">if / else</code> (Regra do Orçamento)</h2>
+        <p class="text-sm text-slate-600 mt-1">
+          Arraste o controle deslizante para mudar o valor da variável <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">total</code> e veja qual caminho do <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">if / else</code> o JavaScript escolhe:
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-5 items-center">
+          <div class="lg:col-span-5 space-y-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between text-sm font-semibold">
+              <span>Valor de <code class="font-mono text-blue-700">total</code>:</span>
+              <span id="if-total-label" class="font-mono text-lg text-slate-900">R$ 80.00</span>
+            </div>
+            <input id="if-slider" type="range" min="0" max="160" step="5" value="80" class="w-full accent-blue-600 cursor-pointer" />
+            <div class="flex justify-between text-xs text-slate-500 font-mono">
+              <span>R$ 0</span>
+              <span class="text-blue-700 font-bold">LIMITE = 100</span>
+              <span>R$ 160</span>
+            </div>
+            <div id="if-status-box" class="p-3 rounded-xl text-center text-sm font-bold bg-emerald-100 text-emerald-800 transition-colors">
+              Dentro do orçamento (Saldo: R$ 20.00)
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 rounded-xl bg-slate-900 p-4 font-mono text-xs text-slate-300 space-y-1 border border-slate-800 overflow-x-auto">
+            <div class="text-slate-400">const LIMITE = 100;</div>
+            <div class="text-sky-300">let total = <span id="if-code-val">80</span>;</div>
+            <div class="pt-1">if (total &gt; LIMITE) { <span id="if-cond-badge" class="ml-2 px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">// false</span></div>
+            <div id="if-branch-true" class="pl-4 py-1 rounded transition-colors text-slate-500">
+              statusEl.textContent = "Orçamento estourado!";<br />
+              statusEl.classList.add("alerta");
+            </div>
+            <div>} else {</div>
+            <div id="if-branch-false" class="pl-4 py-1 rounded transition-colors bg-emerald-950/80 text-emerald-300 border-l-2 border-emerald-400">
+              statusEl.textContent = "Dentro do orçamento";<br />
+              statusEl.classList.remove("alerta");
+            </div>
+            <div>}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz 1 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900 mb-1">Checagem Rápida — Fundamentos</h3>
+        <p class="text-sm text-slate-600 mb-4">
+          No nosso projeto, por que declaramos <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">const LIMITE = 100</code> e <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">let total = 0</code>?
+        </p>
+        <div class="space-y-2" data-quiz="q1">
+          <button type="button" data-correct="true" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            A) Porque <code class="font-mono text-xs">LIMITE</code> é um valor fixo que não muda, enquanto <code class="font-mono text-xs">total</code> vai sendo somado e reatribuído dentro do laço <code class="font-mono text-xs">for</code>.
+          </button>
+          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            B) Porque <code class="font-mono text-xs">const</code> só serve para números maiores que 50 e <code class="font-mono text-xs">let</code> só serve para começar em zero.
+          </button>
+          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            C) Não há diferença prática entre <code class="font-mono text-xs">const</code> e <code class="font-mono text-xs">let</code> no JavaScript.
+          </button>
+        </div>
+        <div id="feedback-q1" class="hidden mt-3 p-3.5 rounded-xl text-sm"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- ABA 3: DOM & PROJETO VIVO (TEMPO 2)                       -->
+    <!-- ========================================================= -->
+    <section id="tab-dom-vivo" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Coluna Esquerda: Projeto Lista de Compras Funcionando -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="mb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Projeto Final de Referência</span>
+            <h2 class="text-xl font-bold text-slate-900">Lista de Compras</h2>
+            <p class="text-xs text-slate-500">Orçamento disponível: <strong>R$ 100,00</strong> (teste adicionar itens para ultrapassar o limite!)</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-2 mb-2">
+            <input id="demo-nome" type="text" placeholder="Nome do item (ex: Café)" autocomplete="off" class="flex-1 px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <div class="flex gap-2">
+              <input id="demo-preco" type="number" step="0.01" placeholder="Preço" class="w-28 sm:w-32 px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <button type="button" id="demo-btn-add" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors shrink-0">
+                Adicionar
+              </button>
+            </div>
+          </div>
+
+          <p id="demo-mensagem" class="min-h-[1.25rem] text-xs font-medium text-red-600 mb-3"></p>
+
+          <!-- Resumo -->
+          <div class="grid grid-cols-3 gap-2 bg-slate-50 border border-slate-200 p-3 rounded-xl text-center mb-3">
+            <div>
+              <div class="text-[11px] text-slate-500 uppercase font-semibold">Itens</div>
+              <div id="demo-qtd" class="text-base font-bold text-slate-900">0</div>
+            </div>
+            <div>
+              <div class="text-[11px] text-slate-500 uppercase font-semibold">Total</div>
+              <div id="demo-total" class="text-base font-bold text-slate-900">R$ 0.00</div>
+            </div>
+            <div>
+              <div class="text-[11px] text-slate-500 uppercase font-semibold">Saldo</div>
+              <div id="demo-saldo" class="text-base font-bold text-slate-900">R$ 100.00</div>
+            </div>
+          </div>
+
+          <!-- Status do Orçamento -->
+          <div id="demo-status" class="text-center text-sm font-bold py-2 px-3 rounded-xl bg-emerald-100 text-emerald-800 mb-4 transition-colors">
+            Dentro do orçamento
+          </div>
+
+          <!-- Lista -->
+          <ul id="demo-lista" class="space-y-2 min-h-[110px] mb-4"></ul>
+
+          <div class="flex justify-end">
+            <button type="button" id="demo-btn-limpar" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 transition-colors">
+              Limpar tudo
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Raio-X da Memória (Array + Laço for) -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400">
+                Raio-X da Memória: Array <code class="text-amber-300">itens</code>
+              </h3>
+              <span id="xray-len" class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">itens.length = 0</span>
+            </div>
+            <p class="text-xs text-slate-400 mb-3">
+              Cada clique em "Adicionar" executa <code class="text-emerald-300">itens.push({ nome, preco })</code>. Veja o conteúdo real na memória:
+            </p>
+            <pre id="xray-array" class="font-mono text-xs bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-emerald-300 overflow-auto max-h-52">[]</pre>
+          </div>
+
+          <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 shadow-sm">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
+              O que <code class="text-sky-300">atualizarTela()</code> acabou de fazer
+            </h3>
+            <ul id="xray-log" class="font-mono text-xs bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-slate-300 space-y-1.5">
+              <li>1. Limpou a &lt;ul&gt; com innerHTML = ""</li>
+              <li>2. Rodou o laço for 0 vez(es)</li>
+              <li>3. Calculou total = 0.00 e saldo = 100.00</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-slate-900 mb-1">Checagem Rápida — DOM e Eventos</h3>
+        <p class="text-sm text-slate-600 mb-4">
+          Por que colocamos <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">listaEl.innerHTML = ""</code> na primeira linha da função <code class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">atualizarTela()</code>?
+        </p>
+        <div class="space-y-2" data-quiz="q2">
+          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            A) Para apagar os dados de dentro do array <code class="font-mono text-xs">itens</code>.
+          </button>
+          <button type="button" data-correct="true" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            B) Para limpar os <code class="font-mono text-xs">&lt;li&gt;</code> antigos da tela antes de o laço <code class="font-mono text-xs">for</code> desenhar o array completo novamente, evitando itens duplicados.
+          </button>
+          <button type="button" class="quiz-opt w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm transition-colors">
+            C) Porque o navegador exige apagar o HTML inteiro antes de usar <code class="font-mono text-xs">Number()</code>.
+          </button>
+        </div>
+        <div id="feedback-q2" class="hidden mt-3 p-3.5 rounded-xl text-sm"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- ABA 4: EXERCÍCIOS PRÁTICOS (TEMPOS 3 E 4)                 -->
+    <!-- ========================================================= -->
+    <section id="tab-exercicios" class="tab-panel hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Roteiro de Exercícios (Tempos 3 e 4)</h2>
+            <p class="text-sm text-slate-600 mt-1">
+              Trabalhe no seu arquivo <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-xs">app.js</code> e marque cada etapa concluída. Tente resolver sozinho primeiro; se travar, abra a <strong>Dica</strong> antes de consultar o exemplo de código.
+            </p>
+          </div>
+          <span id="lab-counter" class="inline-flex items-center px-3.5 py-1.5 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold shrink-0">
+            0 / 5 concluídos
+          </span>
+        </div>
+      </div>
+
+      <!-- Cards dos Exercícios 1 a 5 -->
+      <div id="exercises-container" class="space-y-4"></div>
+
+      <!-- Desafios Extras -->
+      <div class="bg-amber-50/70 rounded-2xl border border-amber-200 p-6">
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Terminou antes do tempo?</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1 mb-3">Desafios Extras (Bônus)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white p-4 rounded-xl border border-amber-200">
+            <div class="font-bold text-slate-900 text-sm mb-1">1. Desfazer último item</div>
+            <p class="text-xs text-slate-600 leading-relaxed">Crie um botão no HTML (<code class="font-mono bg-slate-100 px-1 rounded">id="btn-desfazer"</code>) que chama <code class="font-mono bg-slate-100 px-1 rounded">itens.pop()</code> e depois <code class="font-mono bg-slate-100 px-1 rounded">atualizarTela()</code>.</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-amber-200">
+            <div class="font-bold text-slate-900 text-sm mb-1">2. Desconto progressivo</div>
+            <p class="text-xs text-slate-600 leading-relaxed">Se <code class="font-mono bg-slate-100 px-1 rounded">total &gt; 150</code>, calcule 10% de desconto (<code class="font-mono bg-slate-100 px-1 rounded">total * 0.9</code>) e mostre o valor promocional na tela.</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-amber-200">
+            <div class="font-bold text-slate-900 text-sm mb-1">3. Campo de quantidade</div>
+            <p class="text-xs text-slate-600 leading-relaxed">Adicione um <code class="font-mono bg-slate-100 px-1 rounded">&lt;input type="number" value="1"&gt;</code> no HTML e multiplique <code class="font-mono bg-slate-100 px-1 rounded">item.preco * item.quantidade</code> na soma.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- ABA 5: COLA RÁPIDA & ERROS COMUNS                         -->
+    <!-- ========================================================= -->
+    <section id="tab-cola" class="tab-panel hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mb-1">Cola Rápida de Sintaxe</h2>
+        <p class="text-sm text-slate-600 mb-6">Os comandos essenciais do seu primeiro contato com JavaScript em um só lugar.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
+            <h3 class="font-bold text-slate-900 text-sm mb-2">1. Variáveis e Conversão</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">const LIMITE = 100;       // Valor fixo
+let total = 0;            // Valor que muda
+
+const nome = inputNome.value.trim();
+const preco = Number(inputPreco.value);</pre>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
+            <h3 class="font-bold text-slate-900 text-sm mb-2">2. Arrays e Laço for</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">let itens = [];
+itens.push({ nome: "Arroz", preco: 25.5 });
+
+for (let i = 0; i &lt; itens.length; i++) {
+  const item = itens[i];
+  total = total + item.preco;
+}</pre>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
+            <h3 class="font-bold text-slate-900 text-sm mb-2">3. Selecionar, Ouvir e Criar no DOM</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">const btn = document.querySelector("#btn-adicionar");
+
+btn.addEventListener("click", function () {
+  const li = document.createElement("li");
+  li.textContent = "Arroz - R$ 25.50";
+  listaEl.appendChild(li);
+});</pre>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
+            <h3 class="font-bold text-slate-900 text-sm mb-2">4. Condicionais e Classes CSS</h3>
+            <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg text-xs font-mono overflow-x-auto">if (total &gt; LIMITE) {
+  statusEl.textContent = "Orçamento estourado!";
+  statusEl.classList.add("alerta");
+} else {
+  statusEl.textContent = "Dentro do orçamento";
+  statusEl.classList.remove("alerta");
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guia de Erros Comuns -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-900 mb-1">Socorro! Meu código não funcionou</h2>
+        <p class="text-sm text-slate-600 mb-4">Antes de travar, abra o Console (<kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-xs">F12</kbd>) e confira se o seu problema é um destes:</p>
+
+        <div class="space-y-3">
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <div class="font-bold text-sm text-red-700">1. O total apareceu como "01025" em vez de "35.00"</div>
+            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Faltou converter o preço com <code class="font-mono bg-white px-1 rounded border">Number(inputPreco.value)</code>. Sem isso, o JS junta textos em vez de somar.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <div class="font-bold text-sm text-red-700">2. Erro "Cannot read properties of null" no Console</div>
+            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> O <code class="font-mono bg-white px-1 rounded border">querySelector</code> não achou o elemento. Confira se você colocou o <code class="font-mono bg-white px-1 rounded border">#</code> antes do id e se o nome está idêntico ao <code class="font-mono bg-white px-1 rounded border">index.html</code>.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <div class="font-bold text-sm text-red-700">3. Os itens antigos se repetem toda vez que adiciono um novo</div>
+            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Faltou limpar a lista com <code class="font-mono bg-white px-1 rounded border">listaEl.innerHTML = "";</code> no início da função <code class="font-mono bg-white px-1 rounded border">atualizarTela()</code>.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <div class="font-bold text-sm text-red-700">4. O alerta vermelho não some quando clico em "Limpar tudo"</div>
+            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Você colocou <code class="font-mono bg-white px-1 rounded border">classList.add("alerta")</code> no <code class="font-mono bg-white px-1 rounded border">if</code>, mas esqueceu <code class="font-mono bg-white px-1 rounded border">classList.remove("alerta")</code> no <code class="font-mono bg-white px-1 rounded border">else</code>.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <div class="font-bold text-sm text-red-700">5. Alterei o código e nada mudou na tela</div>
+            <p class="text-xs text-slate-600 mt-1"><strong>Causa:</strong> Verifique se você salvou o arquivo no editor (<kbd class="px-1 bg-white border rounded font-mono">Ctrl+S</kbd>) e recarregou a página no navegador (<kbd class="px-1 bg-white border rounded font-mono">F5</kbd>).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <span>Guia de Referência do Aluno — Primeiro Contato com JavaScript</span>
+      <span>Atalho amigo: <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-slate-700">F12</kbd> abre o Console do navegador</span>
+    </div>
+  </footer>
+
+  <script>
+    /* =====================================================================
+       UTILITÁRIOS (Notificações Toast e Cópia segura com execCommand)
+       ===================================================================== */
+    function mostrarToast(mensagem, tipo) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      const cores = {
+        info: "bg-slate-900 text-white",
+        sucesso: "bg-emerald-600 text-white",
+        aviso: "bg-amber-600 text-white",
+      };
+      toast.className = "pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg text-sm font-medium transition-all duration-300 " + (cores[tipo] || cores.info);
+      toast.textContent = mensagem;
+      container.appendChild(toast);
+
+      setTimeout(function () {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(function () { toast.remove(); }, 300);
+      }, 2500);
+    }
+
+    function copiarTexto(texto) {
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = texto;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+        mostrarToast("Código copiado!", "sucesso");
+      } catch (erro) {
+        mostrarToast("Não foi possível copiar automaticamente.", "aviso");
+      }
+    }
+
+    /* =====================================================================
+       DADOS DOS EXERCÍCIOS (TEMPOS 3 E 4)
+       ===================================================================== */
+    const EXERCICIOS = [
+      {
+        id: "ex1",
+        bloco: "Tempo 3 • Exercício 1",
+        corBadge: "bg-blue-50 text-blue-700",
+        titulo: "1. Base Funcional na Tela",
+        descricao: "Faça o botão 'Adicionar' ler o nome (#nome) e o preço (#preco), guardar o objeto no array itens, desenhar cada <li> na <ul id='lista'>, somar o #total e limpar os campos após o clique.",
+        dica: "Lembre-se de usar Number(inputPreco.value) para somar como número e listaEl.innerHTML = '' no início de atualizarTela() para não duplicar a lista.",
+        solucao: `function atualizarTela() {\n  listaEl.innerHTML = "";\n  let total = 0;\n\n  for (let i = 0; i < itens.length; i++) {\n    const item = itens[i];\n    total = total + item.preco;\n\n    const li = document.createElement("li");\n    li.textContent = item.nome + " - R$ " + item.preco.toFixed(2);\n    listaEl.appendChild(li);\n  }\n\n  totalEl.textContent = "R$ " + total.toFixed(2);\n}`,
+      },
+      {
+        id: "ex2",
+        bloco: "Tempo 3 • Exercício 2",
+        corBadge: "bg-blue-50 text-blue-700",
+        titulo: "2. Validação de Entrada com if",
+        descricao: "Impeça o cadastro se o nome estiver vazio ('') ou se o preço for menor ou igual a zero (<= 0). Mostre um aviso no <p id='mensagem'> e não adicione o item. Quando um item válido for salvo, limpe o aviso.",
+        dica: "Coloque um if logo após ler nome e preco. Dentro do if, escreva a mensagem e use return; para parar a função antes do itens.push().",
+        solucao: `if (nome === "" || preco <= 0 || isNaN(preco)) {\n  mensagemEl.textContent = "Informe um nome válido e um preço maior que zero.";\n  return;\n}\n\nmensagemEl.textContent = "";`,
+      },
+      {
+        id: "ex3",
+        bloco: "Tempo 3 • Exercício 3",
+        corBadge: "bg-blue-50 text-blue-700",
+        titulo: "3. Alerta Visual de Orçamento",
+        descricao: "Dentro de atualizarTela(), verifique se total > LIMITE (100). Se estourar, mude #status-orcamento para 'Orçamento estourado!' e adicione a classe 'alerta'. Caso contrário, volte o texto normal e remova a classe.",
+        dica: "Use statusEl.classList.add('alerta') no if e não esqueça do statusEl.classList.remove('alerta') no else.",
+        solucao: `if (total > LIMITE) {\n  statusEl.textContent = "Orçamento estourado!";\n  statusEl.classList.add("alerta");\n} else {\n  statusEl.textContent = "Dentro do orçamento";\n  statusEl.classList.remove("alerta");\n}`,
+      },
+      {
+        id: "ex4",
+        bloco: "Tempo 4 • Exercício 4",
+        corBadge: "bg-emerald-50 text-emerald-700",
+        titulo: "4. Contador de Itens e Saldo Restante",
+        descricao: "Atualize o elemento #qtd-itens com a quantidade total de itens cadastrados e o elemento #saldo com quanto ainda resta do orçamento de R$ 100,00.",
+        dica: "A quantidade vem de itens.length e o saldo é simplesmente const saldo = LIMITE - total; formatado com saldo.toFixed(2).",
+        solucao: `const saldo = LIMITE - total;\nqtdItensEl.textContent = itens.length;\nsaldoEl.textContent = "R$ " + saldo.toFixed(2);`,
+      },
+      {
+        id: "ex5",
+        bloco: "Tempo 4 • Exercício 5",
+        corBadge: "bg-emerald-50 text-emerald-700",
+        titulo: "5. Botão 'Limpar tudo'",
+        descricao: "Selecione #btn-limpar e ouça o evento de clique. Ao clicar, esvazie o array (itens = []), limpe a mensagem de erro e chame atualizarTela() para zerar a tela e o alerta.",
+        dica: "Como atualizarTela() já recalcula tudo a partir do array itens, basta zerar o array e chamar atualizarTela() novamente!",
+        solucao: `const btnLimpar = document.querySelector("#btn-limpar");\n\nbtnLimpar.addEventListener("click", function () {\n  itens = [];\n  mensagemEl.textContent = "";\n  atualizarTela();\n});`,
+      },
+    ];
+
+    /* =====================================================================
+       PROGRESSO DO ALUNO (Salvo no localStorage com try/catch)
+       ===================================================================== */
+    const STORAGE_KEY = "guia_iniciante_js_progresso_v1";
+    let progresso = { quizzes: {}, exercicios: {} };
+
+    function carregarProgresso() {
+      try {
+        const salvo = localStorage.getItem(STORAGE_KEY);
+        if (salvo) {
+          const parsed = JSON.parse(salvo);
+          if (parsed && typeof parsed === "object") {
+            progresso = {
+              quizzes: parsed.quizzes || {},
+              exercicios: parsed.exercicios || {},
+            };
+          }
+        }
+      } catch (e) {
+        progresso = { quizzes: {}, exercicios: {} };
+      }
+    }
+
+    function salvarProgresso() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progresso));
+      } catch (e) {
+        // Ignora silenciosamente se bloqueado
+      }
+      atualizarBarraProgresso();
+    }
+
+    function atualizarBarraProgresso() {
+      const totalItens = 2 + EXERCICIOS.length;
+      const qFeitos = Object.values(progresso.quizzes).filter(Boolean).length;
+      const eFeitos = Object.values(progresso.exercicios).filter(Boolean).length;
+      const pct = Math.round(((qFeitos + eFeitos) / totalItens) * 100);
+
+      document.getElementById("progress-bar").style.width = pct + "%";
+      document.getElementById("progress-label").textContent = pct + "% concluído";
+      document.getElementById("lab-counter").textContent = eFeitos + " / " + EXERCICIOS.length + " concluídos";
+    }
+
+    /* =====================================================================
+       NAVEGAÇÃO POR ABAS
+       ===================================================================== */
+    document.getElementById("nav-tabs").addEventListener("click", function (event) {
+      const btn = event.target.closest(".tab-btn");
+      if (!btn) return;
+      const alvo = btn.dataset.tab;
+
+      document.querySelectorAll(".tab-btn").forEach(function (b) {
+        const ativo = b === btn;
+        b.className = ativo
+          ? "tab-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors bg-blue-50 text-blue-700"
+          : "tab-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors";
+      });
+
+      document.querySelectorAll(".tab-panel").forEach(function (panel) {
+        panel.classList.toggle("hidden", panel.id !== "tab-" + alvo);
+      });
+    });
+
+    /* =====================================================================
+       ABA 1: DIAGRAMA DO CICLO DE 4 PASSOS
+       ===================================================================== */
+    const CYCLE_INFO = {
+      clique: {
+        title: "1. Ouvir o Clique do Botão",
+        desc: "Primeiro selecionamos o botão no HTML com document.querySelector('#btn-adicionar') e dizemos ao navegador qual função deve rodar quando o usuário clicar nele.",
+        code: `const btnAdicionar = document.querySelector("#btn-adicionar");\n\nbtnAdicionar.addEventListener("click", function () {\n  // O código daqui de dentro só roda no clique!\n});`,
+      },
+      ler: {
+        title: "2. Ler Inputs e Converter para Número",
+        desc: "Dentro do clique, lemos o texto digitado com .value. Para o preço, usamos Number() para transformar texto em número e poder somar corretamente.",
+        code: `const nome = inputNome.value.trim();\nconst preco = Number(inputPreco.value);`,
+      },
+      array: {
+        title: "3. Guardar na Lista (Array) em Memória",
+        desc: "Agrupamos o nome e o preço em um objeto { nome, preco } e colocamos no final do array itens usando o método .push().",
+        code: `let itens = [];\n\nitens.push({ nome: nome, preco: preco });\nconsole.table(itens);`,
+      },
+      tela: {
+        title: "4. Atualizar a Tela com Laço for",
+        desc: "Limpamos a <ul>, percorremos o array com um laço for somando o total e criamos um <li> para cada item com createElement e textContent.",
+        code: `listaEl.innerHTML = "";\nlet total = 0;\n\nfor (let i = 0; i < itens.length; i++) {\n  total = total + itens[i].preco;\n  const li = document.createElement("li");\n  li.textContent = itens[i].nome;\n  listaEl.appendChild(li);\n}`,
+      },
+    };
+
+    document.getElementById("cycle-steps").addEventListener("click", function (event) {
+      const card = event.target.closest(".cycle-card");
+      if (!card) return;
+      const info = CYCLE_INFO[card.dataset.step];
+      if (!info) return;
+
+      document.querySelectorAll(".cycle-card").forEach(function (c) {
+        const ativo = c === card;
+        c.className = ativo
+          ? "cycle-card text-left p-4 rounded-xl border-2 border-blue-600 bg-blue-50/60 transition-all"
+          : "cycle-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition-all";
+      });
+
+      document.getElementById("cycle-title").textContent = info.title;
+      document.getElementById("cycle-desc").textContent = info.desc;
+      document.getElementById("cycle-code").textContent = info.code;
+    });
+
+    /* =====================================================================
+       ABA 2: LABORATÓRIOS DO TEMPO 1 (Number() e if/else)
+       ===================================================================== */
+    function atualizarComparadorNumber() {
+      const a = document.getElementById("calc-a").value;
+      const b = document.getElementById("calc-b").value;
+
+      document.getElementById("calc-code-str").textContent = '"' + a + '" + "' + b + '"';
+      document.getElementById("calc-res-str").textContent = '"' + (a + b) + '"';
+
+      const somaNum = Number(a) + Number(b);
+      document.getElementById("calc-code-num").textContent = 'Number("' + a + '") + Number("' + b + '")';
+      document.getElementById("calc-res-num").textContent = isNaN(somaNum) ? "NaN (use ponto, não vírgula!)" : String(somaNum);
+    }
+
+    document.getElementById("calc-a").addEventListener("input", atualizarComparadorNumber);
+    document.getElementById("calc-b").addEventListener("input", atualizarComparadorNumber);
+
+    function atualizarSimuladorIf() {
+      const total = Number(document.getElementById("if-slider").value);
+      const limite = 100;
+      const estourou = total > limite;
+      const saldo = limite - total;
+
+      document.getElementById("if-total-label").textContent = "R$ " + total.toFixed(2);
+      document.getElementById("if-code-val").textContent = String(total);
+      document.getElementById("if-cond-badge").textContent = estourou ? "// true (entra no if)" : "// false (vai para o else)";
+
+      const box = document.getElementById("if-status-box");
+      const branchTrue = document.getElementById("if-branch-true");
+      const branchFalse = document.getElementById("if-branch-false");
+
+      if (estourou) {
+        box.className = "p-3 rounded-xl text-center text-sm font-bold bg-red-100 text-red-800 transition-colors";
+        box.textContent = "Orçamento estourado! (Saldo: R$ " + saldo.toFixed(2) + ")";
+        branchTrue.className = "pl-4 py-1 rounded transition-colors bg-red-950/80 text-red-300 border-l-2 border-red-400";
+        branchFalse.className = "pl-4 py-1 rounded transition-colors text-slate-500";
+      } else {
+        box.className = "p-3 rounded-xl text-center text-sm font-bold bg-emerald-100 text-emerald-800 transition-colors";
+        box.textContent = "Dentro do orçamento (Saldo: R$ " + saldo.toFixed(2) + ")";
+        branchTrue.className = "pl-4 py-1 rounded transition-colors text-slate-500";
+        branchFalse.className = "pl-4 py-1 rounded transition-colors bg-emerald-950/80 text-emerald-300 border-l-2 border-emerald-400";
+      }
+    }
+
+    document.getElementById("if-slider").addEventListener("input", atualizarSimuladorIf);
+
+    /* =====================================================================
+       ABA 3: PROJETO LISTA DE COMPRAS AO VIVO + RAIO-X
+       ===================================================================== */
+    const DEMO_LIMITE = 100;
+    let demoItens = [
+      { nome: "Arroz 5kg", preco: 28.5 },
+      { nome: "Café 500g", preco: 19.9 },
+    ];
+
+    function atualizarDemoLista() {
+      const listaEl = document.getElementById("demo-lista");
+      listaEl.innerHTML = "";
+      let total = 0;
+
+      if (demoItens.length === 0) {
+        const vazio = document.createElement("li");
+        vazio.className = "text-center text-xs text-slate-400 py-6 border border-dashed border-slate-200 rounded-xl";
+        vazio.textContent = "Sua lista está vazia. Adicione um item acima!";
+        listaEl.appendChild(vazio);
+      } else {
+        for (let i = 0; i < demoItens.length; i++) {
+          const item = demoItens[i];
+          total = total + item.preco;
+
+          const li = document.createElement("li");
+          li.className = "flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm";
+
+          const spanNome = document.createElement("span");
+          spanNome.className = "font-medium text-slate-800";
+          spanNome.textContent = item.nome;
+
+          const spanPreco = document.createElement("span");
+          spanPreco.className = "font-mono text-xs font-semibold text-slate-600";
+          spanPreco.textContent = "R$ " + item.preco.toFixed(2);
+
+          li.append(spanNome, spanPreco);
+          listaEl.appendChild(li);
+        }
+      }
+
+      const saldo = DEMO_LIMITE - total;
+      document.getElementById("demo-qtd").textContent = demoItens.length;
+      document.getElementById("demo-total").textContent = "R$ " + total.toFixed(2);
+      document.getElementById("demo-saldo").textContent = "R$ " + saldo.toFixed(2);
+
+      const statusEl = document.getElementById("demo-status");
+      if (total > DEMO_LIMITE) {
+        statusEl.textContent = "Orçamento estourado!";
+        statusEl.className = "text-center text-sm font-bold py-2 px-3 rounded-xl bg-red-100 text-red-800 mb-4 transition-colors";
+      } else {
+        statusEl.textContent = "Dentro do orçamento";
+        statusEl.className = "text-center text-sm font-bold py-2 px-3 rounded-xl bg-emerald-100 text-emerald-800 mb-4 transition-colors";
+      }
+
+      // Atualiza o Raio-X da memória
+      document.getElementById("xray-len").textContent = "itens.length = " + demoItens.length;
+      document.getElementById("xray-array").textContent = JSON.stringify(demoItens, null, 2);
+
+      const logEl = document.getElementById("xray-log");
+      logEl.innerHTML = "";
+      const passos = [
+        '1. Limpou a <ul> com listaEl.innerHTML = ""',
+        "2. Rodou o laço for " + demoItens.length + " vez(es) criando <li>",
+        "3. Somou total = " + total.toFixed(2) + " e saldo = " + saldo.toFixed(2),
+        total > DEMO_LIMITE
+          ? '4. total > 100 (true) -> classList.add("alerta")'
+          : '4. total > 100 (false) -> classList.remove("alerta")',
+      ];
+      passos.forEach(function (texto) {
+        const li = document.createElement("li");
+        li.textContent = texto;
+        logEl.appendChild(li);
+      });
+    }
+
+    document.getElementById("demo-btn-add").addEventListener("click", function () {
+      const inputNome = document.getElementById("demo-nome");
+      const inputPreco = document.getElementById("demo-preco");
+      const msgEl = document.getElementById("demo-mensagem");
+
+      const nome = inputNome.value.trim();
+      const preco = Number(inputPreco.value);
+
+      if (nome === "" || preco <= 0 || isNaN(preco)) {
+        msgEl.textContent = "Informe um nome válido e um preço maior que zero.";
+        return;
+      }
+
+      msgEl.textContent = "";
+      demoItens.push({ nome: nome, preco: preco });
+      inputNome.value = "";
+      inputPreco.value = "";
+      inputNome.focus();
+      atualizarDemoLista();
+    });
+
+    document.getElementById("demo-btn-limpar").addEventListener("click", function () {
+      demoItens = [];
+      document.getElementById("demo-mensagem").textContent = "";
+      atualizarDemoLista();
+      mostrarToast("Lista esvaziada (itens = []).", "info");
+    });
+
+    /* =====================================================================
+       QUIZZES INTERATIVOS
+       ===================================================================== */
+    document.querySelectorAll("[data-quiz]").forEach(function (quizBox) {
+      const quizId = quizBox.dataset.quiz;
+      quizBox.addEventListener("click", function (event) {
+        const btn = event.target.closest(".quiz-opt");
+        if (!btn) return;
+
+        const correta = btn.dataset.correct === "true";
+        const feedback = document.getElementById("feedback-" + quizId);
+
+        quizBox.querySelectorAll(".quiz-opt").forEach(function (opt) {
+          opt.classList.remove("border-emerald-500", "bg-emerald-50", "border-red-400", "bg-red-50");
+        });
+        feedback.classList.remove("hidden", "bg-emerald-50", "text-emerald-800", "bg-red-50", "text-red-800");
+
+        if (correta) {
+          btn.classList.add("border-emerald-500", "bg-emerald-50");
+          feedback.classList.add("bg-emerald-50", "text-emerald-800");
+          feedback.textContent = "Exato! Você mandou bem na lógica.";
+          progresso.quizzes[quizId] = true;
+          salvarProgresso();
+        } else {
+          btn.classList.add("border-red-400", "bg-red-50");
+          feedback.classList.add("bg-red-50", "text-red-800");
+          feedback.textContent = "Quase lá! Releia a explicação acima e tente outra opção.";
+        }
+      });
+    });
+
+    /* =====================================================================
+       ABA 4: RENDERIZAÇÃO DOS EXERCÍCIOS (TEMPOS 3 E 4)
+       ===================================================================== */
+    function renderizarExercicios() {
+      const container = document.getElementById("exercises-container");
+      container.innerHTML = "";
+
+      EXERCICIOS.forEach(function (ex) {
+        const concluido = Boolean(progresso.exercicios[ex.id]);
+
+        const card = document.createElement("article");
+        card.className = "bg-white rounded-2xl border p-5 sm:p-6 shadow-sm transition-colors " + (concluido ? "border-emerald-300 bg-emerald-50/20" : "border-slate-200");
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3.5">
+            <input type="checkbox" data-ex-check="${ex.id}" ${concluido ? "checked" : ""}
+              class="mt-1 w-5 h-5 rounded accent-emerald-600 cursor-pointer shrink-0" aria-label="Marcar ${ex.titulo} como concluído" />
+            <div class="flex-1 min-w-0">
+              <div class="mb-1.5">
+                <span class="text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full ${ex.corBadge}">${ex.bloco}</span>
+              </div>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">${ex.titulo}</h3>
+              <p class="text-sm text-slate-600 mt-1 leading-relaxed">${ex.descricao}</p>
+
+              <div class="flex flex-wrap gap-2 mt-4">
+                <button type="button" data-toggle-dica="${ex.id}" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors">
+                  Ver Dica
+                </button>
+                <button type="button" data-toggle-solucao="${ex.id}" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                  Ver Exemplo de Código
+                </button>
+              </div>
+
+              <div id="dica-${ex.id}" class="hidden mt-3 p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 text-xs sm:text-sm text-amber-900">
+                <strong>Dica:</strong> ${ex.dica}
+              </div>
+
+              <div id="solucao-${ex.id}" class="hidden mt-3 rounded-xl bg-slate-900 overflow-hidden border border-slate-800">
+                <div class="px-3.5 py-2 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                  <span class="text-[11px] font-mono text-slate-400">Exemplo de referência</span>
+                  <button type="button" data-copy-solucao="${ex.id}" class="text-[11px] font-semibold text-blue-400 hover:text-blue-300">
+                    Copiar código
+                  </button>
+                </div>
+                <pre class="p-3.5 text-xs font-mono text-emerald-300 overflow-x-auto"></pre>
+              </div>
+            </div>
+          </div>
+        `;
+
+        card.querySelector("#solucao-" + ex.id + " pre").textContent = ex.solucao;
+        container.appendChild(card);
+      });
+    }
+
+    document.getElementById("exercises-container").addEventListener("click", function (event) {
+      const check = event.target.closest("[data-ex-check]");
+      if (check) {
+        progresso.exercicios[check.dataset.exCheck] = check.checked;
+        salvarProgresso();
+        renderizarExercicios();
+        if (check.checked) mostrarToast("Exercício concluído! Bom trabalho.", "sucesso");
+        return;
+      }
+
+      const btnDica = event.target.closest("[data-toggle-dica]");
+      if (btnDica) {
+        document.getElementById("dica-" + btnDica.dataset.toggleDica).classList.toggle("hidden");
+        return;
+      }
+
+      const btnSolucao = event.target.closest("[data-toggle-solucao]");
+      if (btnSolucao) {
+        document.getElementById("solucao-" + btnSolucao.dataset.toggleSolucao).classList.toggle("hidden");
+        return;
+      }
+
+      const btnCopy = event.target.closest("[data-copy-solucao]");
+      if (btnCopy) {
+        const ex = EXERCICIOS.find(function (item) { return item.id === btnCopy.dataset.copySolucao; });
+        if (ex) copiarTexto(ex.solucao);
+      }
+    });
+
+    /* =====================================================================
+       INICIALIZAÇÃO
+       ===================================================================== */
+    window.addEventListener("DOMContentLoaded", function () {
+      carregarProgresso();
+      atualizarComparadorNumber();
+      atualizarSimuladorIf();
+      atualizarDemoLista();
+      renderizarExercicios();
+      atualizarBarraProgresso();
+    });
+  </script>
+</body>
+</html>
