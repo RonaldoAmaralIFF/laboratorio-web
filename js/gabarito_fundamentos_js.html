@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solução Interativa — Lista de Compras em JavaScript</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fontes Inter e JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Container de Notificações (Toast) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Cabeçalho Fixo -->
+  <header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-mono font-bold text-sm shadow-sm shrink-0">
+          JS
+        </div>
+        <div class="truncate">
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 truncate">Solução Guiada — Lista de Compras</h1>
+          <p class="text-xs text-slate-500 hidden sm:block">Explicação passo a passo do <code class="font-mono">app.js</code> + execução ao vivo</p>
+        </div>
+      </div>
+
+      <!-- Alternador de Visão Principal -->
+      <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl shrink-0" role="tablist" aria-label="Modo de visualização">
+        <button type="button" data-view="passos" class="view-tab px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-blue-700 shadow-sm transition-all">
+          Passo a Passo
+        </button>
+        <button type="button" data-view="completo" class="view-tab px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all">
+          Código Completo
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal: Layout em 2 Colunas no Desktop -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+      <!-- ========================================================= -->
+      <!-- COLUNA ESQUERDA: EXPLICAÇÃO PASSO A PASSO / CÓDIGO TOTAL  -->
+      <!-- ========================================================= -->
+      <div class="lg:col-span-7 space-y-5">
+
+        <!-- VISÃO 1: PASSO A PASSO INTERATIVO -->
+        <section id="view-passos" class="space-y-5">
+          <!-- Barra de Progresso e Navegação Rápida dos Passos -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Etapas da Solução</span>
+              <span id="step-counter" class="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">Passo 1 de 7</span>
+            </div>
+
+            <!-- Botões numerados dos 7 passos -->
+            <div id="step-pills" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Cartão do Passo Atual -->
+          <article class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-5">
+            <div>
+              <span id="step-badge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 mb-2"></span>
+              <h2 id="step-title" class="text-xl sm:text-2xl font-extrabold text-slate-900"></h2>
+              <p id="step-summary" class="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed"></p>
+            </div>
+
+            <!-- Pontos-chave Técnicos -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Conceitos e Decisões Técnicas</h3>
+              <ul id="step-concepts" class="space-y-2 text-sm text-slate-700 list-disc pl-5"></ul>
+            </div>
+
+            <!-- Bloco de Código do Passo -->
+            <div class="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden">
+              <div class="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between gap-2">
+                <span id="step-file-label" class="text-xs font-mono text-slate-400">app.js</span>
+                <button type="button" id="btn-copy-step" class="text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors">
+                  Copiar trecho
+                </button>
+              </div>
+              <pre id="step-code" class="p-4 text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto leading-relaxed"></pre>
+            </div>
+
+            <!-- Alerta / Boa Prática do Passo -->
+            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 flex items-start gap-3">
+              <span class="text-amber-700 font-bold text-sm shrink-0 mt-0.5">Atenção:</span>
+              <p id="step-tip" class="text-xs sm:text-sm text-amber-900 leading-relaxed"></p>
+            </div>
+
+            <!-- Ação para Demonstrar este Passo na Aplicação ao Vivo -->
+            <div class="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-slate-100">
+              <button type="button" id="btn-demo-step" class="px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold border border-indigo-200 transition-colors">
+                Demonstrar este passo ao vivo →
+              </button>
+
+              <div class="flex items-center justify-between sm:justify-end gap-2">
+                <button type="button" id="btn-prev-step" class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                  ← Anterior
+                </button>
+                <button type="button" id="btn-next-step" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-semibold text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                  Próximo →
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Checklist Interativo dos Requisitos -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-base font-bold text-slate-900">Checklist de Validação da Atividade</h3>
+              <span id="checklist-count" class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">0 / 7 testados</span>
+            </div>
+            <p class="text-xs text-slate-500">Teste cada requisito na aplicação ao lado e marque conforme validar:</p>
+            <div id="checklist-items" class="space-y-2 pt-1"></div>
+          </div>
+        </section>
+
+        <!-- VISÃO 2: CÓDIGO COMPLETO CONSOLIDADO -->
+        <section id="view-completo" class="hidden space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900">Gabarito Completo — <code class="font-mono text-blue-700">app.js</code></h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Código consolidado com todos os 7 passos integrados, pronto para rodar com o template fornecido.</p>
+              </div>
+              <button type="button" id="btn-copy-full" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition-colors shrink-0">
+                Copiar app.js completo
+              </button>
+            </div>
+
+            <div class="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden">
+              <div class="px-4 py-2 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                <span class="text-xs font-mono text-slate-400">labs/labXX/app.js</span>
+                <span class="text-[11px] font-mono text-slate-500">Execução client-side (defer)</span>
+              </div>
+              <pre id="full-code-display" class="p-4 text-xs font-mono text-emerald-300 overflow-x-auto leading-relaxed max-h-[680px]"></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- COLUNA DIREITA: APLICAÇÃO AO VIVO + INSPETOR DE ESTADO    -->
+      <!-- ========================================================= -->
+      <aside class="lg:col-span-5 lg:sticky lg:top-24 space-y-5">
+
+        <!-- Aplicação Base Executando a Solução Completa -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">Ao Vivo</span>
+              <h2 class="text-lg font-bold text-slate-900 mt-1">Lista de Compras</h2>
+              <p class="text-xs text-slate-500">Orçamento disponível: <strong>R$ 100,00</strong> • Desconto 10% acima de R$ 150,00</p>
+            </div>
+          </div>
+
+          <!-- Formulário (idêntico ao contrato do template) -->
+          <div id="live-form-box" class="space-y-2 transition-all rounded-xl">
+            <input type="text" id="nome" placeholder="Nome do item (ex: Arroz)" autocomplete="off"
+              class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <div class="flex gap-2">
+              <input type="number" id="preco" placeholder="Preço (ex: 25.50)" step="0.01" min="0.01"
+                class="flex-1 min-w-0 px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="number" id="quantidade" value="1" min="1" step="1" aria-label="Quantidade"
+                class="w-20 px-3 py-2.5 text-sm border border-slate-300 rounded-xl text-center focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <button type="button" id="btn-adicionar"
+                class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors shrink-0">
+                Adicionar
+              </button>
+            </div>
+          </div>
+
+          <!-- Mensagem de Erro (#mensagem) -->
+          <p id="mensagem" class="min-h-[1.25rem] text-xs font-medium text-red-600" aria-live="polite"></p>
+
+          <!-- Resumo Numérico (#qtd-itens, #total, #saldo) -->
+          <div id="live-resumo-box" class="grid grid-cols-3 gap-2 bg-slate-50 border border-slate-200 p-3 rounded-xl text-center transition-all">
+            <div>
+              <div class="text-[11px] text-slate-500 uppercase font-semibold">Itens</div>
+              <strong id="qtd-itens" class="text-sm sm:text-base font-bold text-slate-900">0</strong>
+            </div>
+            <div>
+              <div class="text-[11px] text-slate-500 uppercase font-semibold">Total</div>
+              <strong id="total" class="text-sm sm:text-base font-bold text-slate-900">R$ 0.00</strong>
+            </div>
+            <div>
+              <div class="text-[11px] text-slate-500 uppercase font-semibold">Saldo</div>
+              <strong id="saldo" class="text-sm sm:text-base font-bold text-slate-900">R$ 100.00</strong>
+            </div>
+          </div>
+
+          <!-- Desconto Progressivo (#desconto) -->
+          <p id="desconto" class="min-h-[1.25rem] text-center text-xs font-bold text-emerald-700" aria-live="polite"></p>
+
+          <!-- Status do Orçamento (#status-orcamento) -->
+          <p id="status-orcamento" class="text-center text-sm font-bold py-2 px-3 rounded-xl bg-emerald-100 text-emerald-800 transition-colors">
+            Dentro do orçamento
+          </p>
+
+          <!-- Lista Renderizada (#lista) -->
+          <ul id="lista" class="space-y-2 min-h-[88px] max-h-48 overflow-y-auto"></ul>
+
+          <!-- Botões de Ação (#btn-desfazer, #btn-limpar) -->
+          <div class="flex justify-end gap-2 pt-1">
+            <button type="button" id="btn-desfazer" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 transition-colors">
+              Desfazer último
+            </button>
+            <button type="button" id="btn-limpar" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 transition-colors">
+              Limpar tudo
+            </button>
+          </div>
+        </div>
+
+        <!-- Inspetor de Estado em Memória (RAM) -->
+        <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 shadow-sm space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400">Inspetor de Estado (<code class="text-amber-300">itens</code>)</h3>
+            <span id="inspector-class" class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-emerald-300">class: ""</span>
+          </div>
+          <pre id="inspector-json" class="font-mono text-xs bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-emerald-300 overflow-auto max-h-40">[]</pre>
+          <div class="pt-1 border-t border-slate-800">
+            <p class="text-[11px] font-mono text-slate-400">Última ação executada:</p>
+            <p id="inspector-event" class="text-xs font-mono text-sky-300 mt-0.5">atualizarTela() — renderização inicial</p>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="border-t border-slate-200 bg-white py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <span>Solução Interativa — Fundamentos de JavaScript e DOM</span>
+      <span>Pressione <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded font-mono text-slate-700">F12</kbd> para acompanhar no DevTools</span>
+    </div>
+  </footer>
+
+  <script>
+    /* =====================================================================
+       DADOS PEDAGÓGICOS DOS 7 PASSOS DA SOLUÇÃO
+       ===================================================================== */
+    const PASSOS = [
+      {
+        numero: 1,
+        curto: "1. Estado & DOM",
+        badge: "Etapa 1 • Configuração Inicial",
+        titulo: "Constantes, Estado em Memória e Seletores do DOM",
+        resumo: "Declaramos as constantes de regra de negócio, inicializamos o array que armazenará os itens em memória e capturamos as referências dos elementos HTML usando document.querySelector().",
+        conceitos: [
+          "Uso de const para valores fixos (LIMITE, LIMITE_DESCONTO, PERCENTUAL_DESCONTO) e referências de elementos do DOM.",
+          "Uso de let para o array itens, pois ele será reatribuído para [] ao clicar no botão Limpar tudo.",
+          "Como o script é carregado com defer no index.html, todos os elementos já existem no DOM quando o app.js inicia."
+        ],
+        codigo: `const LIMITE = 100;
+const LIMITE_DESCONTO = 150;
+const PERCENTUAL_DESCONTO = 0.1;
+
+let itens = [];
+
+// Referências dos elementos do DOM
+const inputNome = document.querySelector("#nome");
+const inputPreco = document.querySelector("#preco");
+const inputQuantidade = document.querySelector("#quantidade");
+const btnAdicionar = document.querySelector("#btn-adicionar");
+const btnDesfazer = document.querySelector("#btn-desfazer");
+const btnLimpar = document.querySelector("#btn-limpar");
+
+const mensagemEl = document.querySelector("#mensagem");
+const qtdItensEl = document.querySelector("#qtd-itens");
+const totalEl = document.querySelector("#total");
+const saldoEl = document.querySelector("#saldo");
+const descontoEl = document.querySelector("#desconto");
+const statusEl = document.querySelector("#status-orcamento");
+const listaEl = document.querySelector("#lista");`,
+        dica: "Verifique sempre se o seletor possui o prefixo # e coincide exatamente com o id do index.html. Caso contrário, querySelector() retorna null e gera TypeError ao tentar acessar propriedades.",
+        demoLabel: "Destacar elementos mapeados",
+        acaoDemo: function () {
+          destacarElemento("live-form-box");
+          destacarElemento("live-resumo-box");
+          atualizarLogInspetor("13 referências do DOM capturadas via document.querySelector()");
+          mostrarToast("Elementos do formulário e resumo destacados ao vivo.", "info");
+        }
+      },
+      {
+        numero: 2,
+        curto: "2. Validação",
+        badge: "Etapa 2 • Guard Clauses (Early Return)",
+        titulo: "Leitura de Entradas, Conversão e Validação",
+        resumo: "Dentro do evento click de #btn-adicionar, lemos os valores dos inputs, fazemos a conversão explícita para número e validamos todas as pré-condições antes de alterar o estado.",
+        conceitos: [
+          "Todo input.value retorna string. Usamos trim() no nome e Number() no preço e na quantidade para evitar concatenação acidental.",
+          "Number.isNaN() verifica de forma segura se a conversão numérica falhou.",
+          "Guard Clauses (if com return imediato) interrompem o fluxo em caso de erro, evitando aninhamento excessivo de else."
+        ],
+        codigo: `btnAdicionar.addEventListener("click", function () {
+  const nome = inputNome.value.trim();
+  const preco = Number(inputPreco.value);
+  const quantidade = Number(inputQuantidade.value);
+
+  // Validação (Guard Clauses)
+  if (nome === "") {
+    mensagemEl.textContent = "Informe o nome do item.";
+    inputNome.focus();
+    return;
+  }
+
+  if (Number.isNaN(preco) || preco <= 0) {
+    mensagemEl.textContent = "Informe um preço válido maior que zero.";
+    inputPreco.focus();
+    return;
+  }
+
+  if (Number.isNaN(quantidade) || quantidade < 1) {
+    mensagemEl.textContent = "A quantidade deve ser no mínimo 1.";
+    inputQuantidade.focus();
+    return;
+  }
+
+  mensagemEl.textContent = "";
+  // Continua no Passo 3...
+});`,
+        dica: "Nunca leia input.value no topo do arquivo: a leitura deve ocorrer dentro do callback do clique, no momento em que o usuário termina de digitar.",
+        demoLabel: "Simular erro de validação",
+        acaoDemo: function () {
+          inputNome.value = "Arroz";
+          inputPreco.value = "-5";
+          inputQuantidade.value = "1";
+          btnAdicionar.click();
+          destacarElemento("live-form-box");
+          mostrarToast("Guard clause acionada: preço <= 0 bloqueado.", "aviso");
+        }
+      },
+      {
+        numero: 3,
+        curto: "3. Inserção",
+        badge: "Etapa 3 • Estado em Memória",
+        titulo: "Inserção no Array de Objetos e Reset do Formulário",
+        resumo: "Após passar pelas validações, adicionamos um novo objeto literal { nome, preco, quantidade } ao array itens, limpamos os campos do formulário e chamamos atualizarTela().",
+        conceitos: [
+          "Cada registro é modelado como um objeto literal com três propriedades bem definidas.",
+          "itens.push(...) insere o novo objeto ao final do array em memória.",
+          "Redefinir inputQuantidade.value = '1' e chamar inputNome.focus() melhora a usabilidade para cadastros em sequência."
+        ],
+        codigo: `  // Após validar as entradas:
+  itens.push({
+    nome: nome,
+    preco: preco,
+    quantidade: quantidade,
+  });
+
+  // Limpa os campos para o próximo cadastro
+  inputNome.value = "";
+  inputPreco.value = "";
+  inputQuantidade.value = "1";
+  inputNome.focus();
+
+  atualizarTela();`,
+        dica: "Observe no Inspetor de Estado à direita como cada clique válido adiciona um objeto ao array itens antes de a tela ser redesenhada.",
+        demoLabel: "Inserir item de exemplo (Arroz)",
+        acaoDemo: function () {
+          inputNome.value = "Arroz 5kg";
+          inputPreco.value = "28.50";
+          inputQuantidade.value = "2";
+          btnAdicionar.click();
+          mostrarToast("Item 'Arroz 5kg' (2x R$ 28.50) inserido no array itens.", "sucesso");
+        }
+      },
+      {
+        numero: 4,
+        curto: "4. Renderização",
+        badge: "Etapa 4 • Manipulação Segura do DOM",
+        titulo: "Percorrendo o Array e Criando Nós <li> com textContent",
+        resumo: "A função atualizarTela() atua como ponto único de sincronização entre o array itens e a interface. Ela limpa a <ul>, percorre os registros acumulando os subtotais e insere cada <li> de forma segura.",
+        conceitos: [
+          "listaEl.innerHTML = '' remove os nós antigos antes do laço for, evitando que os itens se dupliquem na tela.",
+          "Para cada item, calculamos subtotal = item.preco * item.quantidade e somamos ao acumulador total.",
+          "document.createElement('li') + textContent insere texto literal sem interpretar tags HTML, prevenindo XSS."
+        ],
+        codigo: `function atualizarTela() {
+  listaEl.innerHTML = "";
+  let total = 0;
+
+  for (let i = 0; i < itens.length; i++) {
+    const item = itens[i];
+    const subtotal = item.preco * item.quantidade;
+    total = total + subtotal;
+
+    const li = document.createElement("li");
+    li.textContent =
+      item.nome +
+      " (" + item.quantidade + "x R$ " + item.preco.toFixed(2) + ")" +
+      " — Subtotal: R$ " + subtotal.toFixed(2);
+
+    listaEl.appendChild(li);
+  }
+  // Continua nos Passos 5 e 6...
+}`,
+        dica: "O método .toFixed(2) formata o número com exatamente duas casas decimais para exibição monetária, retornando uma string.",
+        demoLabel: "Testar inserção segura contra HTML",
+        acaoDemo: function () {
+          inputNome.value = "<b>Café Especial</b>";
+          inputPreco.value = "19.90";
+          inputQuantidade.value = "1";
+          btnAdicionar.click();
+          mostrarToast("Note que <b> foi exibido como texto literal graças ao textContent.", "info");
+        }
+      },
+      {
+        numero: 5,
+        curto: "5. Orçamento",
+        badge: "Etapa 5 • Estado Derivado e classList",
+        titulo: "Resumo Numérico e Alerta Visual de Orçamento",
+        resumo: "Com o total calculado pelo laço for, derivamos o saldo restante (LIMITE - total), atualizamos os indicadores do resumo e alternamos a classe CSS .alerta no status do orçamento.",
+        conceitos: [
+          "A quantidade de itens vem diretamente de itens.length, evitando variáveis contadoras duplicadas.",
+          "Se total > LIMITE (R$ 100,00), atualizamos o texto e aplicamos classList.add('alerta').",
+          "No bloco else, garantimos classList.remove('alerta') para restaurar o visual verde caso o total volte para dentro do limite."
+        ],
+        codigo: `  // Resumo numérico
+  const saldo = LIMITE - total;
+  qtdItensEl.textContent = itens.length;
+  totalEl.textContent = "R$ " + total.toFixed(2);
+  saldoEl.textContent = "R$ " + saldo.toFixed(2);
+
+  // Controle de orçamento
+  if (total > LIMITE) {
+    statusEl.textContent = "Orçamento estourado!";
+    statusEl.classList.add("alerta");
+  } else {
+    statusEl.textContent = "Dentro do orçamento";
+    statusEl.classList.remove("alerta");
+  }`,
+        dica: "Um erro frequente é esquecer o classList.remove('alerta') no else — isso faz o alerta vermelho ficar preso mesmo depois de desfazer ou limpar a lista.",
+        demoLabel: "Simular estouro de orçamento (> R$ 100)",
+        acaoDemo: function () {
+          itens = [
+            { nome: "Azeite Extra Virgem", preco: 45.0, quantidade: 2 },
+            { nome: "Queijo Minas", preco: 25.0, quantidade: 1 }
+          ];
+          atualizarTela();
+          atualizarLogInspetor("Simulação: total = R$ 115.00 (> R$ 100) -> classList.add('alerta')");
+          destacarElemento("live-resumo-box");
+          mostrarToast("Orçamento estourado! Classe .alerta aplicada.", "aviso");
+        }
+      },
+      {
+        numero: 6,
+        curto: "6. Desconto",
+        badge: "Etapa 6 • Regra Condicional Complementar",
+        titulo: "Desconto Progressivo de 10% Acima de R$ 150,00",
+        resumo: "Ainda dentro de atualizarTela(), verificamos se o total ultrapassou R$ 150,00. Em caso positivo, calculamos o valor líquido com 10% de desconto e exibimos em #desconto.",
+        conceitos: [
+          "O valor com 10% de desconto é obtido por total * (1 - PERCENTUAL_DESCONTO), equivalente a total * 0.9.",
+          "Quando total <= 150, limpamos o conteúdo com descontoEl.textContent = '' para não manter mensagens antigas.",
+          "Como essa lógica está dentro de atualizarTela(), ela reage automaticamente a inserções, desfazer e limpar."
+        ],
+        codigo: `  // Desconto progressivo (10% acima de R$ 150,00)
+  if (total > LIMITE_DESCONTO) {
+    const totalComDesconto = total * (1 - PERCENTUAL_DESCONTO);
+    descontoEl.textContent =
+      "Desconto de 10% aplicado! Valor final: R$ " +
+      totalComDesconto.toFixed(2);
+  } else {
+    descontoEl.textContent = "";
+  }`,
+        dica: "Centralizar todas as atualizações visuais em atualizarTela() garante que a tela nunca fique dessincronizada com os dados em memória.",
+        demoLabel: "Simular compra acima de R$ 150",
+        acaoDemo: function () {
+          itens = [
+            { nome: "Carne Bovina", preco: 65.0, quantidade: 2 },
+            { nome: "Azeite 500ml", preco: 40.0, quantidade: 1 }
+          ];
+          atualizarTela();
+          atualizarLogInspetor("Simulação: total = R$ 170.00 (> R$ 150) -> 10% desconto = R$ 153.00");
+          mostrarToast("Total R$ 170.00: desconto de 10% ativado!", "sucesso");
+        }
+      },
+      {
+        numero: 7,
+        curto: "7. Remoção & Init",
+        badge: "Etapa 7 • Eventos de Remoção e Inicialização",
+        titulo: "Desfazer Último (pop), Limpar Tudo e Renderização Inicial",
+        resumo: "Conectamos os dois botões de remoção (#btn-desfazer e #btn-limpar) e invocamos atualizarTela() ao final do arquivo para garantir o estado inicial consistente.",
+        conceitos: [
+          "Em #btn-desfazer, verificamos se itens.length === 0 antes de chamar itens.pop(), exibindo um aviso amigável se a lista já estiver vazia.",
+          "Em #btn-limpar, reatribuímos itens = [], limpamos #mensagem e chamamos atualizarTela().",
+          "Chamar atualizarTela() na última linha garante que contadores, saldo e status iniciem sincronizados."
+        ],
+        codigo: `// Desfazer último item
+btnDesfazer.addEventListener("click", function () {
+  if (itens.length === 0) {
+    mensagemEl.textContent = "A lista já está vazia.";
+    return;
+  }
+
+  mensagemEl.textContent = "";
+  itens.pop();
+  atualizarTela();
+});
+
+// Limpar toda a lista
+btnLimpar.addEventListener("click", function () {
+  itens = [];
+  mensagemEl.textContent = "";
+  atualizarTela();
+});
+
+// Renderização inicial
+atualizarTela();`,
+        dica: "Tanto no Desfazer quanto no Limpar, basta alterar o array itens e chamar atualizarTela(): toda a UI (lista, total, saldo, desconto e alerta) é recalculada automaticamente.",
+        demoLabel: "Testar Desfazer Último (itens.pop)",
+        acaoDemo: function () {
+          if (itens.length === 0) {
+            itens = [
+              { nome: "Item A", preco: 30, quantidade: 1 },
+              { nome: "Item B", preco: 40, quantidade: 1 }
+            ];
+            atualizarTela();
+          }
+          btnDesfazer.click();
+          mostrarToast("itens.pop() executado e interface recalculada.", "info");
+        }
+      }
+    ];
+
+    /* Código completo consolidado para a aba "Código Completo" */
+    const CODIGO_COMPLETO = `const LIMITE = 100;
+const LIMITE_DESCONTO = 150;
+const PERCENTUAL_DESCONTO = 0.1;
+
+let itens = [];
+
+// Referências dos elementos do DOM
+const inputNome = document.querySelector("#nome");
+const inputPreco = document.querySelector("#preco");
+const inputQuantidade = document.querySelector("#quantidade");
+const btnAdicionar = document.querySelector("#btn-adicionar");
+const btnDesfazer = document.querySelector("#btn-desfazer");
+const btnLimpar = document.querySelector("#btn-limpar");
+
+const mensagemEl = document.querySelector("#mensagem");
+const qtdItensEl = document.querySelector("#qtd-itens");
+const totalEl = document.querySelector("#total");
+const saldoEl = document.querySelector("#saldo");
+const descontoEl = document.querySelector("#desconto");
+const statusEl = document.querySelector("#status-orcamento");
+const listaEl = document.querySelector("#lista");
+
+function atualizarTela() {
+  listaEl.innerHTML = "";
+  let total = 0;
+
+  for (let i = 0; i < itens.length; i++) {
+    const item = itens[i];
+    const subtotal = item.preco * item.quantidade;
+    total = total + subtotal;
+
+    const li = document.createElement("li");
+    li.textContent =
+      item.nome +
+      " (" + item.quantidade + "x R$ " + item.preco.toFixed(2) + ")" +
+      " — Subtotal: R$ " + subtotal.toFixed(2);
+
+    listaEl.appendChild(li);
+  }
+
+  // Resumo numérico
+  const saldo = LIMITE - total;
+  qtdItensEl.textContent = itens.length;
+  totalEl.textContent = "R$ " + total.toFixed(2);
+  saldoEl.textContent = "R$ " + saldo.toFixed(2);
+
+  // Controle de orçamento
+  if (total > LIMITE) {
+    statusEl.textContent = "Orçamento estourado!";
+    statusEl.classList.add("alerta");
+  } else {
+    statusEl.textContent = "Dentro do orçamento";
+    statusEl.classList.remove("alerta");
+  }
+
+  // Desconto progressivo (10% acima de R$ 150,00)
+  if (total > LIMITE_DESCONTO) {
+    const totalComDesconto = total * (1 - PERCENTUAL_DESCONTO);
+    descontoEl.textContent =
+      "Desconto de 10% aplicado! Valor final: R$ " + totalComDesconto.toFixed(2);
+  } else {
+    descontoEl.textContent = "";
+  }
+}
+
+// Adicionar item
+btnAdicionar.addEventListener("click", function () {
+  const nome = inputNome.value.trim();
+  const preco = Number(inputPreco.value);
+  const quantidade = Number(inputQuantidade.value);
+
+  // Validação (Guard Clauses)
+  if (nome === "") {
+    mensagemEl.textContent = "Informe o nome do item.";
+    inputNome.focus();
+    return;
+  }
+
+  if (Number.isNaN(preco) || preco <= 0) {
+    mensagemEl.textContent = "Informe um preço válido maior que zero.";
+    inputPreco.focus();
+    return;
+  }
+
+  if (Number.isNaN(quantidade) || quantidade < 1) {
+    mensagemEl.textContent = "A quantidade deve ser no mínimo 1.";
+    inputQuantidade.focus();
+    return;
+  }
+
+  mensagemEl.textContent = "";
+
+  itens.push({
+    nome: nome,
+    preco: preco,
+    quantidade: quantidade,
+  });
+
+  inputNome.value = "";
+  inputPreco.value = "";
+  inputQuantidade.value = "1";
+  inputNome.focus();
+
+  atualizarTela();
+});
+
+// Desfazer último item
+btnDesfazer.addEventListener("click", function () {
+  if (itens.length === 0) {
+    mensagemEl.textContent = "A lista já está vazia.";
+    return;
+  }
+
+  mensagemEl.textContent = "";
+  itens.pop();
+  atualizarTela();
+});
+
+// Limpar toda a lista
+btnLimpar.addEventListener("click", function () {
+  itens = [];
+  mensagemEl.textContent = "";
+  atualizarTela();
+});
+
+// Renderização inicial
+atualizarTela();`;
+
+    const CHECKLIST = [
+      "Cadastro calcula subtotal (preço × quantidade) sem concatenar strings",
+      "Validação bloqueia nome vazio, preço <= 0 ou quantidade < 1",
+      "Itens são renderizados com createElement + textContent sem duplicação",
+      "Resumo atualiza quantidade de itens, total e saldo restante",
+      "Acima de R$ 100,00 exibe 'Orçamento estourado!' e aplica classe .alerta",
+      "Acima de R$ 150,00 exibe valor final com 10% de desconto (e limpa abaixo)",
+      "Botões 'Desfazer último' (pop) e 'Limpar tudo' atualizam toda a interface"
+    ];
+
+    /* =====================================================================
+       UTILITÁRIOS: TOAST, CÓPIA E DESTAQUE VISUAL
+       ===================================================================== */
+    function mostrarToast(texto, tipo) {
+      const container = document.getElementById("toast-container");
+      const el = document.createElement("div");
+      const estilos = {
+        sucesso: "bg-emerald-600 text-white",
+        aviso: "bg-amber-600 text-white",
+        info: "bg-slate-900 text-white"
+      };
+      el.className = "pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg text-xs sm:text-sm font-medium transition-all duration-300 " + (estilos[tipo] || estilos.info);
+      el.textContent = texto;
+      container.appendChild(el);
+
+      setTimeout(function () {
+        el.classList.add("opacity-0", "translate-y-2");
+        setTimeout(function () { el.remove(); }, 300);
+      }, 2400);
+    }
+
+    function copiarTexto(texto) {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = texto;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        mostrarToast("Código copiado para a área de transferência!", "sucesso");
+      } catch (erro) {
+        mostrarToast("Não foi possível copiar automaticamente.", "aviso");
+      }
+    }
+
+    function destacarElemento(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.add("ring-2", "ring-blue-500", "ring-offset-2");
+      setTimeout(function () {
+        el.classList.remove("ring-2", "ring-blue-500", "ring-offset-2");
+      }, 1100);
+    }
+
+    /* =====================================================================
+       SOLUÇÃO AO VIVO (EXATAMENTE O GABARITO DO APP.JS + INSPETOR)
+       ===================================================================== */
+    const LIMITE = 100;
+    const LIMITE_DESCONTO = 150;
+    const PERCENTUAL_DESCONTO = 0.1;
+
+    let itens = [];
+
+    const inputNome = document.querySelector("#nome");
+    const inputPreco = document.querySelector("#preco");
+    const inputQuantidade = document.querySelector("#quantidade");
+    const btnAdicionar = document.querySelector("#btn-adicionar");
+    const btnDesfazer = document.querySelector("#btn-desfazer");
+    const btnLimpar = document.querySelector("#btn-limpar");
+
+    const mensagemEl = document.querySelector("#mensagem");
+    const qtdItensEl = document.querySelector("#qtd-itens");
+    const totalEl = document.querySelector("#total");
+    const saldoEl = document.querySelector("#saldo");
+    const descontoEl = document.querySelector("#desconto");
+    const statusEl = document.querySelector("#status-orcamento");
+    const listaEl = document.querySelector("#lista");
+
+    function atualizarLogInspetor(texto) {
+      document.getElementById("inspector-event").textContent = texto;
+    }
+
+    function atualizarTela() {
+      listaEl.innerHTML = "";
+      let total = 0;
+
+      if (itens.length === 0) {
+        const vazio = document.createElement("li");
+        vazio.className = "text-center text-xs text-slate-400 py-5 border border-dashed border-slate-200 rounded-xl";
+        vazio.textContent = "Nenhum item na lista. Adicione acima ou clique em 'Demonstrar este passo'.";
+        listaEl.appendChild(vazio);
+      } else {
+        for (let i = 0; i < itens.length; i++) {
+          const item = itens[i];
+          const subtotal = item.preco * item.quantidade;
+          total = total + subtotal;
+
+          const li = document.createElement("li");
+          li.className = "px-3.5 py-2.5 border border-slate-200 rounded-xl bg-white text-xs sm:text-sm text-slate-800";
+          li.textContent =
+            item.nome +
+            " (" + item.quantidade + "x R$ " + item.preco.toFixed(2) + ")" +
+            " — Subtotal: R$ " + subtotal.toFixed(2);
+
+          listaEl.appendChild(li);
+        }
+      }
+
+      // Resumo numérico
+      const saldo = LIMITE - total;
+      qtdItensEl.textContent = itens.length;
+      totalEl.textContent = "R$ " + total.toFixed(2);
+      saldoEl.textContent = "R$ " + saldo.toFixed(2);
+
+      // Controle de orçamento (com classes Tailwind + classe semântica .alerta)
+      if (total > LIMITE) {
+        statusEl.textContent = "Orçamento estourado!";
+        statusEl.className = "alerta text-center text-sm font-bold py-2 px-3 rounded-xl bg-red-100 text-red-800 transition-colors";
+      } else {
+        statusEl.textContent = "Dentro do orçamento";
+        statusEl.className = "text-center text-sm font-bold py-2 px-3 rounded-xl bg-emerald-100 text-emerald-800 transition-colors";
+      }
+
+      // Desconto progressivo (10% acima de R$ 150,00)
+      if (total > LIMITE_DESCONTO) {
+        const totalComDesconto = total * (1 - PERCENTUAL_DESCONTO);
+        descontoEl.textContent = "Desconto de 10% aplicado! Valor final: R$ " + totalComDesconto.toFixed(2);
+      } else {
+        descontoEl.textContent = "";
+      }
+
+      // Sincroniza o Inspetor de Estado
+      document.getElementById("inspector-json").textContent = JSON.stringify(itens, null, 2);
+      const temAlerta = statusEl.classList.contains("alerta");
+      const badgeClass = document.getElementById("inspector-class");
+      badgeClass.textContent = temAlerta ? 'status: .alerta' : 'status: normal';
+      badgeClass.className = temAlerta
+        ? "text-[11px] font-mono px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800"
+        : "text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-emerald-300";
+    }
+
+    btnAdicionar.addEventListener("click", function () {
+      const nome = inputNome.value.trim();
+      const preco = Number(inputPreco.value);
+      const quantidade = Number(inputQuantidade.value);
+
+      if (nome === "") {
+        mensagemEl.textContent = "Informe o nome do item.";
+        inputNome.focus();
+        atualizarLogInspetor("Guard clause: nome vazio -> return");
+        return;
+      }
+
+      if (Number.isNaN(preco) || preco <= 0) {
+        mensagemEl.textContent = "Informe um preço válido maior que zero.";
+        inputPreco.focus();
+        atualizarLogInspetor("Guard clause: preco inválido (" + preco + ") -> return");
+        return;
+      }
+
+      if (Number.isNaN(quantidade) || quantidade < 1) {
+        mensagemEl.textContent = "A quantidade deve ser no mínimo 1.";
+        inputQuantidade.focus();
+        atualizarLogInspetor("Guard clause: quantidade inválida (" + quantidade + ") -> return");
+        return;
+      }
+
+      mensagemEl.textContent = "";
+      itens.push({ nome: nome, preco: preco, quantidade: quantidade });
+
+      inputNome.value = "";
+      inputPreco.value = "";
+      inputQuantidade.value = "1";
+      inputNome.focus();
+
+      atualizarTela();
+      atualizarLogInspetor('itens.push({ nome: "' + nome + '", preco: ' + preco + ', quantidade: ' + quantidade + ' }) -> atualizarTela()');
+    });
+
+    btnDesfazer.addEventListener("click", function () {
+      if (itens.length === 0) {
+        mensagemEl.textContent = "A lista já está vazia.";
+        atualizarLogInspetor("btn-desfazer: itens.length === 0 -> return");
+        return;
+      }
+
+      mensagemEl.textContent = "";
+      const removido = itens.pop();
+      atualizarTela();
+      atualizarLogInspetor('itens.pop() removeu "' + removido.nome + '" -> atualizarTela()');
+    });
+
+    btnLimpar.addEventListener("click", function () {
+      itens = [];
+      mensagemEl.textContent = "";
+      atualizarTela();
+      atualizarLogInspetor("btn-limpar: itens = [] -> atualizarTela()");
+    });
+
+    /* =====================================================================
+       CONTROLE DE NAVEGAÇÃO DOS PASSOS, VISÕES E CHECKLIST
+       ===================================================================== */
+    let passoAtual = 0;
+
+    function renderizarPills() {
+      const container = document.getElementById("step-pills");
+      container.innerHTML = "";
+
+      PASSOS.forEach(function (passo, idx) {
+        const ativo = idx === passoAtual;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = ativo
+          ? "px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-sm transition-all"
+          : "px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all";
+        btn.textContent = passo.curto;
+        btn.addEventListener("click", function () { exibirPasso(idx); });
+        container.appendChild(btn);
+      });
+    }
+
+    function exibirPasso(idx) {
+      if (idx < 0 || idx >= PASSOS.length) return;
+      passoAtual = idx;
+      const p = PASSOS[idx];
+
+      document.getElementById("step-counter").textContent = "Passo " + p.numero + " de " + PASSOS.length;
+      document.getElementById("step-badge").textContent = p.badge;
+      document.getElementById("step-title").textContent = p.titulo;
+      document.getElementById("step-summary").textContent = p.resumo;
+      document.getElementById("step-code").textContent = p.codigo;
+      document.getElementById("step-tip").textContent = p.dica;
+      document.getElementById("btn-demo-step").textContent = p.demoLabel + " →";
+
+      const ulConceitos = document.getElementById("step-concepts");
+      ulConceitos.innerHTML = "";
+      p.conceitos.forEach(function (texto) {
+        const li = document.createElement("li");
+        li.textContent = texto;
+        ulConceitos.appendChild(li);
+      });
+
+      document.getElementById("btn-prev-step").disabled = idx === 0;
+      document.getElementById("btn-next-step").disabled = idx === PASSOS.length - 1;
+
+      renderizarPills();
+    }
+
+    document.getElementById("btn-prev-step").addEventListener("click", function () { exibirPasso(passoAtual - 1); });
+    document.getElementById("btn-next-step").addEventListener("click", function () { exibirPasso(passoAtual + 1); });
+    document.getElementById("btn-demo-step").addEventListener("click", function () { PASSOS[passoAtual].acaoDemo(); });
+    document.getElementById("btn-copy-step").addEventListener("click", function () { copiarTexto(PASSOS[passoAtual].codigo); });
+    document.getElementById("btn-copy-full").addEventListener("click", function () { copiarTexto(CODIGO_COMPLETO); });
+
+    // Alternar entre "Passo a Passo" e "Código Completo"
+    document.querySelectorAll(".view-tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        const alvo = tab.dataset.view;
+        document.querySelectorAll(".view-tab").forEach(function (t) {
+          const ativo = t === tab;
+          t.className = ativo
+            ? "view-tab px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-blue-700 shadow-sm transition-all"
+            : "view-tab px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition-all";
+        });
+        document.getElementById("view-passos").classList.toggle("hidden", alvo !== "passos");
+        document.getElementById("view-completo").classList.toggle("hidden", alvo !== "completo");
+      });
+    });
+
+    // Checklist interativo
+    function renderizarChecklist() {
+      const container = document.getElementById("checklist-items");
+      container.innerHTML = "";
+
+      CHECKLIST.forEach(function (texto, idx) {
+        const label = document.createElement("label");
+        label.className = "flex items-start gap-2.5 p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors";
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.className = "mt-0.5 w-4 h-4 rounded accent-emerald-600 cursor-pointer shrink-0";
+        cb.addEventListener("change", atualizarContagemChecklist);
+
+        const span = document.createElement("span");
+        span.className = "text-xs sm:text-sm text-slate-700";
+        span.textContent = (idx + 1) + ". " + texto;
+
+        label.append(cb, span);
+        container.appendChild(label);
+      });
+    }
+
+    function atualizarContagemChecklist() {
+      const marcados = document.querySelectorAll("#checklist-items input:checked").length;
+      document.getElementById("checklist-count").textContent = marcados + " / " + CHECKLIST.length + " testados";
+    }
+
+    /* =====================================================================
+       INICIALIZAÇÃO
+       ===================================================================== */
+    window.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("full-code-display").textContent = CODIGO_COMPLETO;
+      exibirPasso(0);
+      renderizarChecklist();
+      atualizarTela();
+    });
+  </script>
+</body>
+</html>
